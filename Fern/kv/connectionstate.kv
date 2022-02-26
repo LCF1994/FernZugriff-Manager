@@ -1,0 +1,28 @@
+<ConnectionState>
+    # rows:1
+
+    size_hint_y: None
+    height: 45.0
+    size_hint_x: .25
+
+    spacing: dp(5)
+    padding: 10, 0, 0, 0
+
+    MDLabel:
+        id: text
+        text: 'Offline'
+        valign: 'center'
+        pos_hint: {'center_y': .5}
+
+    MDFillRoundFlatButton:
+        id: conn_btn
+        adaptive_height: True
+        text: 'Conectar'
+        on_release: root.connect('target')
+
+<RefreshButton>
+    icon: 'refresh'
+    adaptive_height:True
+    pos_hint: {'center_y': .5}
+
+    on_release: root.refresh()

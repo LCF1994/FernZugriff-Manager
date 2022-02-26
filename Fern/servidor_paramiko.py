@@ -27,7 +27,7 @@ class ServidorSAGE:
                 self.ip, username=self.user, password=self.password
             )
             # transport = self.client.get_transport()
-            # print(transport)
+            print('Conectado')
             # transport.open_x11_channel((self.ip,6010))
 
         except AuthenticationException:

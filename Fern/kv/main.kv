@@ -1,0 +1,45 @@
+MDScreen:
+    MDFloatLayout:
+        MDIconButton: # settings icon
+            icon:'centos'
+            user_font_size: dp(40)
+            pos_hint: {'center_x': .925, 'center_y': .9}
+            on_release: app.open_card(root)
+        MDBoxLayout:
+            orientation: 'vertical'
+            pos_hint: { 'center_x': .525, 'center_y': .875 }
+            adaptive_height: True
+            spacing: 10
+            MDBoxLayout:
+                orientation: 'vertical'
+                adaptive_height: True
+                MDLabel:
+                    adaptive_height: True
+                    text: 'Servidor SAGE 1'
+                    font_style: 'Body1'
+                    size_hint_x: .9
+                MDLabel:
+                    id: server_ip
+                    text: '    IP: xxx.xxx.xxx.xxx'
+                    adaptive_height: True
+                    font_style: 'Caption'
+                    size_hint_x: .9
+            MDSeparator:
+                size_hint_x: .25
+                color: app.success_color
+                padding: 0, 30, 0, 0
+            ConnectionState:
+                padding: 0, 20, 0, 0
+        MDGridLayout:
+            rows:1
+            pos_hint: {'center_x': .5 , 'center_y': .1}
+            size_hint_y: .2
+            padding: 15, 0, 15, 10
+            spacing: 15
+            MDCard:
+                radius: [dp(12), dp(12), dp(12), dp(12)]
+            MDCard:
+                radius: [dp(12), dp(12), dp(12), dp(12)]
+            MDCard:
+                radius: [dp(12), dp(12), dp(12), dp(12)]
+
