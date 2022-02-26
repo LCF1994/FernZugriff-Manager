@@ -1,8 +1,9 @@
 from auxiliary.kvlang import string_builder
+
+# from auxiliary.servidor_subprocess import ServidorSAGE
+from auxiliary.servidor_paramiko import ServidorSAGE
 from kivy.lang import Builder
 from kivymd.app import MDApp
-#from servidor import ServidorSAGE
-from servidor_paramiko import ServidorSAGE
 from widgets.card.serverconfig import ConfigCard
 from widgets.connectionstate import ConnectionState
 

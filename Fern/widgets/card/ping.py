@@ -5,13 +5,11 @@ from servidor import ServidorSAGE
 
 
 class PingCard(MDCard):
-  
     def close_card(self, args):
         x, y = args[1].pos
 
         if not self.collide_point(x, y):
             self.parent.remove_widget(self)
-
 
     def ping(
         self, target: ServidorSAGE, success_color: list, failure_color: list
