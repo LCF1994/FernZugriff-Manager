@@ -19,7 +19,15 @@ class ServidorSAGE:
         self.client = SSHClient()
         self.client.set_missing_host_key_policy(AutoAddPolicy())
 
+        self.transport = None
         # Internal variables for status
+    
+        
+    def set_host(self, value:str) -> None:
+        self.host = value
+
+    def check_connection(self) -> bool:
+        return self.transport.is_active()
 
     def connect(self) -> bool:
         print(f'Connecting to {self.host}')
@@ -27,17 +35,17 @@ class ServidorSAGE:
             self.client.connect(
                 self.host, username=self.username, password=self.password,port=self.port
             )
-            # transport = self.client.get_transport()
             print('Conectado')
-            # transport.open_x11_channel((self.ip,6010))
-            return True
+
+            self.transport = self.client.get_transport()
+            return self.check_connection()
 
         except AuthenticationException:
             print('Erro de autenticação')
         except SSHException:
             print('Falha de conexão')
-        except socket.error:
-             print(f'Socket error: {socket.error}')
+        except (socket.error, OSError) as err:
+             print(f'Socket error: {err}')
         
         return False
 
@@ -75,13 +83,15 @@ class ServidorSAGE:
 
 
 if __name__ == '__main__':
-    sage1 = ServidorSAGE('192.168.198.132')
-    #sage1.set_config('host', '192.168.198.132')
-    #sage1 = ServidorSAGE('1')
+    sage1 = ServidorSAGE('192.168.198.135')
+
+    # sage1.check_gcd_running()
+
+    print(sage1.connect())
+        
+    sage1.set_host('127.0.0.1')
     print(sage1.connect())
 
-    #print(sage1.get_var())
-    # print(sage1.check_gcd_running())
-    #sage1.client.close()
-
+    sage1.set_host('192.168.198.135')
+    print(sage1.connect())
 

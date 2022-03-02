@@ -1,6 +1,7 @@
 from kivymd.uix.card import MDCard
 from kivymd.uix.snackbar import Snackbar
 from auxiliary.servidor_paramiko import ServidorSAGE
+from kivymd.app import MDApp
 
 
 class ConfigCard(MDCard):
@@ -17,23 +18,23 @@ class ConfigCard(MDCard):
     def cancel_button(self) -> None:
         self.close_card()
 
-    def save_button(self, app) -> None:
+    def save_button(self) -> None:
         data = {
             'host': self.ids.server_ip.text,
             'username': self.ids.username.text
-            if not self.ids.username.text
+            if self.ids.username.text != ''
             else 'sagetr1',
             'password': self.ids.password.text
-            if not self.ids.password.text
+            if self.ids.password.text != ''
             else 'sagetr1',
             'port': self.ids.port_number.text
-            if not self.ids.port_number.text
+            if self.ids.port_number.text != ''
             else 22,
         }
         print(data)
 
         if self._validate_server_ip() and self._validate_ssh_port():
-            self._save_data(data, app)
+            self._save_data(data)
             self.close_card()
 
     def _validate_server_ip(self) -> bool:
@@ -63,13 +64,15 @@ class ConfigCard(MDCard):
         else:
             return True
 
-    def _save_data(self, data, app) -> None:
+    def _save_data(self, data) -> None:
         self.parent.ids.server_ip.text = f"    IP: {data['host']}"
+        app = MDApp.get_running_app()
+
+        app.SAGE_1.set_host(data['host'])
+        # update data
+        app.SAGE_1.username = data['username']
+        app.SAGE_1.password = data['password']
+        app.SAGE_1.port = data['port']
 
         print('Dados salvos')
-
-        app.srv1_data_update(data)
-
-        #app.srv_connect()
-
-        #print(app.sage1.exec_cmd('whoami'))
+        print(f'host:{app.SAGE_1.host}')

@@ -1,13 +1,12 @@
-import cmd
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton
-# from auxiliary.servidor_paramiko import ServidorSAGE
-from auxiliary.servidor_asyncssh import ServidorSAGE
+from auxiliary.servidor_paramiko import ServidorSAGE
+# from auxiliary.servidor_asyncssh import ServidorSAGE
 from kivymd.uix.snackbar import Snackbar
 import asynckivy as ak
-import asyncio, asyncssh, sys
-from concurrent.futures import ThreadPoolExecutor
+import asyncssh, sys
 
+from kivymd.app import MDApp
 
 class ConnectionState(MDBoxLayout):
 
@@ -21,7 +20,8 @@ class ConnectionState(MDBoxLayout):
 
     async def async_cmd(self, target):
         try:
-            result = await ak.run_in_thread(target.run_thread)
+            #result = await ak.run_in_thread(target.run_thread)
+            result = await ak.run_in_thread(target.connect)
             self._success_connection(result)
 
         except (OSError, asyncssh.Error) as exc:
@@ -29,12 +29,21 @@ class ConnectionState(MDBoxLayout):
 
     def _success_connection(self, data):
         self.ids.conn_spinner.active = False
-        self.ids.text.text = f'Connected: {data[0]}'
+        self.ids.text.text = f'Connected: {data}'
         print('sucesso')
         print(f'Dados recebidos: {data}')
 
 
-    def connect(self, target:ServidorSAGE, app) -> bool:
+    def connect(self, target) -> bool:
+        running_app = MDApp.get_running_app()
+        print(target)
+        if target == 'sage1':
+            target = running_app.SAGE_1
+        elif target == 'sage2':
+            target = running_app.SAGE_2
+        else:
+            self._snackbar_error('Target Not found !')
+            return False
 
         print(target)
 
