@@ -17,7 +17,7 @@ class FernApp(MDApp):
         super().__init__(**kwargs)
 
         self.sage1 = ServidorSAGE('127.0.0.1')
-        self.sage1.host= '192.168.198.134'
+        self.sage1.host= '192.168.198.135'
 
     
     def srv1_data_update(self, data:dict) -> None:

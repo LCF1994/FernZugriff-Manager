@@ -5,26 +5,36 @@ class ServidorSAGE:
         self.host = host
         self.username = username
         self.password = password
+        self.conn_options = asyncssh.SSHClientConnectionOptions(username=self.username, password=self.password, x11_forwarding='ignore_failure', known_hosts=None)
    
-    def create_connection(self) -> asyncssh.connection.SSHClientConnection:
-        conn_options = asyncssh.SSHClientConnectionOptions(username=self.username, password=self.password, x11_forwarding='ignore_failure', known_hosts=None)
-        return asyncssh.connect(self.host, options=conn_options)
-
     async def exec_cmd(self, cmd:str, *args, **kargs) -> tuple:
-        async with self.create_connection() as conn:
+        async with asyncssh.connect(self.host, options=self.conn_options) as conn:
             result = await conn.run(cmd, check=True)
             return result.stdout[:-1], result.returncode, result.exit_status
 
+    async def _wait_for_thread(self):
+        loop = asyncio.get_event_loop()
+        r = await loop.create_task( self.exec_cmd('whoami') )
+        return r
 
+    def run_thread(self):
+        try:
+            r = asyncio.run(self._wait_for_thread())
+            return r
+
+        except (OSError, asyncssh.Error) as exc:
+            sys.exit('SSH connection failed: ' + str(exc))
 
 
 if __name__ == '__main__':
-    sage1 = ServidorSAGE('192.168.198.134')
+    sage1 = ServidorSAGE('192.168.198.135')
 
-    try:
-        r = asyncio.run(
-            asyncio.to_thread(sage1.exec_cmd('whoami')))
-        print(r)
+    print(
+        sage1.run_thread()
+    )
+    # try:
+    #     r = asyncio.run(sage1._wait_for_thread())
+    #     print(r)
 
-    except (OSError, asyncssh.Error) as exc:
-        sys.exit('SSH connection failed: ' + str(exc))
+    # except (OSError, asyncssh.Error) as exc:
+    #     sys.exit('SSH connection failed: ' + str(exc))

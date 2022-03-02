@@ -1,3 +1,4 @@
+import cmd
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton
 # from auxiliary.servidor_paramiko import ServidorSAGE
@@ -5,6 +6,7 @@ from auxiliary.servidor_asyncssh import ServidorSAGE
 from kivymd.uix.snackbar import Snackbar
 import asynckivy as ak
 import asyncio, asyncssh, sys
+from concurrent.futures import ThreadPoolExecutor
 
 
 class ConnectionState(MDBoxLayout):
@@ -17,15 +19,22 @@ class ConnectionState(MDBoxLayout):
                size_hint_x=0.95,
            ).open()
 
-    def connect(self, target:ServidorSAGE, app) -> bool:
-        async def async_cmd(self, target):
-            try:
-                r = await ak.run_in_thread(target.exec_cmd('whoami'))
-                print(r)
-                return r
+    async def async_cmd(self, target):
+        try:
+            result = await ak.run_in_thread(target.run_thread)
+            self._success_connection(result)
 
-            except (OSError, asyncssh.Error) as exc:
-                sys.exit('SSH connection failed: ' + str(exc))
+        except (OSError, asyncssh.Error) as exc:
+            sys.exit('SSH connection failed: ' + str(exc))
+
+    def _success_connection(self, data):
+        self.ids.conn_spinner.active = False
+        self.ids.text.text = f'Connected: {data[0]}'
+        print('sucesso')
+        print(f'Dados recebidos: {data}')
+
+
+    def connect(self, target:ServidorSAGE, app) -> bool:
 
         print(target)
 
@@ -37,14 +46,8 @@ class ConnectionState(MDBoxLayout):
             print(f'Target IP: {target.host}')
 
             self.ids.conn_spinner.active = True
-        
-            retorno = ak.start(async_cmd(self, target))
 
-            self.ids.conn_spinner.active = False
-
-
-            #self.remove_widget(self.ids.conn_btn)
-        #self.add_widget(RefreshButton())
+            ak.start(self.async_cmd(target))
 
 
 class RefreshButton(MDIconButton):
