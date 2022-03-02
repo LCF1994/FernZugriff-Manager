@@ -1,19 +1,19 @@
-from paramiko import (
-    AuthenticationException,
-    AutoAddPolicy,
-    SSHClient,
-    SSHException,
-)
+from ast import match_case
+from cmath import e
+from paramiko import (AuthenticationException, AutoAddPolicy, SSHClient,
+                      SSHException)
+import socket
 
 
 class ServidorSAGE:
     def __init__(
-        self, server_ip_or_hostname, user='sagetr1', password='sagetr1'
+        self, host, username='sagetr1', password='sagetr1', port=22
     ) -> None:
         # Server config
-        self.ip = server_ip_or_hostname
-        self.user = user
+        self.host = host
+        self.username = username
         self.password = password
+        self.port = port
 
         # SSH Client from Paramiko
         self.client = SSHClient()
@@ -21,19 +21,26 @@ class ServidorSAGE:
 
         # Internal variables for status
 
-    def connect(self) -> None:
+    def connect(self) -> bool:
+        print(f'Connecting to {self.host}')
         try:
             self.client.connect(
-                self.ip, username=self.user, password=self.password
+                self.host, username=self.username, password=self.password,port=self.port
             )
             # transport = self.client.get_transport()
             print('Conectado')
             # transport.open_x11_channel((self.ip,6010))
+            return True
 
         except AuthenticationException:
             print('Erro de autenticação')
         except SSHException:
             print('Falha de conexão')
+        except socket.error:
+             print(f'Socket error: {socket.error}')
+        
+        return False
+
 
     def exec_cmd(self, cmd) -> bytes:
         stdin, stdout, stderr = self.client.exec_command(cmd)
@@ -63,20 +70,18 @@ class ServidorSAGE:
             else 'Undefined',
         }
 
-    def get_config(self):
-        pass
-
-    def set_config(self):
-        pass
-
     def abre_visor_acesso(self):
         pass
 
 
 if __name__ == '__main__':
-    sage1 = ServidorSAGE('192.168.198.131')
-    sage1.connect()
+    sage1 = ServidorSAGE('192.168.198.132')
+    #sage1.set_config('host', '192.168.198.132')
+    #sage1 = ServidorSAGE('1')
+    print(sage1.connect())
 
-    print(sage1.get_var())
+    #print(sage1.get_var())
     # print(sage1.check_gcd_running())
-    sage1.client.close()
+    #sage1.client.close()
+
+

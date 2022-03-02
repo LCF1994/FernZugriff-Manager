@@ -2,7 +2,7 @@ import subprocess
 
 
 class ServidorSAGE:
-    def __init__(self, ip, user='sagetr1') -> None:
+    def __init__(self, ip, user='sagetr1', *args) -> None:
         self.ip = ip
         self.user = user
         self.reachable = None

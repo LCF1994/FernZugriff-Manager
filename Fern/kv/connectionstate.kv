@@ -1,11 +1,8 @@
 <ConnectionState>
-    # rows:1
-
     size_hint_y: None
     height: 45.0
-    size_hint_x: .25
-
-    spacing: dp(5)
+    size_hint_x: .33
+    spacing: 25
     padding: 10, 0, 0, 0
 
     MDLabel:
@@ -13,12 +10,17 @@
         text: 'Offline'
         valign: 'center'
         pos_hint: {'center_y': .5}
-
+    MDSpinner:
+        id: conn_spinner
+        size_hint: None, None
+        size: dp(15), dp(15)
+        pos_hint: {'center_y': .5}
+        active: False
     MDFillRoundFlatButton:
         id: conn_btn
         adaptive_height: True
         text: 'Conectar'
-        on_release: root.connect('target')
+        on_release: root.connect(app.sage1, app)
 
 <RefreshButton>
     icon: 'refresh'

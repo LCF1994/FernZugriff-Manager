@@ -1,7 +1,6 @@
 import asynckivy as ak
-from kivy.lang import Builder
 from kivymd.uix.card import MDCard
-from servidor import ServidorSAGE
+from auxiliary.servidor_subprocess import ServidorSAGE
 
 
 class PingCard(MDCard):
@@ -27,7 +26,7 @@ class PingCard(MDCard):
         target.ip = server_ip
         print(f'target ip = {target.ip}')
 
-        async def server_ping(server_ip):
+        async def server_ping():
             result_value = await ak.run_in_thread(target.check_ping)
             print('ok 3')
             self.ids.spinner.active = False
@@ -37,4 +36,18 @@ class PingCard(MDCard):
                 success_color if result_value else failure_color
             )
 
-        ak.start(server_ping(server_ip))
+        ak.start(server_ping())
+
+if __name__ == '__main__':
+    from kivymd.app import MDApp
+    from kivy.lang import Builder
+
+KV = '''
+MDBoxLayout:
+    PingCard:
+
+'''
+
+class PingCardApp(MDApp):
+    def build(self):
+        return Builder.load_string(KV)

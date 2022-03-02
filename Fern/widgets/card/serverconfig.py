@@ -1,5 +1,6 @@
 from kivymd.uix.card import MDCard
 from kivymd.uix.snackbar import Snackbar
+from auxiliary.servidor_paramiko import ServidorSAGE
 
 
 class ConfigCard(MDCard):
@@ -18,14 +19,14 @@ class ConfigCard(MDCard):
 
     def save_button(self, app) -> None:
         data = {
-            'server_ip': self.ids.server_ip.text,
+            'host': self.ids.server_ip.text,
             'username': self.ids.username.text
             if not self.ids.username.text
             else 'sagetr1',
             'password': self.ids.password.text
             if not self.ids.password.text
             else 'sagetr1',
-            'ssh_port': self.ids.port_number.text
+            'port': self.ids.port_number.text
             if not self.ids.port_number.text
             else 22,
         }
@@ -63,4 +64,12 @@ class ConfigCard(MDCard):
             return True
 
     def _save_data(self, data, app) -> None:
-        self.parent.ids.server_ip.text = f'    IP: {data["server_ip"]}'
+        self.parent.ids.server_ip.text = f"    IP: {data['host']}"
+
+        print('Dados salvos')
+
+        app.srv1_data_update(data)
+
+        #app.srv_connect()
+
+        #print(app.sage1.exec_cmd('whoami'))
