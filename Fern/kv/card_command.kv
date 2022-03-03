@@ -1,0 +1,26 @@
+<CommandCard>:
+    radius: [dp(12), ]
+
+    FitImage:
+        pos_hint: {'center_x': .5 , 'center_y': .5}
+        source: root.image
+        radius: [dp(12), 0, 0, dp(12)]
+        size_hint_x: .5
+
+    MDBoxLayout:
+        orientation: 'vertical'
+
+        MDLabel:
+            text: root.title
+            halign: 'center'
+
+        MDRoundFlatIconButton:
+            pos_hint: { 'center_x': .5, 'center_y': .5}
+            size_hint_x: .75
+            icon: root.btn_icon
+            theme_icon_color: "Custom"
+            icon_color: app.theme_cls.accent_color
+            text: root.btn_text
+            theme_text_color: "Custom"
+            text_color: app.theme_cls.accent_color
+            line_color: 0, 0, 0 ,0

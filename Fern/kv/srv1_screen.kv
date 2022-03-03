@@ -56,74 +56,22 @@
         size_hint_y: .15
         padding: 15, 0, 15, 10
         spacing: 15
-        MDCard:
-            radius: [dp(12), ]
-            FitImage:
-                pos_hint: {'center_x': .5 , 'center_y': .5}
-                source:'Fern/assets/images/fluxo.jpg'
-                radius: [dp(12), 0, 0, dp(12)]
-                size_hint_x: .5
 
-            MDBoxLayout:
-                orientation: 'vertical'
-                MDLabel:
-                    text: 'VisorAcesso'
-                    halign: 'center'
-                MDRoundFlatIconButton:
-                    pos_hint: { 'center_x': .5, 'center_y': .5}
-                    icon:'open-in-new'
-                    theme_icon_color: "Custom"
-                    icon_color: app.theme_cls.accent_color
-                    text:'Abrir'
-                    theme_text_color: "Custom"
-                    text_color: app.theme_cls.accent_color
-                    line_color: 0, 0, 0 ,0
+        CommandCard:
+            image: 'Fern/assets/images/fluxo.jpg'
+            title: 'VisorAcesso'
+            btn_icon: 'open-in-new'
+            btn_text: 'Abrir'
+        
+        CommandCard:
+            image: 'Fern/assets/images/abs_img_red.jpg'
+            title: 'Detalhes'
+            btn_icon: 'information-variant'
+            btn_text: 'Solicitar'
 
-        MDCard:
-            radius: [dp(12), dp(12), dp(12), dp(12)]
-            FitImage:
-                pos_hint: {'center_x': .5 , 'center_y': .5}
-                source:'Fern/assets/images/abs_img_red.jpg'
-                radius: [dp(12), 0, 0, dp(12)]
-                size_hint_x: .5
+        CommandCard:
+            image: 'Fern/assets/images/cryptocode.jpg'
+            title: 'Remote Terminal'
+            btn_icon: 'console-line'
+            btn_text: 'Executar'
 
-            MDBoxLayout:
-                orientation: 'vertical'
-                MDLabel:
-                    text: 'Detalhes'
-                    halign: 'center'
-                MDRoundFlatIconButton:
-                    pos_hint: { 'center_x': .5, 'center_y': .5}
-                    icon:'information-variant'
-                    theme_icon_color: "Custom"
-                    icon_color: app.theme_cls.accent_color
-                    text:'Solicitar'
-                    theme_text_color: "Custom"
-                    text_color: app.theme_cls.accent_color
-                    line_color: 0, 0, 0 ,0
-
-        MDCard:
-            radius: [dp(12), ]
-            FitImage:
-                pos_hint: {'center_x': .5 , 'center_y': .5}
-                source:'Fern/assets/images/cryptocode.jpg'
-                radius: [dp(12), 0, 0, dp(12)]
-                size_hint_x: .5
-
-            MDBoxLayout:
-                orientation: 'vertical'
-                MDLabel:
-                    text: 'Remote Terminal'
-                    halign: 'center'
-                MDRoundFlatIconButton:
-                    # size_hint_x: 1
-                    pos_hint: { 'center_x': .5, 'center_y': .5}
-                    icon:'console-line'
-                    theme_icon_color: "Custom"
-                    icon_color: app.theme_cls.accent_color
-                    text:'Executar'
-                    theme_text_color: "Custom"
-                    text_color: app.theme_cls.accent_color
-                    line_color: 0, 0, 0 ,0
-                    halign: 'center'
-                    valign: 'center'

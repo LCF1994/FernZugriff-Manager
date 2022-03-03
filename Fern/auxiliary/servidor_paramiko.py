@@ -95,8 +95,4 @@ if __name__ == '__main__':
 
     print(sage1.connect())
 
-    sage1.set_host('127.0.0.1')
-    print(sage1.connect())
-
-    sage1.set_host('192.168.198.135')
-    print(sage1.connect())
+    print(sage1.get_var())
