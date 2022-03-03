@@ -1,6 +1,6 @@
 import asynckivy as ak
-from kivymd.uix.card import MDCard
 from auxiliary.servidor_subprocess import ServidorSAGE
+from kivymd.uix.card import MDCard
 
 
 class PingCard(MDCard):
@@ -38,15 +38,17 @@ class PingCard(MDCard):
 
         ak.start(server_ping())
 
-if __name__ == '__main__':
-    from kivymd.app import MDApp
-    from kivy.lang import Builder
 
-KV = '''
+if __name__ == '__main__':
+    from kivy.lang import Builder
+    from kivymd.app import MDApp
+
+KV = """
 MDBoxLayout:
     PingCard:
 
-'''
+"""
+
 
 class PingCardApp(MDApp):
     def build(self):

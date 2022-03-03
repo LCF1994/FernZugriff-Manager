@@ -1,25 +1,23 @@
 from auxiliary.kvlang import string_builder
 from auxiliary.servidor_paramiko import ServidorSAGE
+
 # from auxiliary.servidor_asyncssh import ServidorSAGE
 from kivy.lang import Builder
 from kivymd.app import MDApp
-from widgets.card.serverconfig import ConfigCard
-#from widgets.card.ping import PingCard
-from widgets.connectionstate import ConnectionState
-from kivy.properties import StringProperty
+from widgets.screen.srv1screen import Srv1Screen
+
+# from widgets.card.ping import PingCard
+# from widgets.connectionstate import ConnectionState
+# from kivy.properties import StringProperty
 
 # Build kv string from kv files
 KV = string_builder()
-
 
 
 class FernApp(MDApp):
 
     SAGE_1 = ServidorSAGE('127.0.0.1')
     SAGE_2 = ServidorSAGE('127.0.0.1')
-
-    def open_card(self, screen):
-        screen.add_widget(ConfigCard())
 
     def build(self):
         # Config

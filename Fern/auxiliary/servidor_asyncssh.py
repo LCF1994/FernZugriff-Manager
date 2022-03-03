@@ -1,20 +1,33 @@
-import asyncio, asyncssh, sys
+import asyncio
+import sys
+
+import asyncssh
+
 
 class ServidorSAGE:
-    def __init__(self, host:str, username='sagetr1', password='sagetr1') -> None:
+    def __init__(
+        self, host: str, username='sagetr1', password='sagetr1'
+    ) -> None:
         self.host = host
         self.username = username
         self.password = password
-        self.conn_options = asyncssh.SSHClientConnectionOptions(username=self.username, password=self.password, x11_forwarding='ignore_failure', known_hosts=None)
-   
-    async def exec_cmd(self, cmd:str, *args, **kargs) -> tuple:
-        async with asyncssh.connect(self.host, options=self.conn_options) as conn:
+        self.conn_options = asyncssh.SSHClientConnectionOptions(
+            username=self.username,
+            password=self.password,
+            x11_forwarding='ignore_failure',
+            known_hosts=None,
+        )
+
+    async def exec_cmd(self, cmd: str, *args, **kargs) -> tuple:
+        async with asyncssh.connect(
+            self.host, options=self.conn_options
+        ) as conn:
             result = await conn.run(cmd, check=True)
             return result.stdout[:-1], result.returncode, result.exit_status
 
     async def _wait_for_thread(self):
         loop = asyncio.get_event_loop()
-        r = await loop.create_task( self.exec_cmd('whoami') )
+        r = await loop.create_task(self.exec_cmd('whoami'))
         return r
 
     def run_thread(self):
@@ -29,9 +42,7 @@ class ServidorSAGE:
 if __name__ == '__main__':
     sage1 = ServidorSAGE('192.168.198.135')
 
-    print(
-        sage1.run_thread()
-    )
+    print(sage1.run_thread())
     # try:
     #     r = asyncio.run(sage1._wait_for_thread())
     #     print(r)

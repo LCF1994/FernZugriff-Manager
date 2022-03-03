@@ -1,8 +1,13 @@
+import socket
 from ast import match_case
 from cmath import e
-from paramiko import (AuthenticationException, AutoAddPolicy, SSHClient,
-                      SSHException)
-import socket
+
+from paramiko import (
+    AuthenticationException,
+    AutoAddPolicy,
+    SSHClient,
+    SSHException,
+)
 
 
 class ServidorSAGE:
@@ -21,9 +26,8 @@ class ServidorSAGE:
 
         self.transport = None
         # Internal variables for status
-    
-        
-    def set_host(self, value:str) -> None:
+
+    def set_host(self, value: str) -> None:
         self.host = value
 
     def check_connection(self) -> bool:
@@ -33,7 +37,10 @@ class ServidorSAGE:
         print(f'Connecting to {self.host}')
         try:
             self.client.connect(
-                self.host, username=self.username, password=self.password,port=self.port
+                self.host,
+                username=self.username,
+                password=self.password,
+                port=self.port,
             )
             print('Conectado')
 
@@ -45,10 +52,9 @@ class ServidorSAGE:
         except SSHException:
             print('Falha de conexão')
         except (socket.error, OSError) as err:
-             print(f'Socket error: {err}')
-        
-        return False
+            print(f'Socket error: {err}')
 
+        return False
 
     def exec_cmd(self, cmd) -> bytes:
         stdin, stdout, stderr = self.client.exec_command(cmd)
@@ -88,10 +94,9 @@ if __name__ == '__main__':
     # sage1.check_gcd_running()
 
     print(sage1.connect())
-        
+
     sage1.set_host('127.0.0.1')
     print(sage1.connect())
 
     sage1.set_host('192.168.198.135')
     print(sage1.connect())
-

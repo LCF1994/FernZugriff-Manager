@@ -1,26 +1,28 @@
+import sys
+
+import asynckivy as ak
+import asyncssh
+from auxiliary.servidor_paramiko import ServidorSAGE
+from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton
-from auxiliary.servidor_paramiko import ServidorSAGE
+
 # from auxiliary.servidor_asyncssh import ServidorSAGE
 from kivymd.uix.snackbar import Snackbar
-import asynckivy as ak
-import asyncssh, sys
 
-from kivymd.app import MDApp
 
 class ConnectionState(MDBoxLayout):
-
     def _snackbar_error(self, message) -> None:
         Snackbar(
-               text=f'[color=#ee3434]{message}[/color]',
-               snackbar_x='10dp',
-               snackbar_y='10dp',
-               size_hint_x=0.95,
-           ).open()
+            text=f'[color=#ee3434]{message}[/color]',
+            snackbar_x='10dp',
+            snackbar_y='10dp',
+            size_hint_x=0.95,
+        ).open()
 
     async def async_cmd(self, target):
         try:
-            #result = await ak.run_in_thread(target.run_thread)
+            # result = await ak.run_in_thread(target.run_thread)
             result = await ak.run_in_thread(target.connect)
             self._success_connection(result)
 
@@ -29,10 +31,9 @@ class ConnectionState(MDBoxLayout):
 
     def _success_connection(self, data):
         self.ids.conn_spinner.active = False
-        self.ids.text.text = f'Connected: {data}'
-        print('sucesso')
         print(f'Dados recebidos: {data}')
-
+        if data is True:
+            self.ids.text.text = 'Online'
 
     def connect(self, target) -> bool:
         running_app = MDApp.get_running_app()

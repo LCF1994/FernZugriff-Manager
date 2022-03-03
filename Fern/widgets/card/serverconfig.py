@@ -1,7 +1,7 @@
-from kivymd.uix.card import MDCard
-from kivymd.uix.snackbar import Snackbar
 from auxiliary.servidor_paramiko import ServidorSAGE
 from kivymd.app import MDApp
+from kivymd.uix.card import MDCard
+from kivymd.uix.snackbar import Snackbar
 
 
 class ConfigCard(MDCard):
@@ -65,7 +65,9 @@ class ConfigCard(MDCard):
             return True
 
     def _save_data(self, data) -> None:
-        self.parent.ids.server_ip.text = f"    IP: {data['host']}"
+        self.parent.ids.srv1_screen.ids.server_ip.text = (
+            f"    IP: {data['host']}"
+        )
         app = MDApp.get_running_app()
 
         app.SAGE_1.set_host(data['host'])
