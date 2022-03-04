@@ -1,9 +1,15 @@
-from kivymd.uix.floatlayout import MDFloatLayout
-from widgets.card.serverconfig import ConfigCard
-from widgets.connectionstate import ConnectionState
+from http import server
+
+from kivy.properties import ObjectProperty
+from kivymd.uix.screen import Screen
 from widgets.card.command import CommandCard
+from widgets.card.serverconfig import ConfigCard
+from widgets.wrapper.connectionstate import ConnectionState
+from widgets.wrapper.servertitle import ServerTitle
 
 
-class Srv1Screen(MDFloatLayout):
-    def open_card(self):
-        self.parent.add_widget(ConfigCard())
+class Srv1Screen(Screen):
+    server = ObjectProperty(None)
+
+    def open_card(self) -> None:
+        self.add_widget(ConfigCard(target=self.server))

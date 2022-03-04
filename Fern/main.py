@@ -1,14 +1,8 @@
 from auxiliary.kvlang import string_builder
 from auxiliary.servidor_paramiko import ServidorSAGE
-
-# from auxiliary.servidor_asyncssh import ServidorSAGE
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from widgets.screen.srv1screen import Srv1Screen
-
-# from widgets.card.ping import PingCard
-# from widgets.connectionstate import ConnectionState
-# from kivy.properties import StringProperty
 
 # Build kv string from kv files
 KV = string_builder()

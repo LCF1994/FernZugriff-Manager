@@ -1,10 +1,11 @@
-from auxiliary.servidor_paramiko import ServidorSAGE
-from kivymd.app import MDApp
+from kivy.properties import ObjectProperty
 from kivymd.uix.card import MDCard
 from kivymd.uix.snackbar import Snackbar
 
 
 class ConfigCard(MDCard):
+    target = ObjectProperty(None)
+
     def close_card(self) -> None:
         self.parent.remove_widget(self)
 
@@ -65,16 +66,14 @@ class ConfigCard(MDCard):
             return True
 
     def _save_data(self, data) -> None:
-        self.parent.ids.srv1_screen.ids.server_ip.text = (
-            f"    IP: {data['host']}"
-        )
-        app = MDApp.get_running_app()
 
-        app.SAGE_1.set_host(data['host'])
-        # update data
-        app.SAGE_1.username = data['username']
-        app.SAGE_1.password = data['password']
-        app.SAGE_1.port = data['port']
+        self.parent.ids.srv_title.server_ip = data['host']
+
+        # update server data
+        self.target.set_host(data['host'])
+        self.target.username = data['username']
+        self.target.password = data['password']
+        self.target.port = data['port']
 
         print('Dados salvos')
-        print(f'host:{app.SAGE_1.host}')
+        print(f'host:{self.target.host}')

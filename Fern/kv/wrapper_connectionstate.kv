@@ -6,25 +6,16 @@
     padding: 10, 0, 0, 0
 
     MDLabel:
-        id: text
-        text: 'Offline'
+        text: root.conn_state
         valign: 'center'
         pos_hint: {'center_y': .5}
     MDSpinner:
-        id: conn_spinner
         size_hint: None, None
         size: dp(15), dp(15)
         pos_hint: {'center_y': .5}
-        active: False
+        active: root.spinner
     MDFillRoundFlatButton:
         id: conn_btn
         adaptive_height: True
         text: 'Conectar'
-        on_release: root.connect('sage1')
-
-<RefreshButton>
-    icon: 'refresh'
-    adaptive_height:True
-    pos_hint: {'center_y': .5}
-
-    on_release: root.refresh()
+        on_release: root.connect()
