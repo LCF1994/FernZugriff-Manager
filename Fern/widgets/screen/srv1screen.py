@@ -1,9 +1,8 @@
-from http import server
-
 from kivy.properties import ObjectProperty
 from kivymd.uix.screen import Screen
 from widgets.card.command import CommandCard
 from widgets.card.serverconfig import ConfigCard
+from widgets.wrapper.body import BodyContainer
 from widgets.wrapper.connectionstate import ConnectionState
 from widgets.wrapper.servertitle import ServerTitle
 

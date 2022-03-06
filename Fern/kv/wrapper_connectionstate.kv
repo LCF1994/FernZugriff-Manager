@@ -1,19 +1,21 @@
 <ConnectionState>
     size_hint_y: None
     height: 45.0
-    size_hint_x: .33
-    spacing: 25
+    size_hint_x: .25
+    spacing: 10
     padding: 10, 0, 0, 0
 
-    MDLabel:
-        text: root.conn_state
-        valign: 'center'
-        pos_hint: {'center_y': .5}
     MDSpinner:
         size_hint: None, None
         size: dp(15), dp(15)
         pos_hint: {'center_y': .5}
         active: root.spinner
+
+    MDLabel:
+        text: root.conn_state
+        halign:'center'
+        size_hint_x: .3
+ 
     MDFillRoundFlatButton:
         id: conn_btn
         adaptive_height: True

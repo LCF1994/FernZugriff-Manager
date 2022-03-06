@@ -27,11 +27,17 @@ class ServidorSAGE:
         self.transport = None
         # Internal variables for status
 
+        self.var = {}
+        self.gcd = 'desativado' # not used
+
     def set_host(self, value: str) -> None:
         self.host = value
 
     def check_connection(self) -> bool:
-        return self.transport.is_active()
+        try:
+            return self.transport.is_active()
+        except AttributeError:
+            return False
 
     def connect(self) -> bool:
         print(f'Connecting to {self.host}')
@@ -67,8 +73,8 @@ class ServidorSAGE:
         return True if self.exec_cmd('pgrep gcd') else False
 
     def get_var(self) -> dict:
-        return {
-            'CPU': self.exec_cmd('echo $CPU'),
+        self.var = {
+            'CPU': self.exec_cmd('echo $CPU').lower(),
             'SAGE_OS': self.exec_cmd('echo $SAGE_SO'),
             'HOST': self.exec_cmd('echo $HOST'),
             'SOM': self.exec_cmd('echo $SERV_SOM')
@@ -82,7 +88,10 @@ class ServidorSAGE:
             'DIFUSAO': self.exec_cmd('echo $METODO_DIFUSAO')
             if 'Undefined' not in self.exec_cmd('echo $METODO_DIFUSAO')
             else 'Undefined',
+            'GCD': 'ativo' if self.check_gcd_running() else 'desativado',
+            'LOCAL': self.exec_cmd('echo $LOCAL'),
         }
+        return self.var
 
     def abre_visor_acesso(self):
         pass

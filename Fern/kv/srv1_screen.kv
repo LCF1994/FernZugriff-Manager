@@ -11,7 +11,7 @@
 
         ConnectionState: # Center 
             target: root.server
-            pos_hint: {'center_x': .5 , 'center_y': .925}
+            pos_hint: {'center_x': .75 , 'center_y': .93}
 
         MDIconButton: # Right
             icon:'cog'
@@ -28,14 +28,12 @@
 
 
         # Body
-        MDBoxLayout:
+        BodyContainer:
             id: body_container
             pos_hint: {'center_x': .5 , 'center_y': .5}
             size_hint_x:.95
-            # MDCard:
-            #     pos_hint: {'center_x': .5 , 'center_y': .525}
-            #     size_hint_y: .65
-            #     radius: [10, ]
+            spinner: False
+            target: root.server
 
 
         # Bottom
@@ -52,7 +50,7 @@
                 btn_icon: 'open-in-new'
                 btn_text: 'Abrir'
                 server_target: root.server
-                release_function: self.abre_visor_acesso
+                release_function: {'function':self.abre_visor_acesso, 'args':{}}
 
             CommandCard:
                 image: 'Fern/assets/images/abs_img_red.jpg'
@@ -60,7 +58,7 @@
                 btn_icon: 'information-variant'
                 btn_text: 'Solicitar'
                 server_target: root.server
-                release_function: self.get_server_info
+                release_function: {'function':self.get_server_info, 'args':{}}
 
             CommandCard:
                 image: 'Fern/assets/images/cryptocode.jpg'
@@ -68,4 +66,4 @@
                 btn_icon: 'console-line'
                 btn_text: 'Executar'
                 server_target: root.server
-                release_function: self.executar_remote_command
+                release_function: {'function':self.executar_remote_command, 'args':{'cmd':'whoami'}}
