@@ -4,6 +4,7 @@
         pos_hint: {'center_x': .5 , 'center_y': .5}
 
         ServerDetails:
+            id: details
             pos_hint: {'center_x': .15 , 'center_y': .525}
 
             os: app.SAGE_1.var['CPU']
@@ -11,7 +12,7 @@
             version: app.SAGE_1.var['VERSAO']
             database: app.SAGE_1.var['BASE']
             gcd: app.SAGE_1.var['GCD']
-        
+
         MDGridLayout:
             #md_bg_color:[1,1,1,1]
             pos_hint: {'center_x': .66 , 'center_y': .525}
@@ -60,8 +61,11 @@
                 value: app.SAGE_1.status['disk_logs']
 
         MainCover:
+            id: cover_chart
             pos_hint: {'center_x': .66 , 'center_y': .525}
             size_hint: .66, .65
+            message: 'GCD Desativado'
+            opacity: .5
 
 
     MDSpinner:
@@ -73,3 +77,11 @@
         palette: root.spinner_palette
         pos_hint: {'center_x': .5, 'center_y': .5}
         active: root.spinner
+
+    MainCover:
+        id: cover_conn
+        pos_hint: {'center_x': .5 , 'center_y': .525}
+        size_hint: 1., .65
+
+        message:'Not Connected'
+        opacity: .925

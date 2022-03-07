@@ -55,7 +55,8 @@ class ServidorSAGE:
 
     def check_connection(self) -> bool:
         try:
-            return self.transport.is_active()
+            transport = self.client.get_transport() if self.client else None
+            return transport and transport.is_active()
         except AttributeError:
             return False
 
@@ -71,6 +72,7 @@ class ServidorSAGE:
             print('Conectado')
 
             self.transport = self.client.get_transport()
+            self.transport.set_keepalive(30)
             return self.check_connection()
 
         except AuthenticationException:
@@ -82,10 +84,10 @@ class ServidorSAGE:
 
         return False
 
-    def exec_cmd(self, cmd) -> bytes:
+    def exec_cmd(self, cmd:str, stdin=None) -> bytes:
         stdin, stdout, stderr = self.client.exec_command(cmd)
         if stderr.channel.recv_exit_status() != 0:
-            return str(stderr.read(), 'utf-8')
+            return str(stderr.read()[:-1], 'utf-8')
         else:
             return str(stdout.read()[:-1], 'utf-8')
 
@@ -118,10 +120,18 @@ class ServidorSAGE:
 
 
 if __name__ == '__main__':
-    sage1 = ServidorSAGE('192.168.198.135')
+    sage1 = ServidorSAGE('192.168.198.136')
 
     # sage1.check_gcd_running()
 
     print(sage1.connect())
 
-    print(sage1.get_var())
+    print(sage1.check_connection())
+
+    from time import sleep
+
+    sleep(60)
+
+    print(sage1.check_connection())
+
+    #print(sage1.get_var())

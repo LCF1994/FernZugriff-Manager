@@ -4,6 +4,8 @@ from kivy.lang import Builder
 from kivymd.app import MDApp
 from widgets.screen.srv1screen import Srv1Screen
 
+from kivy.clock import Clock
+
 # Build kv string from kv files
 KV = string_builder()
 
@@ -12,6 +14,17 @@ class FernApp(MDApp):
 
     SAGE_1 = ServidorSAGE('127.0.0.1')
     SAGE_2 = ServidorSAGE('127.0.0.1')
+
+    RUNNING_CLOCK = []
+    
+
+    def on_start(self):
+        # For scheduling events on_start from config File
+
+        # if self.SVR1_CONFIGURED:
+        #     self.GET_GCD_RUNNING = Clock.schedule_interval(self.test, 1)
+        return super().on_start()
+
 
     def build(self):
         # Config

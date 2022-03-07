@@ -1,7 +1,7 @@
 from kivy.properties import StringProperty, ObjectProperty
 from kivymd.uix.boxlayout import MDBoxLayout
 from auxiliary.servidor_paramiko import ServidorSAGE
-
+import asynckivy as ak
 
 class ServerDetails(MDBoxLayout):
     os = StringProperty('linux')
@@ -12,10 +12,16 @@ class ServerDetails(MDBoxLayout):
       
 
     def update_data(self, srv):
-        if type(srv) is ServidorSAGE:
-            self.os = srv.var['CPU']
-            self.hostname = srv.var['HOST']
-            self.version = srv.var['VERSAO']
-            self.database = srv.var['BASE']
-            self.gcd = srv.var['GCD']
+        ak.start(self._request_data(srv))
+
+    async def _request_data(self, srv) -> None:
+        data = await ak.run_in_thread(srv.get_var)
+        self._update_widget_data(data)
+        
+    def _update_widget_data(self, data:dict) -> None:
+        self.os = data['CPU']
+        self.hostname = data['HOST']
+        self.version = data['VERSAO']
+        self.database = data['BASE']
+        self.gcd = data['GCD']
         
