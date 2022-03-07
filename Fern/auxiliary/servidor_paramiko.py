@@ -27,8 +27,28 @@ class ServidorSAGE:
         self.transport = None
         # Internal variables for status
 
-        self.var = {}
-        self.gcd = 'desativado' # not used
+        self.var = {
+            'CPU': '',
+            'SAGE_OS': '',
+            'HOST': 'unknow',
+            'SOM': 'unknow',
+            'BASE': 'unknow',
+            'MODELO': 'unknow',
+            'VERSAO': 'xx-xx',
+            'DIFUSAO': 'unknow',
+            'GCD': 'unknow',
+            'LOCAL': 'unknow',
+        }
+
+        self.status = {
+            'cpu': 15,
+            'memory': 6, 
+            'disk_sage': 85, 
+            'disk_arqs': 45, 
+            'disk_logs': 65,
+        }
+
+        self.gcd = False 
 
     def set_host(self, value: str) -> None:
         self.host = value

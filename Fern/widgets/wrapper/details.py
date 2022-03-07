@@ -17,4 +17,5 @@ class ServerDetails(MDBoxLayout):
             self.hostname = srv.var['HOST']
             self.version = srv.var['VERSAO']
             self.database = srv.var['BASE']
+            self.gcd = srv.var['GCD']
         

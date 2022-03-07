@@ -3,9 +3,66 @@
         id: container
         pos_hint: {'center_x': .5 , 'center_y': .5}
 
-        #ServerDetails:
-        #    target: root.target
-        #    pos_hint: {'center_x': .15 , 'center_y': .525}
+        ServerDetails:
+            pos_hint: {'center_x': .15 , 'center_y': .525}
+
+            os: app.SAGE_1.var['CPU']
+            hostname: app.SAGE_1.var['HOST']
+            version: app.SAGE_1.var['VERSAO']
+            database: app.SAGE_1.var['BASE']
+            gcd: app.SAGE_1.var['GCD']
+        
+        MDGridLayout:
+            #md_bg_color:[1,1,1,1]
+            pos_hint: {'center_x': .66 , 'center_y': .525}
+            size_hint: .66, .65
+            spacing: 15
+            padding: [10,]
+            cols:3
+
+            RoundedChart:
+                size_hint: None, None
+                size: 150, 175
+                color: app.theme_cls.colors['Blue']['400']
+                name:'CPU'
+                value: app.SAGE_1.status['cpu']
+
+            RoundedChart:
+                size_hint: None, None
+                size: 150, 175
+                color: app.theme_cls.colors['Green']['400']
+                name:'Memoria'
+                value: app.SAGE_1.status['memory']
+
+            RoundedChart:
+                size_hint: None, None
+                size: 150, 175
+                color: app.theme_cls.colors['Red']['400']
+                name:'Disco'
+                value: app.SAGE_1.status['disk_sage']
+
+            MDBoxLayout:
+                size_hint: None, None
+                size: 150, 175
+
+            RoundedChart:
+                size_hint: None, None
+                size: 150, 175
+                color: app.theme_cls.colors['Orange']['400']
+                name:'ARQs'
+                value: app.SAGE_1.status['disk_arqs']
+
+            RoundedChart:
+                size_hint: None, None
+                size: 150, 175
+                color: app.theme_cls.colors['Purple']['400']
+                name:'LOGs'
+                value: app.SAGE_1.status['disk_logs']
+
+        MainCover:
+            pos_hint: {'center_x': .66 , 'center_y': .525}
+            size_hint: .66, .65
+
 
     MDSpinner:
         size_hint: None, None

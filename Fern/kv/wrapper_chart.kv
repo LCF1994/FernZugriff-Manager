@@ -1,0 +1,33 @@
+<RoundedChart>:
+    orientation:'vertical'
+    MDFloatLayout:
+        size_hint: .9, .9
+        pos_hint:{'center_x':.5, 'center_y':.5}
+        canvas:
+            Color:
+                rgba: app.theme_cls.bg_light
+            Ellipse:
+                pos: self.pos
+                size: self.size
+            Color:
+                rgba: root.color
+            Ellipse:
+                pos: self.pos
+                size: self.size
+                angle_start:.0001
+                angle_end: root.value * 3.6
+            Color:
+                rgba: app.theme_cls.bg_normal
+            Ellipse:
+                pos: self.pos[0] + root.thickness / 2 , self.pos[1] + root.thickness / 2
+                size: self.size[0] - root.thickness , self.size[1] - root.thickness
+        MDLabel:
+            pos_hint:{'center_x':.5, 'center_y':.5}
+            adaptive_size:True
+            font_style:'H5'
+            text: '{} %'.format(str(root.value))
+    MDLabel:
+        text: root.name
+        pos_hint: {'center_y': .5}
+        size_hint_y: .25
+        halign: 'center'

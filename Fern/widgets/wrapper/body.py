@@ -2,6 +2,8 @@ from kivy.properties import BooleanProperty, ListProperty, ObjectProperty
 from kivymd.uix.floatlayout import MDFloatLayout
 from widgets.wrapper.details import ServerDetails
 from auxiliary.servidor_paramiko import ServidorSAGE
+from widgets.wrapper.chart import RoundedChart
+from widgets.cover.cover import MainCover
 
 
 class BodyContainer(MDFloatLayout):
