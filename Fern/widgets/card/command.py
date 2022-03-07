@@ -28,9 +28,9 @@ class CommandCard(MDCard):
         body = self.parent.parent.parent.ids.body_container
         self.screen_body = body
 
-        #print(body.children)
+        # print(body.children)
         body.ids.container.clear_widgets()
-        
+
         body.spinner = True
 
     async def async_cmd(self, long_action, future_reaction) -> None:
@@ -59,15 +59,15 @@ class CommandCard(MDCard):
         print(data)
         try:
             self.screen_body.ids.container.add_widget(
-            ServerDetails(
-                pos_hint= {'center_x': .15 , 'center_y': .525}, 
-                os = data['CPU'],
-                hostname = data['HOST'],
-                version = data['VERSAO'],
-                database = data['BASE'],
-                gcd= data['GCD']
+                ServerDetails(
+                    pos_hint={'center_x': 0.15, 'center_y': 0.525},
+                    os=data['CPU'],
+                    hostname=data['HOST'],
+                    version=data['VERSAO'],
+                    database=data['BASE'],
+                    gcd=data['GCD'],
+                )
             )
-        )
         except:
             print('deu ruim')
         try:

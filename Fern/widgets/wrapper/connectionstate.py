@@ -1,10 +1,10 @@
 import asynckivy as ak
 from auxiliary.servidor_paramiko import ServidorSAGE
+from kivy.clock import Clock
 from kivy.properties import BooleanProperty, ObjectProperty, StringProperty
+from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.snackbar import Snackbar
-from kivymd.app import MDApp
-from kivy.clock import Clock
 
 
 class ConnectionState(MDBoxLayout):
@@ -27,7 +27,6 @@ class ConnectionState(MDBoxLayout):
         for clock in self.app.RUNNING_CLOCK:
             clock.cancel()
 
-    
     def connect(self) -> None:
         self.app = MDApp.get_running_app()
         self.screen_body = self.parent.parent.ids.body_container
@@ -39,19 +38,17 @@ class ConnectionState(MDBoxLayout):
             print(f'Target IP: {self.target.host}')
             self.spinner = True
             ak.start(self.async_cmd(self.target))
-    
 
     async def async_cmd(self, target: ServidorSAGE) -> None:
         result = await ak.run_in_thread(target.connect)
         self._connection_result(result)
-
 
     def _connection_result(self, data: bool) -> None:
         self.spinner = False
         print(f'Dados recebidos: {data}')
 
         if data is True:
-            
+
             self.conn_state = 'Online'
             self.screen_body.ids.cover_conn.message = ''
             self.screen_body.ids.cover_conn.opacity = 0
@@ -59,18 +56,16 @@ class ConnectionState(MDBoxLayout):
             self.screen_body.ids.details.update_data(self.target)
 
             self.app.RUNNING_CLOCK.append(
-                Clock.schedule_interval( self._update_conn_state , 10),
-                Clock.schedule_interval( self._update_gcd_state , 30),
-                )
+                Clock.schedule_interval(self._update_conn_state, 10),
+                Clock.schedule_interval(self._update_gcd_state, 30),
+            )
         else:
             self.conn_state = 'Offline'
             self.screen_body.ids.cover_conn.message = 'Not Connected'
-            self.screen_body.ids.cover_conn.opacity = .9
+            self.screen_body.ids.cover_conn.opacity = 0.9
 
             self._clear_clocks()
             self._snackbar_error('Falha na Conexao')
-
-
 
     def _update_conn_state(self, *args):
         print('Checking Connection State ...')
@@ -85,8 +80,6 @@ class ConnectionState(MDBoxLayout):
         if not new_conn_state:
             self.conn_state = 'Offline'
             self.CLOCK_CONNECTION_STATE.cancel()
-
-
 
     def _update_gcd_state(self, *args):
         print('Checking Connection State ...')

@@ -42,13 +42,13 @@ class ServidorSAGE:
 
         self.status = {
             'cpu': 15,
-            'memory': 6, 
-            'disk_sage': 85, 
-            'disk_arqs': 45, 
+            'memory': 6,
+            'disk_sage': 85,
+            'disk_arqs': 45,
             'disk_logs': 65,
         }
 
-        self.gcd = False 
+        self.gcd = False
 
     def set_host(self, value: str) -> None:
         self.host = value
@@ -84,7 +84,7 @@ class ServidorSAGE:
 
         return False
 
-    def exec_cmd(self, cmd:str, stdin=None) -> bytes:
+    def exec_cmd(self, cmd: str, stdin=None) -> bytes:
         stdin, stdout, stderr = self.client.exec_command(cmd)
         if stderr.channel.recv_exit_status() != 0:
             return str(stderr.read()[:-1], 'utf-8')
@@ -134,4 +134,4 @@ if __name__ == '__main__':
 
     print(sage1.check_connection())
 
-    #print(sage1.get_var())
+    # print(sage1.get_var())
