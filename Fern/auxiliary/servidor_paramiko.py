@@ -36,15 +36,16 @@ class ServidorSAGE:
             'VERSAO': 'xx-xx',
             'DIFUSAO': 'unknow',
             'GCD': 'unknow',
+            'GCD_COR': [0,0,1,1],
             'LOCAL': 'unknow',
         }
 
         self.performance = {
             'cpu': 0,
-            'memory': 6,
-            'disk_sage': 85,
-            'disk_arqs': 45,
-            'disk_logs': 65,
+            'memory': 0,
+            'disk_sage': 0,
+            'disk_arqs': 0,
+            'disk_logs': 0,
         }
 
         self.gcd = False
@@ -112,6 +113,7 @@ class ServidorSAGE:
             if 'Undefined' not in self.exec_cmd('echo $METODO_DIFUSAO')
             else 'Undefined',
             'GCD': 'ativo' if self.check_gcd_running() else 'desativado',
+            'GCD_COR': [0, 1, 0, 1] if self.check_gcd_running() else [1, 0, 0, 1],
             'LOCAL': self.exec_cmd('echo $LOCAL'),
         }
         return self.var

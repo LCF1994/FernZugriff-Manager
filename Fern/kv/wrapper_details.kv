@@ -46,24 +46,52 @@
         MDSeparator:
             padding: 0, 5, 0, 5
 
-        MDBoxLayout:
-            adaptive_height: True
-            padding: [10, ]
-            MDLabel:
-                text: 'Base:'
-                font_style: 'Body1'
-            MDLabel:
-                text: root.database
-                font_style: 'Body2'
-                size_hint_x: .7
+        Item:
+            title:'Base'
+            value: root.database
 
-        MDBoxLayout:
-            adaptive_height: True
-            padding: [10, ]
-            MDLabel:
-                text: 'GCD:'
-                font_style: 'Body2'
-            MDLabel:
-                text: root.gcd
-                font_style: 'Body2'
-                size_hint_x: .7
+        MDSeparator:
+            padding: 0, 5, 0, 5
+
+        Item:
+            title: 'GCD'
+            value: root.gcd
+            theme: 'Custom'
+            color: root.gcd_color
+
+        MDSeparator:
+            padding: 0, 5, 0, 5
+
+        Item:
+            title:'Modelo'
+            value: root.dbtype
+
+        Item:
+            title:'Difusao'
+            value: root.redundancy
+
+        Item:
+            title:'SOM'
+            value: root.sound
+
+        Item:
+            title:'NOH'
+            value: root.network_node
+            
+        MDSeparator:
+            padding: 0, 5, 0, 5
+
+
+
+<Item>:
+    adaptive_height: True
+    padding: [10, ]
+    MDLabel:
+        text: '{}:'.format(root.title)
+        font_style: 'Body2'
+    MDLabel:
+        text: root.value
+        font_style: 'Body2'
+        theme_text_color: root.theme
+        text_color: root.color
+        size_hint_x: .7
