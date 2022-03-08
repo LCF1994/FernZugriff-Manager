@@ -1,7 +1,7 @@
 from unicodedata import numeric
 
 # from kivymd.app import MDApp
-from kivy.properties import ColorProperty, NumericProperty, StringProperty
+from kivy.properties import ColorProperty, NumericProperty, StringProperty, BoundedNumericProperty
 from kivymd.uix.boxlayout import MDBoxLayout
 
 
@@ -10,4 +10,4 @@ class RoundedChart(MDBoxLayout):
     name = StringProperty('Title')
     thickness = NumericProperty(20)
     color = ColorProperty([1, 0, 0, 1])
-    value = NumericProperty(0)
+    value = BoundedNumericProperty(0, min=0, max=100, errorvalue=0)

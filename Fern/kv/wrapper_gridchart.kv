@@ -1,0 +1,38 @@
+<GridCharts>:
+    #md_bg_color:[1,1,1,1]
+    spacing: 15
+    padding: [10,]
+    cols:3
+    RoundedChart:
+        size_hint: None, None
+        size: 150, 175
+        color: app.theme_cls.colors['Blue']['400']
+        name:'CPU'
+        value: root.cpu
+    RoundedChart:
+        size_hint: None, None
+        size: 150, 175
+        color: app.theme_cls.colors['Green']['400']
+        name:'Memoria'
+        value: root.memory
+    RoundedChart:
+        size_hint: None, None
+        size: 150, 175
+        color: app.theme_cls.colors['Red']['400']
+        name:'Disco'
+        value: root.disk_sage
+    MDBoxLayout:
+        size_hint: None, None
+        size: 150, 175
+    RoundedChart:
+        size_hint: None, None
+        size: 150, 175
+        color: app.theme_cls.colors['Orange']['400']
+        name:'ARQs'
+        value: root.disk_arqs
+    RoundedChart:
+        size_hint: None, None
+        size: 150, 175
+        color: app.theme_cls.colors['Purple']['400']
+        name:'LOGs'
+        value: root.disk_logs

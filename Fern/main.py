@@ -14,7 +14,7 @@ class FernApp(MDApp):
     SAGE_1 = ServidorSAGE('127.0.0.1')
     SAGE_2 = ServidorSAGE('127.0.0.1')
 
-    RUNNING_CLOCK = []
+    RUNNING_CLOCK = {}
 
     def on_start(self):
         # For scheduling events on_start from config File

@@ -6,6 +6,7 @@ from kivy.properties import BooleanProperty, ListProperty, ObjectProperty
 from kivymd.uix.floatlayout import MDFloatLayout
 from widgets.cover.cover import MainCover
 from widgets.wrapper.chart import RoundedChart
+from widgets.wrapper.gridchart import GridCharts
 from widgets.wrapper.details import ServerDetails
 
 

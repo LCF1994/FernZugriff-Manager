@@ -1,6 +1,5 @@
 import socket
-from ast import match_case
-from cmath import e
+import json
 
 from paramiko import (
     AuthenticationException,
@@ -40,8 +39,8 @@ class ServidorSAGE:
             'LOCAL': 'unknow',
         }
 
-        self.status = {
-            'cpu': 15,
+        self.performance = {
+            'cpu': 0,
             'memory': 6,
             'disk_sage': 85,
             'disk_arqs': 45,
@@ -73,6 +72,7 @@ class ServidorSAGE:
 
             self.transport = self.client.get_transport()
             self.transport.set_keepalive(30)
+            self.check_gcd_running()
             return self.check_connection()
 
         except AuthenticationException:
@@ -92,7 +92,8 @@ class ServidorSAGE:
             return str(stdout.read()[:-1], 'utf-8')
 
     def check_gcd_running(self) -> bool:
-        return True if self.exec_cmd('pgrep gcd') else False
+        self.gcd = True if self.exec_cmd('pgrep gcd') else False
+        return self.gcd
 
     def get_var(self) -> dict:
         self.var = {
@@ -115,6 +116,32 @@ class ServidorSAGE:
         }
         return self.var
 
+    
+    def get_performance(self) -> dict:
+        query = f''' 'select cpu_usage, mem_usage, disk_use_sage, disk_use_arqs, disk_use_log from noh where id == "{self.var['LOCAL']}"' '''
+        cmd = f"brsql -s {query} --json"
+        data_json = self.exec_cmd(cmd)
+        print(data_json)
+        data_dict = json.loads(data_json)
+
+        if type(data_dict)== list and len(data_dict)>0:
+            data_dict = data_dict[0]
+
+        print(f'Tipo de dado recebido{type(data_dict)}')
+
+        if type(data_dict) is dict:
+            try:
+                self.performance['cpu'] = data_dict['cpu_usage']
+                self.performance['memory'] = data_dict['mem_usage']
+                self.performance['disk_sage'] = data_dict['disk_use_sage']
+                self.performance['disk_arqs'] = data_dict['disk_use_arqs']
+                self.performance['disk_logs'] = data_dict['disk_use_log']
+            except KeyError:
+                print('Query return Error')
+
+        return self.performance
+
+
     def abre_visor_acesso(self):
         pass
 
@@ -124,14 +151,15 @@ if __name__ == '__main__':
 
     # sage1.check_gcd_running()
 
-    print(sage1.connect())
+    print(f'Connection :{sage1.connect()}')
 
-    print(sage1.check_connection())
+    print(f'GCD: {sage1.check_gcd_running()}')
 
-    from time import sleep
+    print(f'Var: {sage1.get_var()}')
 
-    sleep(60)
+    
+    print(sage1.get_performance())
 
-    print(sage1.check_connection())
+
 
     # print(sage1.get_var())
