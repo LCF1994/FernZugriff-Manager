@@ -103,7 +103,7 @@ class ServidorSAGE:
             'HOST': self.exec_cmd('echo $HOST'),
             'SOM': self.exec_cmd('echo $SERV_SOM')
             if 'Undefined' not in self.exec_cmd('echo $SERV_SOM')
-            else 'Undefined',
+            else 'Servidor',
             'BASE': self.exec_cmd('echo $BASE'),
             'MODELO': self.exec_cmd('echo $MODELO'),
             'VERSAO': self.exec_cmd(
@@ -116,12 +116,15 @@ class ServidorSAGE:
             'GCD_COR': [0, 1, 0, 1]
             if self.check_gcd_running()
             else [1, 0, 0, 1],
-            'LOCAL': self.exec_cmd('echo $LOCAL'),
+            'LOCAL': self.exec_cmd('echo $LOCAL')
+            if 'Undefined' not in self.exec_cmd('echo $LOCAL')
+            else self.exec_cmd('echo $HOST'),
         }
         return self.var
 
     def get_performance(self) -> dict:
         query = f""" 'select cpu_usage, mem_usage, disk_use_sage, disk_use_arqs, disk_use_log from noh where id == "{self.var['LOCAL']}"' """
+        print(query)
         cmd = f'brsql -s {query} --json'
         data_json = self.exec_cmd(cmd)
         print(data_json)
