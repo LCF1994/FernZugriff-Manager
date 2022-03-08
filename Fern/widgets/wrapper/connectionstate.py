@@ -19,11 +19,13 @@ class ConnectionState(MDBoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.clock_list.extend([
-            self._update_conn_state,
-            self._update_gcd_state,
-            self._update_charts_value,
-        ])
+        self.clock_list.extend(
+            [
+                self._update_conn_state,
+                self._update_gcd_state,
+                self._update_charts_value,
+            ]
+        )
 
     def _snackbar_error(self, message: str) -> None:
         Snackbar(
@@ -67,11 +69,15 @@ class ConnectionState(MDBoxLayout):
 
             # alterar para dict, possibilitando o cancelamento de rotinas especificas
             self.app.RUNNING_CLOCK = {
-                'connection': Clock.schedule_interval(self._update_conn_state, 15),
+                'connection': Clock.schedule_interval(
+                    self._update_conn_state, 15
+                ),
                 'gcd': Clock.schedule_interval(self._update_gcd_state, 30),
-                'performance': Clock.schedule_interval(self._update_charts_value, 10), 
+                'performance': Clock.schedule_interval(
+                    self._update_charts_value, 10
+                ),
             }
-            
+
         else:
             self.conn_state = 'Offline'
             self.screen_body.ids.cover_conn.message = 'Not Connected'
@@ -98,7 +104,6 @@ class ConnectionState(MDBoxLayout):
         if not new_conn_state:
             self.conn_state = 'Offline'
 
-
     # functions for gcd - clock event
     def _update_gcd_state(self, *args):
         print('Checking GCD State ...')
@@ -113,7 +118,7 @@ class ConnectionState(MDBoxLayout):
         if not new_gcd_state:
             self.screen_body.ids.details.gcd = 'desativado'
             self.screen_body.ids.cover_chart.message = 'GCD Desativado'
-            self.screen_body.ids.cover_chart.opacity = .5
+            self.screen_body.ids.cover_chart.opacity = 0.5
             print('GCD Desativado')
         else:
             self.screen_body.ids.details.gcd = 'ativo'
@@ -133,11 +138,13 @@ class ConnectionState(MDBoxLayout):
         data_received = await ak.run_in_thread(self.target.get_performance)
         self._update_charts_value_with_data_received(data_received)
 
-    def _update_charts_value_with_data_received(self, data_received:dict) -> None:
+    def _update_charts_value_with_data_received(
+        self, data_received: dict
+    ) -> None:
         print(f'Requesting Charts Update: {data_received} - Done')
 
-        self.screen_body.ids.grid_chart.cpu= data_received['cpu']
-        self.screen_body.ids.grid_chart.memory= data_received['memory']
-        self.screen_body.ids.grid_chart.disk_sage= data_received['disk_sage']
-        self.screen_body.ids.grid_chart.disk_arqs= data_received['disk_arqs']
-        self.screen_body.ids.grid_chart.disk_logs= data_received['disk_logs']
+        self.screen_body.ids.grid_chart.cpu = data_received['cpu']
+        self.screen_body.ids.grid_chart.memory = data_received['memory']
+        self.screen_body.ids.grid_chart.disk_sage = data_received['disk_sage']
+        self.screen_body.ids.grid_chart.disk_arqs = data_received['disk_arqs']
+        self.screen_body.ids.grid_chart.disk_logs = data_received['disk_logs']

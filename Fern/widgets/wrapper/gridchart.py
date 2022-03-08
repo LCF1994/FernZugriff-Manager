@@ -1,5 +1,5 @@
-from kivymd.uix.gridlayout import MDGridLayout
 from kivy.properties import NumericProperty
+from kivymd.uix.gridlayout import MDGridLayout
 
 
 class GridCharts(MDGridLayout):
@@ -8,4 +8,3 @@ class GridCharts(MDGridLayout):
     disk_sage = NumericProperty(0)
     disk_arqs = NumericProperty(0)
     disk_logs = NumericProperty(0)
-

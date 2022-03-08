@@ -1,7 +1,12 @@
 from unicodedata import numeric
 
 # from kivymd.app import MDApp
-from kivy.properties import ColorProperty, NumericProperty, StringProperty, BoundedNumericProperty
+from kivy.properties import (
+    BoundedNumericProperty,
+    ColorProperty,
+    NumericProperty,
+    StringProperty,
+)
 from kivymd.uix.boxlayout import MDBoxLayout
 
 
