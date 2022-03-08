@@ -1,5 +1,5 @@
 import asynckivy as ak
-from kivy.properties import StringProperty, ColorProperty, OptionProperty
+from kivy.properties import ColorProperty, OptionProperty, StringProperty
 from kivymd.uix.boxlayout import MDBoxLayout
 
 
@@ -10,7 +10,7 @@ class ServerDetails(MDBoxLayout):
     database = StringProperty('undefined')
     dbtype = StringProperty('undefined')
     gcd = StringProperty('desativado')
-    gcd_color = ColorProperty([1,0,0,1])
+    gcd_color = ColorProperty([1, 0, 0, 1])
     sound = StringProperty('undefined')
     redundancy = StringProperty('undefined')
     network_node = StringProperty('undefined')
@@ -34,8 +34,20 @@ class ServerDetails(MDBoxLayout):
         self.redundancy = data['DIFUSAO']
         self.network_node = data['LOCAL']
 
+
 class Item(MDBoxLayout):
     title = StringProperty('ITEM')
     value = StringProperty('undefined')
-    theme = OptionProperty('Custom', options=['Primary', 'Secondary', 'Hint', 'Error', 'Custom', 'ContrastParentBackground'], allownone=True)
+    theme = OptionProperty(
+        'Custom',
+        options=[
+            'Primary',
+            'Secondary',
+            'Hint',
+            'Error',
+            'Custom',
+            'ContrastParentBackground',
+        ],
+        allownone=True,
+    )
     color = ColorProperty([1, 1, 1, 1])

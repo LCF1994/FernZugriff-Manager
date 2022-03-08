@@ -36,7 +36,7 @@ class ServidorSAGE:
             'VERSAO': 'xx-xx',
             'DIFUSAO': 'unknow',
             'GCD': 'unknow',
-            'GCD_COR': [0,0,1,1],
+            'GCD_COR': [0, 0, 1, 1],
             'LOCAL': 'unknow',
         }
 
@@ -113,7 +113,9 @@ class ServidorSAGE:
             if 'Undefined' not in self.exec_cmd('echo $METODO_DIFUSAO')
             else 'Undefined',
             'GCD': 'ativo' if self.check_gcd_running() else 'desativado',
-            'GCD_COR': [0, 1, 0, 1] if self.check_gcd_running() else [1, 0, 0, 1],
+            'GCD_COR': [0, 1, 0, 1]
+            if self.check_gcd_running()
+            else [1, 0, 0, 1],
             'LOCAL': self.exec_cmd('echo $LOCAL'),
         }
         return self.var
