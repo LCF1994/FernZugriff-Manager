@@ -40,16 +40,4 @@ class PingCard(MDCard):
 
 
 if __name__ == '__main__':
-    from kivy.lang import Builder
-    from kivymd.app import MDApp
-
-KV = """
-MDBoxLayout:
-    PingCard:
-
-"""
-
-
-class PingCardApp(MDApp):
-    def build(self):
-        return Builder.load_string(KV)
+    pass

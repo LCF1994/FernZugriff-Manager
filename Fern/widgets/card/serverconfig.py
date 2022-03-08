@@ -1,20 +1,10 @@
+from auxiliary.common import CommonCard, CommonFeatures
 from kivy.properties import ObjectProperty
 from kivymd.uix.card import MDCard
-from kivymd.uix.snackbar import Snackbar
 
 
-class ConfigCard(MDCard):
+class ConfigCard(MDCard, CommonFeatures, CommonCard):
     target = ObjectProperty(None)
-
-    def close_card(self) -> None:
-        self.parent.remove_widget(self)
-
-    def check_card_focus(self, args) -> None:
-        x, y = args[1].pos
-
-        # check unfocus
-        if not self.collide_point(x, y):
-            self.parent.remove_widget(self)
 
     def cancel_button(self) -> None:
         self.close_card()
@@ -40,28 +30,20 @@ class ConfigCard(MDCard):
 
     def _validate_server_ip(self) -> bool:
         if not self.ids.server_ip.text:
-            Snackbar(
-                text='[color=#ee3434]Insira um IP para o Servidor ![/color]',
-                snackbar_x='10dp',
-                snackbar_y='10dp',
-                size_hint_x=0.95,
-            ).open()
+            self._snackbar_error('Insira um IP para o Servidor !')
             return False
         return True
 
     def _validate_ssh_port(self) -> bool:
         if self.ids.port_number.text:
             try:
-                int(self.ids.port_number.text)
-                return True
-            except ValueError:
-                Snackbar(
-                    text='[color=#ee3434]Porta invalida ! - Insira um numero de 0 a 65,535 [/color]',
-                    snackbar_x='10dp',
-                    snackbar_y='10dp',
-                    size_hint_x=0.95,
-                ).open()
-            return False
+                port_value = int(self.ids.port_number.text)
+                return 0 <= port_value <= 65_535
+            except (ValueError, TypeError):
+                self._snackbar_error(
+                    'Porta invalida ! - Insira um numero de 0 a 65,535'
+                )
+                return False
         else:
             return True
 

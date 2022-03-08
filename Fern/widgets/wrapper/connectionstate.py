@@ -1,13 +1,13 @@
 import asynckivy as ak
+from auxiliary.common import CommonFeatures
 from auxiliary.servidor_paramiko import ServidorSAGE
 from kivy.clock import Clock
 from kivy.properties import BooleanProperty, ObjectProperty, StringProperty
 from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.snackbar import Snackbar
 
 
-class ConnectionState(MDBoxLayout):
+class ConnectionState(MDBoxLayout, CommonFeatures):
     conn_state = StringProperty('Offline')
     target = ObjectProperty(None)
     spinner = BooleanProperty(False)
@@ -27,14 +27,6 @@ class ConnectionState(MDBoxLayout):
             ]
         )
 
-    def _snackbar_error(self, message: str) -> None:
-        Snackbar(
-            text=f'[color=#ee3434]{message}[/color]',
-            snackbar_x='10dp',
-            snackbar_y='10dp',
-            size_hint_x=0.95,
-        ).open()
-
     def _clear_clocks(self) -> None:
         for clock in self.app.RUNNING_CLOCK:
             clock.cancel()
@@ -49,11 +41,9 @@ class ConnectionState(MDBoxLayout):
         else:
             print(f'Target IP: {self.target.host}')
             self.spinner = True
-            ak.start(self.async_cmd(self.target))
-
-    async def async_cmd(self, target: ServidorSAGE) -> None:
-        result = await ak.run_in_thread(target.connect)
-        self._connection_result(result)
+            ak.start(
+                self.async_cmd(self.target.connect, self._connection_result)
+            )
 
     def _connection_result(self, data: bool) -> None:
         self.spinner = False
@@ -93,11 +83,11 @@ class ConnectionState(MDBoxLayout):
     # functions for connection - clock event
     def _update_conn_state(self, *args):
         print('Checking Connection State ...')
-        ak.start(self._await_conn_verification())
-
-    async def _await_conn_verification(self):
-        result = await ak.run_in_thread(self.target.check_connection)
-        self._conn_verifcation_result(result)
+        ak.start(
+            self.async_cmd(
+                self.target.check_connection, self._conn_verifcation_result
+            )
+        )
 
     def _conn_verifcation_result(self, new_conn_state):
         print(f'Checking Connection State: {new_conn_state} - Done')
@@ -107,11 +97,11 @@ class ConnectionState(MDBoxLayout):
     # functions for gcd - clock event
     def _update_gcd_state(self, *args):
         print('Checking GCD State ...')
-        ak.start(self._await_gcd_verification())
-
-    async def _await_gcd_verification(self):
-        new_gcd_state = await ak.run_in_thread(self.target.check_gcd_running)
-        self._gcd_verifcation_result(new_gcd_state)
+        ak.start(
+            self.async_cmd(
+                self.target.check_gcd_running, self._gcd_verifcation_result
+            )
+        )
 
     def _gcd_verifcation_result(self, new_gcd_state):
         print(f'Checking GCD State: {new_gcd_state} - Done')
@@ -130,13 +120,14 @@ class ConnectionState(MDBoxLayout):
     def _update_charts_value(self, *args) -> None:
         if self.target.gcd:
             print('Requesting Charts Update ...')
-            ak.start(self._await_chart_data_request())
+            ak.start(
+                self.async_cmd(
+                    self.target.get_performance,
+                    self._update_charts_value_with_data_received,
+                )
+            )
         else:
             print('GCD not running')
-
-    async def _await_chart_data_request(self) -> None:
-        data_received = await ak.run_in_thread(self.target.get_performance)
-        self._update_charts_value_with_data_received(data_received)
 
     def _update_charts_value_with_data_received(
         self, data_received: dict

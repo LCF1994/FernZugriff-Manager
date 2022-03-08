@@ -1,0 +1,26 @@
+<ProccessCard>:
+    size_hint: .6, .9
+    pos_hint: {'center_x': .5, 'center_y': .5}
+    elevation: 20
+    radius: [dp(36), ]
+
+    on_touch_down: self.check_card_focus(args)
+
+    MDFloatLayout:
+        MDSpinner:
+            id: spinner
+            size_hint: None, None
+            size: dp(20), dp(20)
+            pos_hint: {'center_x': .5, 'center_y': .81}
+            active: False
+        MDIconButton:
+            id: monitor
+            icon: 'monitor'
+            theme_text_color: "Custom"
+            text_color: app.theme_cls.primary_color
+            user_font_size: '75sp'
+            pos_hint: {"center_x": .5, "center_y": .8}
+        MDLabel:
+            halign:'center'
+            pos_hint: {'center_x': .5, "center_y": .6}
+            text:'SAGE 1 - Processos'
