@@ -1,6 +1,8 @@
 import asynckivy as ak
 from auxiliary.common import CommonFeatures
+from kivy.clock import Clock
 from kivy.properties import DictProperty, ObjectProperty, StringProperty
+from kivymd.app import MDApp
 from kivymd.uix.card import MDCard
 from kivymd.uix.spinner import MDSpinner
 from widgets.card.proccess import ProccessCard
@@ -29,15 +31,13 @@ class CommandCard(MDCard, CommonFeatures):
 
     def get_proccess_running_in_server(self, args: dict):
         self._get_screen()
-        self.screen.add_widget(ProccessCard())
-        if self.server_target.gcd:
-            self._snackbar_error(
-                f'Abrir Card com Processos : GCD - {self.server_target.gcd}'
+
+        ak.start(
+            self.async_cmd(
+                self.server_target.get_server_proccess,
+                self.reaction_get_proccess_running_in_server,
             )
-        else:
-            self._snackbar_error(
-                f'Abrir Card com Processos : GCD - {self.server_target.gcd}'
-            )
+        )
 
     def execute_remote_command(self, args: dict):
         self._get_screen()
@@ -45,5 +45,12 @@ class CommandCard(MDCard, CommonFeatures):
         print(args)
 
     # Future Responses
-    def reaction_get_proccess_running_in_server(self, data: dict) -> None:
-        pass
+    def reaction_get_proccess_running_in_server(self, data: list) -> None:
+
+        self.screen.add_widget(
+            ProccessCard(
+                app=MDApp.get_running_app(),
+                proccess_list=data,
+                server_target=self.server_target,
+            )
+        )

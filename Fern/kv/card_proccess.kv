@@ -1,26 +1,52 @@
 <ProccessCard>:
-    size_hint: .6, .9
-    pos_hint: {'center_x': .5, 'center_y': .5}
+    size_hint: .6, .8
+    pos_hint: {'center_x': .5, 'center_y': .585}
     elevation: 20
     radius: [dp(36), ]
+
+    proccess_list: 
 
     on_touch_down: self.check_card_focus(args)
 
     MDFloatLayout:
-        MDSpinner:
-            id: spinner
-            size_hint: None, None
-            size: dp(20), dp(20)
-            pos_hint: {'center_x': .5, 'center_y': .81}
-            active: False
-        MDIconButton:
-            id: monitor
-            icon: 'monitor'
-            theme_text_color: "Custom"
-            text_color: app.theme_cls.primary_color
-            user_font_size: '75sp'
-            pos_hint: {"center_x": .5, "center_y": .8}
         MDLabel:
             halign:'center'
-            pos_hint: {'center_x': .5, "center_y": .6}
-            text:'SAGE 1 - Processos'
+            pos_hint: {'center_x': .5, "center_y": .95}
+            text:'Processos - SAGE'
+            font_style: 'H6'
+        MDSeparator:
+            pos_hint: {'center_x': .5, "center_y": .9}
+            size_hint_x: .9
+
+        ScrollView:
+            pos_hint: {'center_x': .5, "center_y": .5}
+            size_hint: .9, .7
+            MDList:
+                id:md_list
+        
+        MDFillRoundFlatButton:
+            pos_hint: {'center_x': .25, "center_y": .05}
+            text:'Create'
+            on_release:root.create_list()
+        
+        MDFillRoundFlatButton:
+            pos_hint: {'center_x': .5, "center_y": .05}
+            text:'Update'
+            on_release:root.update_list()
+
+        MDFillRoundFlatButton:
+            pos_hint: {'center_x': .75, "center_y": .05}
+            text:'Clear'
+            on_release:root.clear_list()
+
+
+<ListItem>:
+    on_size:
+        self.ids._right_container.width = container.width
+        self.ids._right_container.x = container.width
+
+    ProccessStatus:
+        id: container
+
+        MDLabel:
+            text: root.status

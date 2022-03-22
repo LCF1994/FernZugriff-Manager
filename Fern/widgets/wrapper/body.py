@@ -1,7 +1,3 @@
-from email import message
-from operator import index
-
-from auxiliary.servidor_paramiko import ServidorSAGE
 from kivy.properties import BooleanProperty, ListProperty, ObjectProperty
 from kivymd.uix.floatlayout import MDFloatLayout
 from widgets.cover.cover import MainCover
