@@ -52,8 +52,14 @@ class ServidorSAGE:
 
         self.proccess = {}
 
-    def set_host(self, value: str) -> None:
-        self.host = value
+    def set_config(self, config: dict) -> None:
+        try:
+            self.host = config['host']
+            self.username = config['username']
+            self.password = config['password']
+            self.port = config['port']
+        except KeyError:
+            print('Keys expected = [ host, username, password, port ]')
 
     def check_connection(self) -> bool:
         try:
