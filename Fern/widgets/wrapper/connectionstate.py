@@ -27,54 +27,58 @@ class ConnectionState(MDBoxLayout, CommonFeatures):
             ]
         )
 
-    def _clear_clocks(self) -> None:
-        for clock in self.app.RUNNING_CLOCK:
-            clock.cancel()
-
-    def connect(self) -> None:
+    def on_kv_post(self, base_widget):
         self.app = MDApp.get_running_app()
+        self.app.OBSERVERS['SRV1']['CONN_STATE'] = self
+
         self.screen_body = self.parent.parent.ids.body_container
 
-        if self.target.host == '127.0.0.1':
+        return super().on_kv_post(base_widget)
+
+    def connect(self) -> None:
+        if self.target.host == 'xxx.xxx.xxx.xxx':
             self._snackbar_error('Configure um IP valido')
 
         else:
             print(f'Target IP: {self.target.host}')
             self.spinner = True
             ak.start(
-                self.async_cmd(self.target.connect, self._connection_result)
+                self.async_cmd(self.target.connect, self.connection_result)
             )
 
-    def _connection_result(self, data: bool) -> None:
+    def connection_result(self, data: bool) -> None:
         self.spinner = False
         print(f'Dados recebidos: {data}')
 
         if data is True:
-            self.conn_state = 'Online'
-            self.screen_body.ids.cover_conn.message = ''
-            self.screen_body.ids.cover_conn.opacity = 0
-
-            self.screen_body.ids.details.update_data(self.target)
-            self.run_clock_list()
-
-            # alterar para dict, possibilitando o cancelamento de rotinas especificas
-            self.app.RUNNING_CLOCK = {
-                'connection': Clock.schedule_interval(
-                    self._update_conn_state, 15
-                ),
-                'gcd': Clock.schedule_interval(self._update_gcd_state, 30),
-                'performance': Clock.schedule_interval(
-                    self._update_charts_value, 10
-                ),
-            }
-
+            self.positive_conn()
         else:
-            self.conn_state = 'Offline'
-            self.screen_body.ids.cover_conn.message = 'Not Connected'
-            self.screen_body.ids.cover_conn.opacity = 0.9
+            self.negative_conn()
 
-            self._clear_clocks()
-            self._snackbar_error('Falha na Conexao')
+    def positive_conn(self):
+        self.conn_state = 'Online'
+        self.screen_body.ids.cover_conn.message = ''
+        self.screen_body.ids.cover_conn.opacity = 0
+        self.screen_body.ids.details.update_data(self.target)
+
+        self.run_clock_list()
+
+        self.app.RUNNING_CLOCK = {
+            'connection': Clock.schedule_interval(self._update_conn_state, 15),
+            'gcd': Clock.schedule_interval(self._update_gcd_state, 30),
+            'performance': Clock.schedule_interval(
+                self._update_charts_value, 10
+            ),
+        }
+
+    def negative_conn(self):
+        self.conn_state = 'Offline'
+        self.screen_body.ids.cover_conn.message = 'Not Connected'
+        self.screen_body.ids.cover_conn.opacity = 0.9
+
+        self.app.clear_clocks()
+
+        self._snackbar_error('Falha na Conexao')
 
     def run_clock_list(self, *args):
         for function in self.clock_list:
