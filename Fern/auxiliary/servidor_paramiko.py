@@ -23,8 +23,9 @@ class ServidorSAGE:
         self.client = SSHClient()
         self.client.set_missing_host_key_policy(AutoAddPolicy())
 
-        self.transport = None
         # Internal variables for status
+        self.transport = None
+        self.conn = False
 
         self.var = {
             'CPU': '',
@@ -69,7 +70,7 @@ class ServidorSAGE:
             return False
 
     def connect(self) -> bool:
-        print(f'Connecting to {self.host}')
+        # print(f'Connecting to {self.host}')
         try:
             self.client.connect(
                 self.host,
@@ -77,7 +78,7 @@ class ServidorSAGE:
                 password=self.password,
                 port=self.port,
             )
-            print('Conectado')
+            # print('Conectado')
 
             self.transport = self.client.get_transport()
             self.transport.set_keepalive(30)

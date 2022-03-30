@@ -1,3 +1,4 @@
+from auxiliary.extentions import Extentions
 from auxiliary.kvlang import string_builder
 from auxiliary.servidor_paramiko import ServidorSAGE
 from kivy.clock import Clock
@@ -9,32 +10,23 @@ from widgets.screen.srv1screen import Srv1Screen
 
 # Build kv string from kv files
 KV = string_builder()
+CONFIG_PATH = './Fern/config.json'
 
 
-class FernApp(MDApp):
-    CONFIG_PATH = './Fern/config.json'
-    CONFIG_STORAGE = JsonStore(CONFIG_PATH)
-
+class FernApp(MDApp, Extentions):
     SAGE_1 = ServidorSAGE('xxx.xxx.xxx.xxx')
     SAGE_2 = ServidorSAGE('xxx.xxx.xxx.xxx')
 
-    RUNNING_CLOCK = {}
-
-    OBSERVERS = {
-        'SRV1': {},
-        'SRV2': {},
-        'TC1': {},
-        'TC2': {},
-    }
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.storage = JsonStore(CONFIG_PATH)
+
         self.set_config_up()
 
     def set_config_up(self) -> None:
         try:
-            self.SAGE_1.set_config(self.CONFIG_STORAGE.get('sage1'))
-            self.SAGE_2.set_config(self.CONFIG_STORAGE.get('sage2'))
+            self.SAGE_1.set_config(self.storage.get('sage1'))
+            self.SAGE_2.set_config(self.storage.get('sage2'))
             Logger.info('Settings: Configuration file loaded')
         except KeyError:
             Logger.warning('Settings: Configuration file incomplete')

@@ -29,7 +29,8 @@ class ConnectionState(MDBoxLayout, CommonFeatures):
 
     def on_kv_post(self, base_widget):
         self.app = MDApp.get_running_app()
-        self.app.OBSERVERS['SRV1']['CONN_STATE'] = self
+        self.app.widgets['SRV1']['CONN_STATE'] = self
+        self.app.observers['CONN_STATE'] = self
 
         self.screen_body = self.parent.parent.ids.body_container
 
@@ -40,13 +41,10 @@ class ConnectionState(MDBoxLayout, CommonFeatures):
             self._snackbar_error('Configure um IP valido')
 
         else:
-            print(f'Target IP: {self.target.host}')
             self.spinner = True
-            ak.start(
-                self.async_cmd(self.target.connect, self.connection_result)
-            )
+            self.app.connect_to_server(self.target)
 
-    def connection_result(self, data: bool) -> None:
+    def update_connenction(self, data: bool) -> None:
         self.spinner = False
         print(f'Dados recebidos: {data}')
 
