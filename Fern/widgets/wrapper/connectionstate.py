@@ -21,7 +21,6 @@ class ConnectionState(MDBoxLayout, CommonFeatures):
 
         self.clock_list.extend(
             [
-                self._update_conn_state,
                 self._update_gcd_state,
                 self._update_charts_value,
             ]
@@ -29,8 +28,7 @@ class ConnectionState(MDBoxLayout, CommonFeatures):
 
     def on_kv_post(self, base_widget):
         self.app = MDApp.get_running_app()
-        self.app.widgets['SRV1']['CONN_STATE'] = self
-        self.app.observers['CONN_STATE'] = self
+        self.app.widgets['SAGE_1']['CONN_STATE'] = self
 
         self.screen_body = self.parent.parent.ids.body_container
 
@@ -62,7 +60,6 @@ class ConnectionState(MDBoxLayout, CommonFeatures):
         self.run_clock_list()
 
         self.app.RUNNING_CLOCK = {
-            'connection': Clock.schedule_interval(self._update_conn_state, 15),
             'gcd': Clock.schedule_interval(self._update_gcd_state, 30),
             'performance': Clock.schedule_interval(
                 self._update_charts_value, 10
@@ -83,14 +80,6 @@ class ConnectionState(MDBoxLayout, CommonFeatures):
             function()
 
     # functions for connection - clock event
-    def _update_conn_state(self, *args):
-        print('Checking Connection State ...')
-        ak.start(
-            self.async_cmd(
-                self.target.check_connection, self._conn_verifcation_result
-            )
-        )
-
     def _conn_verifcation_result(self, new_conn_state):
         print(f'Checking Connection State: {new_conn_state} - Done')
         if not new_conn_state:

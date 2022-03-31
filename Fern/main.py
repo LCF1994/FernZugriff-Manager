@@ -14,8 +14,8 @@ CONFIG_PATH = './Fern/config.json'
 
 
 class FernApp(MDApp, Extentions):
-    SAGE_1 = ServidorSAGE('xxx.xxx.xxx.xxx')
-    SAGE_2 = ServidorSAGE('xxx.xxx.xxx.xxx')
+    SAGE_1 = ServidorSAGE('SAGE_1', 'xxx.xxx.xxx.xxx')
+    SAGE_2 = ServidorSAGE('SAGE_2', 'xxx.xxx.xxx.xxx')
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -47,10 +47,6 @@ class FernApp(MDApp, Extentions):
         self.define_theme()
 
         return Builder.load_string(KV)
-
-    def clear_clocks(self) -> None:
-        for clock in self.RUNNING_CLOCK.values():
-            clock.cancel()
 
 
 if __name__ == '__main__':

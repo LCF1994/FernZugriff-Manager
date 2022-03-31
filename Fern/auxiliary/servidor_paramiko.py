@@ -11,9 +11,15 @@ from paramiko import (
 
 class ServidorSAGE:
     def __init__(
-        self, host, username='sagetr1', password='sagetr1', port=22
+        self,
+        name: str,
+        host: str,
+        username='sagetr1',
+        password='sagetr1',
+        port=22,
     ) -> None:
         # Server config
+        self.name = name
         self.host = host
         self.username = username
         self.password = password
