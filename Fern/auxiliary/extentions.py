@@ -98,8 +98,23 @@ class Extentions:
         )
 
         if data is True:
-            # update charts
-            pass
+            self._clock_charts_update(server)
+
+    def update_charts_with_data_received(
+        self, data: dict, server: ServidorSAGE
+    ) -> None:
+        # send screen widgets result
+        try:
+            for widget in self.widgets[server.name].values():
+                try:
+                    widget.update_charts_info(data)
+                except AttributeError:
+                    continue
+
+        except KeyError:
+            print(
+                f'KeyError {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
+            )
 
     def _clock_conn_checker(self, server, *args) -> None:
         Logger.info('Clock : Checking Connection State ...')
@@ -114,6 +129,16 @@ class Extentions:
         ak.start(
             self.async_cmd_with_args(
                 server.check_gcd_running, self.gcd_result, server
+            )
+        )
+
+    def _clock_charts_update(self, server, *args) -> None:
+        Logger.info(f'Clock : Updating {server.name} Charts information ...')
+        ak.start(
+            self.async_cmd_with_args(
+                server.get_performance,
+                self.update_charts_with_data_received,
+                server,
             )
         )
 
