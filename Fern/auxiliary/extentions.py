@@ -41,6 +41,7 @@ class Extentions:
                 Logger.info(
                     f'Clock : Conn_Checker - {server.name} [IP: {server.host}] - Connection Verified'
                 )
+                self._clock_gcd_checker(server)
             else:
                 self.conn_status = True
                 Logger.info(
@@ -50,14 +51,19 @@ class Extentions:
                 # send screen widgets result
                 try:
                     for widget in self.widgets[server.name].values():
-                        widget.update_connenction(data)
+                        try:
+                            widget.update_connection(data)
+                        except AttributeError:
+                            print('Function not found or not implemented')
+                        continue
 
                 except KeyError:
                     print(
                         f'KeyError {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
                     )
-                except AttributeError:
-                    print('Function not found')
+
+                # Check GCD
+                self._clock_gcd_checker(server)
 
                 # add Clock
                 Logger.info('Clock : Conn_Checker added.')
@@ -71,6 +77,30 @@ class Extentions:
                 self.clear_clocks()
                 Logger.info('Clock : All clocks canceled')
 
+    def gcd_result(self, data: bool, server: ServidorSAGE) -> None:
+        # send screen widgets result
+        try:
+            for widget in self.widgets[server.name].values():
+                try:
+                    widget.update_gcd_state(data)
+                except AttributeError:
+                    # print('Function not found or not implemented')
+                    continue
+
+        except KeyError:
+            print(
+                f'KeyError {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
+            )
+
+        state = 'Running' if data else 'Stopped'
+        Logger.info(
+            f'Clock : GCD_Checker - {server.name} [IP: {server.host}] - GCD {state}'
+        )
+
+        if data is True:
+            # update charts
+            pass
+
     def _clock_conn_checker(self, server, *args) -> None:
         Logger.info('Clock : Checking Connection State ...')
         ak.start(
@@ -79,8 +109,13 @@ class Extentions:
             )
         )
 
-    # def _clock_conn_checker_result(self, *args):
-    #    print(args)
+    def _clock_gcd_checker(self, server, *args) -> None:
+        Logger.info(f'Clock : Checking {server.name} GCD State ...')
+        ak.start(
+            self.async_cmd_with_args(
+                server.check_gcd_running, self.gcd_result, server
+            )
+        )
 
     def add_clock(name: str, action, time_multplier: int) -> None:
         return Clock.schedule_interval(action, time_multplier * DEFAULT_TIME)

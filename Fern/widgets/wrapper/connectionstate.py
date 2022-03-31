@@ -28,7 +28,7 @@ class ConnectionState(MDBoxLayout, CommonFeatures):
 
     def on_kv_post(self, base_widget):
         self.app = MDApp.get_running_app()
-        self.app.widgets['SAGE_1']['CONN_STATE'] = self
+        self.app.widgets[self.target.name]['CONN_STATE'] = self
 
         self.screen_body = self.parent.parent.ids.body_container
 
@@ -42,7 +42,7 @@ class ConnectionState(MDBoxLayout, CommonFeatures):
             self.spinner = True
             self.app.connect_to_server(self.target)
 
-    def update_connenction(self, data: bool) -> None:
+    def update_connection(self, data: bool) -> None:
         self.spinner = False
         print(f'Dados recebidos: {data}')
 
@@ -53,59 +53,15 @@ class ConnectionState(MDBoxLayout, CommonFeatures):
 
     def positive_conn(self):
         self.conn_state = 'Online'
-        self.screen_body.ids.cover_conn.message = ''
-        self.screen_body.ids.cover_conn.opacity = 0
-        self.screen_body.ids.details.update_data(self.target)
-
-        self.run_clock_list()
-
-        self.app.RUNNING_CLOCK = {
-            'gcd': Clock.schedule_interval(self._update_gcd_state, 30),
-            'performance': Clock.schedule_interval(
-                self._update_charts_value, 10
-            ),
-        }
+        # Must be implemented
+        # change connection btn to disconnection btn
 
     def negative_conn(self):
         self.conn_state = 'Offline'
-        self.screen_body.ids.cover_conn.message = 'Not Connected'
-        self.screen_body.ids.cover_conn.opacity = 0.9
-
-        self.app.clear_clocks()
+        # Must be implemented
+        # change disconnection btn to connection btn
 
         self._snackbar_error('Falha na Conexao')
-
-    def run_clock_list(self, *args):
-        for function in self.clock_list:
-            function()
-
-    # functions for connection - clock event
-    def _conn_verifcation_result(self, new_conn_state):
-        print(f'Checking Connection State: {new_conn_state} - Done')
-        if not new_conn_state:
-            self.conn_state = 'Offline'
-
-    # functions for gcd - clock event
-    def _update_gcd_state(self, *args):
-        print('Checking GCD State ...')
-        ak.start(
-            self.async_cmd(
-                self.target.check_gcd_running, self._gcd_verifcation_result
-            )
-        )
-
-    def _gcd_verifcation_result(self, new_gcd_state):
-        print(f'Checking GCD State: {new_gcd_state} - Done')
-        if not new_gcd_state:
-            self.screen_body.ids.details.gcd = 'desativado'
-            self.screen_body.ids.cover_chart.message = 'GCD Desativado'
-            self.screen_body.ids.cover_chart.opacity = 0.5
-            print('GCD Desativado')
-        else:
-            self.screen_body.ids.details.gcd = 'ativo'
-            self.screen_body.ids.cover_chart.message = ''
-            self.screen_body.ids.cover_chart.opacity = 0
-            print('GCD ativo')
 
     # functions for update charts - clock event
     def _update_charts_value(self, *args) -> None:

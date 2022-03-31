@@ -10,6 +10,7 @@ from widgets.screen.srv1screen import Srv1Screen
 
 # Build kv string from kv files
 KV = string_builder()
+
 CONFIG_PATH = './Fern/config.json'
 
 

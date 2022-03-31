@@ -9,7 +9,7 @@ from paramiko import (
 )
 
 
-class ServidorSAGE:
+class ServidorSAGE(object):
     def __init__(
         self,
         name: str,
@@ -18,6 +18,7 @@ class ServidorSAGE:
         password='sagetr1',
         port=22,
     ) -> None:
+
         # Server config
         self.name = name
         self.host = host

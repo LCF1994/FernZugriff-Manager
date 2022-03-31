@@ -5,33 +5,19 @@
 
         ServerDetails:
             id: details
+            target: root.target
             pos_hint: {'center_x': .15 , 'center_y': .525}
-
-            os: app.SAGE_1.var['CPU']
-            hostname: app.SAGE_1.var['HOST']
-            version: app.SAGE_1.var['VERSAO']
-            database: app.SAGE_1.var['BASE']
-            gcd: app.SAGE_1.var['GCD']
-            gcd_color: app.SAGE_1.var['GCD_COR']
-            dbtype: app.SAGE_1.var['MODELO']
-            sound: app.SAGE_1.var['SOM']
-            redundancy: app.SAGE_1.var['DIFUSAO']
-            network_node: app.SAGE_1.var['LOCAL']
 
 
         GridCharts:
             id: grid_chart
+            target: root.target
             pos_hint: {'center_x': .66 , 'center_y': .525}
             size_hint: .66, .65
 
-            cpu: app.SAGE_1.performance['cpu']
-            memory: app.SAGE_1.performance['memory']
-            disk_sage: app.SAGE_1.performance['disk_sage']
-            disk_arqs: app.SAGE_1.performance['disk_arqs']
-            disk_logs: app.SAGE_1.performance['disk_logs']
 
-        MainCover:
-            id: cover_chart
+        Cover:
+            id: cover_charts
             pos_hint: {'center_x': .66 , 'center_y': .525}
             size_hint: .66, .65
             message: 'GCD Desativado'
@@ -48,8 +34,8 @@
         pos_hint: {'center_x': .5, 'center_y': .5}
         active: root.spinner
 
-    MainCover:
-        id: cover_conn
+    Cover:
+        id: cover_all
         pos_hint: {'center_x': .5 , 'center_y': .525}
         size_hint: 1., .65
 
