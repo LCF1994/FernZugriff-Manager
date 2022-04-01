@@ -52,7 +52,7 @@
                 btn_icon: 'open-in-new'
                 btn_text: 'Abrir'
                 target: root.server
-                release_function: {'function':self.open_visor_acesso, 'args':{}}
+                release_function: {'function': self.open_visor_acesso}
 
             CommandCard:
                 name: 'ProcessCard'
@@ -61,7 +61,7 @@
                 btn_icon: 'information-variant'
                 btn_text: 'Verificar'
                 target: root.server
-                release_function: {'function':self.open_process_card, 'args':{}}
+                release_function: {'function': self.open_process_card}
 
             CommandCard:
                 name: 'CMDCard'
@@ -70,4 +70,4 @@
                 btn_icon: 'console-line'
                 btn_text: 'Executar'
                 target: root.server
-                release_function: {'function':self.execute_remote_command, 'args':{'cmd':'whoami'}}
+                release_function: {'function': self.execute_remote_command}

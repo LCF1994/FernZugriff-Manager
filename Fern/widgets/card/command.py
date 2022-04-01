@@ -1,5 +1,6 @@
 from auxiliary.common import CommonFeatures
 from auxiliary.servidor_paramiko import ServidorSAGE
+from kivy.logger import Logger
 from kivy.properties import (
     BooleanProperty,
     DictProperty,
@@ -8,7 +9,8 @@ from kivy.properties import (
 )
 from kivymd.app import MDApp
 from kivymd.uix.card import MDCard
-from kivymd.uix.spinner import MDSpinner
+
+# from kivymd.uix.spinner import MDSpinner
 from widgets.card.process import ProcessCard
 
 # from widgets.card.serverconfig import ConfigCard
@@ -41,10 +43,11 @@ class CommandCard(MDCard, CommonFeatures):
         self.btn_disable = not conn_state
 
     # Actions
-    def open_visor_acesso(self, args: dict) -> None:
-        print(f'Comando para abrir VisorAcesso no Servidor {self.target.host}')
+    def open_visor_acesso(self) -> None:
+        Logger.info('VisorAcesso : VisorAcesso requested')
+        self.target.request_visor_acesso()
 
-    def open_process_card(self, args: dict):
+    def open_process_card(self):
         self.screen.add_widget(
             ProcessCard(
                 target=self.target,
@@ -53,6 +56,5 @@ class CommandCard(MDCard, CommonFeatures):
 
         self.app._on_open_process_card(self.target)
 
-    def execute_remote_command(self, args: dict):
+    def execute_remote_command(self):
         print(f'Executar comando no Servidor {self.target.host}')
-        print(args)

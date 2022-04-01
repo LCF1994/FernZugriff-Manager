@@ -180,8 +180,8 @@ class ServidorSAGE(object):
 
         return self.proccess
 
-    def abre_visor_acesso(self):
-        ...
+    def request_visor_acesso(self):
+        print('VisorAcesso solicitado para abertura.')
 
 
 if __name__ == '__main__':
