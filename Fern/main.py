@@ -39,6 +39,7 @@ class FernApp(MDApp, Extentions):
         self.theme_cls.primary_hue = '400'
 
         self.success_color = self.theme_cls.colors['LightGreen']['A400']
+        self.neutral_color = self.theme_cls.text_color
         self.failure_color = self.theme_cls.colors['Red']['A700']
 
     def build(self):

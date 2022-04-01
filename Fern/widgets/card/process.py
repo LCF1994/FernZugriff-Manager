@@ -22,7 +22,7 @@ class ProcessCard(MDCard, CommonFeatures, CommonCard):
     process_list = ListProperty([])
     spinner = BooleanProperty(True)
 
-    SAGE_PROCESS_STATUS = defaultdict(lambda: ' ----- ')
+    SAGE_PROCESS_STATUS = defaultdict(lambda: ' ------- ')
     SAGE_PROCESS_STATUS.update(
         {
             0: 'Nao iniciado',
@@ -33,8 +33,12 @@ class ProcessCard(MDCard, CommonFeatures, CommonCard):
             5: 'ERRO',
             6: 'Inibido',
             7: 'Manual',
+            11: 'Manual',
         }
     )
+
+    RED_STATES = [0, 3, 5, 6]
+    GREEN_STATES = [4]
 
     def on_kv_post(self, base_widget):
         self.app = MDApp.get_running_app()
@@ -61,10 +65,18 @@ class ProcessCard(MDCard, CommonFeatures, CommonCard):
         for item in self.process_list:
             new_text = self.pattern.match(item['id']).group('Process_Name')
 
+            if item['estad'] in self.RED_STATES:
+                color = self.app.failure_color
+            elif item['estad'] in self.GREEN_STATES:
+                color = self.app.success_color
+            else:
+                color = self.app.neutral_color
+
             self.ids.md_list.add_widget(
                 ListItem(
                     text=f'{new_text}',
                     status=f'{self.SAGE_PROCESS_STATUS[item["estad"]]}',
+                    color=color,
                 )
             )
 
@@ -82,6 +94,7 @@ class ProcessCard(MDCard, CommonFeatures, CommonCard):
 
 class ListItem(OneLineAvatarIconListItem):
     status = StringProperty('status')
+    color = ColorProperty()
 
 
 class ProccessStatus(IRightBodyTouch, MDBoxLayout):
