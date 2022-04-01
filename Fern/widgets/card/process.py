@@ -5,6 +5,7 @@ from auxiliary.common import CommonCard, CommonFeatures
 from auxiliary.servidor_paramiko import ServidorSAGE
 from kivy.logger import Logger
 from kivy.properties import (
+    BooleanProperty,
     ColorProperty,
     ListProperty,
     ObjectProperty,
@@ -19,6 +20,7 @@ from kivymd.uix.list import IRightBodyTouch, OneLineAvatarIconListItem
 class ProcessCard(MDCard, CommonFeatures, CommonCard):
     target = target = ObjectProperty(ServidorSAGE)
     process_list = ListProperty([])
+    spinner = BooleanProperty(True)
 
     SAGE_PROCESS_STATUS = defaultdict(lambda: ' ----- ')
     SAGE_PROCESS_STATUS.update(
@@ -54,6 +56,7 @@ class ProcessCard(MDCard, CommonFeatures, CommonCard):
         self.ids.md_list.clear_widgets()
 
     def create_list(self) -> None:
+        self.spinner = False
         # print(f'Data from create_list : {self.process_list}')
         for item in self.process_list:
             new_text = self.pattern.match(item['id']).group('Process_Name')

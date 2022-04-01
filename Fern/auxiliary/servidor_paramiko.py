@@ -157,10 +157,8 @@ class ServidorSAGE(object):
     def get_performance(self) -> dict:
         query = f""" 'select cpu_usage, mem_usage, disk_use_sage, disk_use_arqs, disk_use_log from noh where id == "{self.var['LOCAL']}"' """
 
-        # print(query)
         data_dict = self.brsql_request(query, gcd_required=True)
 
-        # print(f'Tipo de dado recebido{type(data_dict)}')
         if type(data_dict) is list and len(data_dict) > 0:
             data_dict = data_dict[0]
 
@@ -176,7 +174,7 @@ class ServidorSAGE(object):
 
         return self.performance
 
-    def get_server_proccess(self, noh=1) -> list:
+    def get_server_process(self, noh=1) -> list:
         query = f""" 'select id, estad from inp where a_noh == {noh}' """
         self.proccess = self.brsql_request(query, gcd_required=self.gcd)
 

@@ -35,11 +35,11 @@ class FernApp(MDApp, Extentions):
         # colors
         self.theme_cls.theme_style = 'Dark'
 
-        self.theme_cls.primary_palette = 'Cyan'
-        self.theme_cls.primary_hue = '700'
+        self.theme_cls.primary_palette = 'Teal'
+        self.theme_cls.primary_hue = '400'
 
-        self.success_color = self.theme_cls.colors['Green']['400']
-        self.failure_color = self.theme_cls.colors['Red']['400']
+        self.success_color = self.theme_cls.colors['LightGreen']['A400']
+        self.failure_color = self.theme_cls.colors['Red']['A700']
 
     def build(self):
         self.title = 'Zugriff'

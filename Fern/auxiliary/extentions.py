@@ -127,7 +127,7 @@ class Extentions:
         Logger.info('ProcessCard : Process_checker clock scheduled')
         self.add_clock(
             'Process_checker',
-            partial(self._clock_update_proccess_list, server),
+            partial(self._clock_update_process_list, server),
             10,
         )
 
@@ -136,7 +136,7 @@ class Extentions:
         self.cancel_clock('Process_checker')
 
     def update_process_card(self, data: list, server: ServidorSAGE) -> None:
-        Logger.info(
+        Logger.debug(
             f'ProcessCard : Data retrieved from {server.name} [IP: {server.host}]'
         )
         # send screen widgets result
@@ -180,11 +180,11 @@ class Extentions:
             )
         )
 
-    def _clock_update_proccess_list(self, server: ServidorSAGE, *args) -> None:
-        Logger.info('Clock : Requesting Process Card data...')
+    def _clock_update_process_list(self, server: ServidorSAGE, *args) -> None:
+        Logger.debug('Clock : Requesting Process Card data...')
         ak.start(
             self.async_cmd_with_args(
-                server.get_server_proccess, self.update_process_card, server
+                server.get_server_process, self.update_process_card, server
             )
         )
 

@@ -22,20 +22,31 @@
             MDList:
                 id:md_list
         
-        MDFillRoundFlatButton:
-            pos_hint: {'center_x': .25, "center_y": .05}
-            text:'Create'
-            on_release:root.create_list()
+        MDSpinner:
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            size_hint: .33, .33
+            active: root.spinner
         
         MDFillRoundFlatButton:
             pos_hint: {'center_x': .5, "center_y": .05}
-            text:'Update'
-            on_release:root.update_list()
+            text:'Close'
+            on_release:root.close_card()
 
-        MDFillRoundFlatButton:
-            pos_hint: {'center_x': .75, "center_y": .05}
-            text:'Clear'
-            on_release:root.clear_list()
+
+        # MDFillRoundFlatButton:
+        #     pos_hint: {'center_x': .25, "center_y": .05}
+        #     text:'Create'
+        #     on_release:root.create_list()
+        # MDFillRoundFlatButton:
+        #     pos_hint: {'center_x': .5, "center_y": .05}
+        #     text:'Update'
+        #     on_release:root.update_list()
+        # MDFillRoundFlatButton:
+        #     pos_hint: {'center_x': .75, "center_y": .05}
+        #     text:'Clear'
+        #     on_release:root.clear_list()
+        
+
 
 
 <ListItem>:
