@@ -1,7 +1,6 @@
 from auxiliary.extentions import Extentions
 from auxiliary.kvlang import string_builder
 from auxiliary.servidor_paramiko import ServidorSAGE
-from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.logger import Logger
 from kivy.storage.jsonstore import JsonStore

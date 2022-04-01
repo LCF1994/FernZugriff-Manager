@@ -21,8 +21,6 @@ class GridCharts(MDGridLayout):
         return super().on_kv_post(base_widget)
 
     def update_charts_info(self, data_received: dict) -> None:
-        Logger.info('Charts: Updating charts values')
-
         try:
             self.cpu = data_received['cpu']
             self.memory = data_received['memory']

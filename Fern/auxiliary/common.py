@@ -24,4 +24,4 @@ class CommonCard:
 
         # check unfocus
         if not self.collide_point(x, y):
-            self.parent.remove_widget(self)
+            self.close_card()

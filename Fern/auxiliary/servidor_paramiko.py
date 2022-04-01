@@ -143,7 +143,7 @@ class ServidorSAGE(object):
         cmd = f'brsql -s {query} --json {context}'
 
         result = self._conversion_json_to_dict(self.exec_cmd(cmd))
-        print(type(result))
+        # print(type(result))
 
         return result
         # return cmd
@@ -157,10 +157,10 @@ class ServidorSAGE(object):
     def get_performance(self) -> dict:
         query = f""" 'select cpu_usage, mem_usage, disk_use_sage, disk_use_arqs, disk_use_log from noh where id == "{self.var['LOCAL']}"' """
 
-        print(query)
+        # print(query)
         data_dict = self.brsql_request(query, gcd_required=True)
 
-        print(f'Tipo de dado recebido{type(data_dict)}')
+        # print(f'Tipo de dado recebido{type(data_dict)}')
         if type(data_dict) is list and len(data_dict) > 0:
             data_dict = data_dict[0]
 
