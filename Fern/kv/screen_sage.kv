@@ -1,13 +1,14 @@
 <ScreenSage1>:
     name: 'sage1'
     server: app.SAGE_1
+
     ScreenSageDefault:
-        id: content
         srv_name: 'Servidor SAGE 1'
 
 <ScreenSage2>:
     name: 'sage2'
     server: app.SAGE_2
+    
     ScreenSageDefault:
         srv_name: 'Servidor SAGE 2'
 
@@ -15,19 +16,23 @@
 <ScreenSageDefault>:
     server: self.parent.server
     # Header
+    MDIconButton:
+        icon:'menu'
+        on_press: app.navbar.set_state("open")
+        pos_hint: { 'center_x': .05, 'center_y': .925 }
     ServerTitle: # Left
         target: root.server
         title: root.srv_name
-
+        pos_hint: { 'center_x': .2, 'center_y': .925 }
+        #md_bg_color: [1,0,0,1]
     ConnectionState: # Center
         target: root.server
         pos_hint: {'center_x': .75 , 'center_y': .93}
-
     MDIconButton: # Right
         icon:'cog'
         user_font_size: dp(40)
-        pos_hint: {'center_x': .925, 'center_y': .925}
         on_release: root.open_card()
+        pos_hint: {'center_x': .925, 'center_y': .925}
 
     MDProgressBar: # Separator
         id: progress_bar

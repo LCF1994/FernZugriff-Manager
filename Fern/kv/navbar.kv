@@ -1,3 +1,7 @@
+<MyNavDrawer>
+    ContentNavigationDrawer:
+
+
 <ContentNavigationDrawer>
     orientation: "vertical"
     padding: "8dp"
@@ -30,31 +34,37 @@
         MDList:
             OneLineIconListItem:
                 text: "Home"
+                on_press:
+                    root.parent.set_state("close")
+                    app.screen_manager.current = "home"
                 IconLeftWidget:
                     icon: "star"
+                    on_press:
+                        root.parent.set_state("close")
+                        app.screen_manager.current = "home"
 
             OneLineIconListItem:
                 text: "Servidor SAGE 1"
                 on_press:
                     root.parent.set_state("close")
-                    root.screen_manager.current = "tela1"
+                    app.screen_manager.current = "sage1"
 
                 IconLeftWidget:
                     icon: "centos"
                     on_press:
                         root.parent.set_state("close")
-                        root.screen_manager.current = "tela1"
+                        app.screen_manager.current = "sage1"
 
             OneLineIconListItem:
                 text: "Servidor SAGE 2"
                 on_press:
                     root.parent.set_state("close")
-                    root.screen_manager.current = "tela2"
+                    app.screen_manager.current = "sage2"
                 IconLeftWidget:
                     icon: "centos"
                     on_press:
                         root.parent.set_state("close")
-                        root.screen_manager.current = "tela2"
+                        app.screen_manager.current = "sage2"
     
             OneLineIconListItem:
                 text: "Thin Client 1"

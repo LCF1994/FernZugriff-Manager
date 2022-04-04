@@ -1,25 +1,8 @@
-ScreenManager:
-    HomeScreen:
-        name: 'home'
-    ScreenSage1:
+MDScreen:
+    MDNavigationLayout:
+        MyScreenManager:
+            HomeScreen:
+            ScreenSage1:
+            ScreenSage2:
 
-    ScreenSage2:
-
-
-<HomeScreen>
-    MDFloatLayout:
-        MDLabel:
-            text:'HOME'
-            font_style: "H1"
-            pos_hint:{'center_x': .5, 'center_y': .75 }
-            halign: 'center'
-        MDRaisedButton:
-            text: 'SAGE 1'
-            pos_hint:{'center_x': .25, 'center_y': .25 }
-            on_press:
-                root.manager.current = 'sage1'
-        MDRaisedButton:
-            text: 'SAGE 2'
-            pos_hint:{'center_x': .75, 'center_y': .25 }
-            on_press:
-                root.manager.current = 'sage2'
+    MyNavDrawer:

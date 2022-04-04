@@ -4,18 +4,16 @@ from auxiliary.servidor_paramiko import ServidorSAGE
 from kivy.lang import Builder
 from kivy.logger import Logger
 from kivy.storage.jsonstore import JsonStore
-from kivy.uix.screenmanager import Screen
 from kivymd.app import MDApp
+from widgets.navbar.content import MyNavDrawer
+from widgets.screen.screen_home import HomeScreen
+from widgets.screen.screen_manager import MyScreenManager
 from widgets.screen.screen_sage import ScreenSage1, ScreenSage2
 
 # Build kv string from kv files
 KV = string_builder()
 
 CONFIG_PATH = './Fern/config.json'
-
-
-class HomeScreen(Screen):
-    pass
 
 
 class FernApp(MDApp, Extentions):
