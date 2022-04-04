@@ -6,7 +6,7 @@ from kivy.logger import Logger
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
 from kivymd.app import MDApp
-from widgets.screen.srv1screen import Srv1Screen
+from widgets.screen.screen_sage import ScreenSage1, ScreenSage2
 
 # Build kv string from kv files
 KV = string_builder()
@@ -32,6 +32,7 @@ class FernApp(MDApp, Extentions):
         try:
             self.SAGE_1.set_config(self.storage.get('sage1'))
             self.SAGE_2.set_config(self.storage.get('sage2'))
+
             Logger.info('Settings: Configuration file loaded')
         except KeyError:
             Logger.warning('Settings: Configuration file incomplete')

@@ -1,0 +1,72 @@
+<ContentNavigationDrawer>
+    orientation: "vertical"
+    padding: "8dp"
+    spacing: "8dp"
+
+    AnchorLayout:
+        anchor_x: "left"
+        size_hint_y: None
+        height: logo.height
+
+        Image:
+            id: logo
+            size_hint: None, None
+            size: "56dp", "56dp"
+            source: "Fern/assets/images/sage.png"
+
+    MDLabel:
+        text: "Gerenciador de Acessos"
+        font_style: "Button"
+        adaptive_height: True
+
+    MDLabel:
+        text: "desenvolvido por Lucas Campos Ferreira"
+        font_style: "Caption"
+        adaptive_height: True
+
+    MDSeparator:
+
+    ScrollView:
+        MDList:
+            OneLineIconListItem:
+                text: "Home"
+                IconLeftWidget:
+                    icon: "star"
+
+            OneLineIconListItem:
+                text: "Servidor SAGE 1"
+                on_press:
+                    root.parent.set_state("close")
+                    root.screen_manager.current = "tela1"
+
+                IconLeftWidget:
+                    icon: "centos"
+                    on_press:
+                        root.parent.set_state("close")
+                        root.screen_manager.current = "tela1"
+
+            OneLineIconListItem:
+                text: "Servidor SAGE 2"
+                on_press:
+                    root.parent.set_state("close")
+                    root.screen_manager.current = "tela2"
+                IconLeftWidget:
+                    icon: "centos"
+                    on_press:
+                        root.parent.set_state("close")
+                        root.screen_manager.current = "tela2"
+    
+            OneLineIconListItem:
+                text: "Thin Client 1"
+                IconLeftWidget:
+                    icon: "monitor"
+
+            OneLineIconListItem:
+                text: "Thin Client 2"
+                IconLeftWidget:
+                    icon: "monitor"
+
+            OneLineIconListItem:
+                text: "About"
+                IconLeftWidget:
+                    icon: "information"

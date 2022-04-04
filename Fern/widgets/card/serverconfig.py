@@ -1,10 +1,13 @@
+import re
+
 from auxiliary.common import CommonCard, CommonFeatures
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, StringProperty
 from kivymd.uix.card import MDCard
 
 
 class ConfigCard(MDCard, CommonFeatures, CommonCard):
     target = ObjectProperty(None)
+    srv_name = StringProperty('SAGE ')
 
     def cancel_button(self) -> None:
         self.close_card()

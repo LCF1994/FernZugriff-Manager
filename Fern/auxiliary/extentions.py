@@ -206,3 +206,17 @@ class Extentions:
 
     def open_config(path: str):
         ...
+
+    def set_ip_on_server_title(self, server):
+        # send screen widgets result
+        try:
+            for widget in self.widgets[server.name].values():
+                try:
+                    widget.update_ip(server.host)
+                except AttributeError:
+                    continue
+
+        except KeyError:
+            print(
+                f'KeyError {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
+            )
