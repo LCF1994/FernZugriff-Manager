@@ -4,8 +4,10 @@ import asynckivy as ak
 from auxiliary.servidor_paramiko import ServidorSAGE
 from kivy.clock import Clock
 from kivy.logger import Logger
+from kivy.storage.jsonstore import JsonStore
 
 DEFAULT_TIME = 1
+CONFIG_PATH = './Fern/config.json'
 
 
 class Extentions:
@@ -18,6 +20,7 @@ class Extentions:
             'THIN_2': {},
         }
         self.conn_status = False
+        self.storage = JsonStore(CONFIG_PATH)
 
     async def async_cmd(self, async_action, future_reaction) -> None:
         future_reaction(await ak.run_in_thread(async_action))
@@ -204,9 +207,6 @@ class Extentions:
         for clock in self.running_clocks.values:
             clock.cancel()
 
-    def open_config(path: str):
-        ...
-
     def set_ip_on_server_title(self, server):
         # send screen widgets result
         try:
@@ -220,3 +220,16 @@ class Extentions:
             print(
                 f'KeyError {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
             )
+
+    def save_config(self, server: ServidorSAGE) -> None:
+
+        if self.SAGE_1.host == self.SAGE_2.host:
+            Logger.warning('App : Identical IPs configured for Servers')
+
+        self.storage.put(
+            server.name,
+            host=server.host,
+            username=server.username,
+            password=server.password,
+            port=server.port,
+        )

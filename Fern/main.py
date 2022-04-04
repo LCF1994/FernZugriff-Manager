@@ -28,8 +28,8 @@ class FernApp(MDApp, Extentions):
 
     def set_config_up(self) -> None:
         try:
-            self.SAGE_1.set_config(self.storage.get('sage1'))
-            self.SAGE_2.set_config(self.storage.get('sage2'))
+            self.SAGE_1.set_config(self.storage.get('SAGE_1'))
+            self.SAGE_2.set_config(self.storage.get('SAGE_2'))
 
             Logger.info('Settings: Configuration file loaded')
         except KeyError:

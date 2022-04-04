@@ -1,13 +1,16 @@
-import re
-
 from auxiliary.common import CommonCard, CommonFeatures
 from kivy.properties import ObjectProperty, StringProperty
+from kivymd.app import MDApp
 from kivymd.uix.card import MDCard
 
 
 class ConfigCard(MDCard, CommonFeatures, CommonCard):
     target = ObjectProperty(None)
     srv_name = StringProperty('SAGE ')
+
+    def on_kv_post(self, base_widget):
+        self.app = MDApp.get_running_app()
+        return super().on_kv_post(base_widget)
 
     def cancel_button(self) -> None:
         self.close_card()
@@ -25,7 +28,7 @@ class ConfigCard(MDCard, CommonFeatures, CommonCard):
             if self.ids.port_number.text != ''
             else 22,
         }
-        print(data)
+        # print(data)
 
         if self._validate_server_ip() and self._validate_ssh_port():
             self._save_data(data)
@@ -52,13 +55,11 @@ class ConfigCard(MDCard, CommonFeatures, CommonCard):
 
     def _save_data(self, data) -> None:
 
-        self.parent.ids.srv_title.server_ip = data['host']
-
         # update server data
-        self.target.set_host(data['host'])
+        self.target.host = data['host']
         self.target.username = data['username']
         self.target.password = data['password']
         self.target.port = data['port']
 
-        print('Dados salvos')
-        print(f'host:{self.target.host}')
+        self.app.save_config(self.target)
+        self.app.set_ip_on_server_title(self.target)
