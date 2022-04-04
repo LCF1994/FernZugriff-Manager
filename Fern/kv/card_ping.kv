@@ -35,6 +35,6 @@
             hint_text: 'IP do servidor'
         MDRaisedButton:
             pos_hint: {'center_x': .5, 'center_y': .3}
-            size_hint_x: .5
+            size_hint: .5, None
             text:'Ping !'
             on_release: root.ping(app.sage1, app.success_color, app.failure_color)

@@ -1,2 +1,21 @@
-Srv1Screen:
-    id: screen_sage1
+ScreenManager:
+    HomeScreen:
+        name: 'home'
+    #Srv1Screen:
+    #    name: 'sage2'
+    Srv1Screen:
+
+
+<HomeScreen>
+    MDFloatLayout:
+        MDLabel:
+            text:'HOME'
+            pos_hint:{'center_x': .5, 'center_y': .75 }
+            halign: 'center'
+        
+        MDRaisedButton:
+            text: 'SAGE 1'
+            pos_hint:{'center_x': .5, 'center_y': .25 }
+            on_press: root.manager.current = 'sage1'
+
+
