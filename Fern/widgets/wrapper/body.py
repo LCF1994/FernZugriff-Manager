@@ -32,7 +32,7 @@ class BodyContainer(MDFloatLayout):
         else:
             self._show_cover(
                 self.ids.cover_all,
-                cover_message=f'{self.target.name} DESCONECTADO',
+                cover_message=f'DESCONECTADO',
                 darkness=0.925,
             )
 

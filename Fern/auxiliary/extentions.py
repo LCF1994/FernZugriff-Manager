@@ -73,16 +73,14 @@ class Extentions:
                 # add Clock
                 Logger.info('Clock : Conn_Checker added.')
                 self.add_clock(
-                    'Conn_Checker',
+                    f'Conn_Checker_{server.name}',
                     partial(self._clock_conn_checker, server),
                     5,
                 )
 
         else:
             Logger.error('App : Connection Fail')
-            if self.conn_status:
-                self.clear_clocks()
-                Logger.info('Clock : All clocks canceled')
+            self._disconnection_rotine(server)
 
     def gcd_result(self, data: bool, server: ServidorSAGE) -> None:
         # send screen widgets result
@@ -127,16 +125,20 @@ class Extentions:
             )
 
     def _on_open_process_card(self, server: ServidorSAGE) -> None:
-        Logger.info('ProcessCard : Process_checker clock scheduled')
+        clock_name = f'Process_checker_{server.name}'
+
+        Logger.info(f'ProcessCard : {clock_name} clock scheduled')
         self.add_clock(
-            'Process_checker',
+            clock_name,
             partial(self._clock_update_process_list, server),
             10,
         )
 
-    def _on_close_process_card(self) -> None:
-        Logger.info('ProcessCard : Process_checker clock canceled')
-        self.cancel_clock('Process_checker')
+    def _on_close_process_card(self, server: ServidorSAGE) -> None:
+        clock_name = f'Process_checker_{server.name}'
+
+        Logger.info(f'ProcessCard : Canceling clock {clock_name}...')
+        self.cancel_clock(clock_name)
 
     def update_process_card(self, data: list, server: ServidorSAGE) -> None:
         Logger.debug(
@@ -197,14 +199,15 @@ class Extentions:
         )
 
     def cancel_clock(self, clock: str) -> None:
+        print('in cancel_clock')
         try:
             self.running_clocks[clock].cancel()
-            Logger.debug('Clock : Clock successfully canceled')
+            Logger.info(f'Clock : Clock {clock} successfully canceled')
         except KeyError:
             Logger.error('Clock : Clock not found.')
 
     def clear_clocks(self) -> None:
-        for clock in self.running_clocks.values:
+        for clock in self.running_clocks.values():
             clock.cancel()
 
     def set_ip_on_server_title(self, server):
@@ -233,3 +236,27 @@ class Extentions:
             password=server.password,
             port=server.port,
         )
+
+    def disconnect(self, server: ServidorSAGE) -> None:
+        self._disconnection_rotine(server)
+
+        self.conn_status = False
+        server.disconnect()
+        Logger.warning(f'App : {server.name} disconnected')
+
+    def _disconnection_rotine(self, server: ServidorSAGE) -> None:
+        try:
+            for widget in self.widgets[server.name].values():
+                try:
+                    widget.update_connection(False)
+                except AttributeError:
+                    Logger.debug('App : Function not found or not implemented')
+                continue
+        except KeyError:
+            Logger.debug(
+                f'KeyError : {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
+            )
+
+        for clock_key in self.running_clocks.keys():
+            if server.name in clock_key:
+                self.cancel_clock(clock_key)

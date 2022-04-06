@@ -32,7 +32,6 @@ class ServidorSAGE(object):
 
         # Internal variables for status
         self.transport = None
-        self.conn = False
 
         self.var = {
             'CPU': '',
@@ -72,7 +71,7 @@ class ServidorSAGE(object):
     def check_connection(self) -> bool:
         try:
             transport = self.client.get_transport() if self.client else None
-            return transport and transport.is_active()
+            return transport.is_active()
         except AttributeError:
             return False
 
@@ -183,23 +182,19 @@ class ServidorSAGE(object):
     def request_visor_acesso(self):
         print('VisorAcesso solicitado para abertura.')
 
+    def disconnect(self) -> None:
+        self.client.close()
+
 
 if __name__ == '__main__':
-    sage1 = ServidorSAGE('192.168.198.137')
+    sage1 = ServidorSAGE('sage1', '192.168.198.137')
 
     print(f'Connection :{sage1.connect()}')
-    # sage1.client.invoke_shell()
+    print(f'Check connection: {sage1.check_connection()}')
 
-    # sage1.check_gcd_running()
-    # print(f'GCD: {sage1.check_gcd_running()}')
-    # print(f'Var: {sage1.get_var()}')
-    # print(sage1.get_performance())
-    # print(sage1.get_var())
+    sage1.disconnect()
+    print('Disconnect')
+    print(f'Check connection: {sage1.check_connection()}')
 
-    query = """ 'select * from noh' """
-    result = sage1.brsql_request(query)
-    print(f'Query 1 : {result}\n')
-
-    print(f'Proccess: {sage1.get_server_proccess(noh=1)}')
-
-    # print(f'Query 2 : {sage1.brsql_request(query, True)}')
+    print(f'Connection :{sage1.connect()}')
+    print(f'Check connection: {sage1.check_connection()}')

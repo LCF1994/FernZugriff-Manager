@@ -52,7 +52,7 @@ class ProcessCard(MDCard, CommonFeatures, CommonCard):
 
     def close_card(self) -> None:
         Logger.debug('ProcessCard : Card close')
-        self.app._on_close_process_card()
+        self.app._on_close_process_card(self.target)
 
         super().close_card()
 
