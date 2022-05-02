@@ -1,4 +1,5 @@
 paramiko==2.9.2
-kivymd==0.104.2
+kivymd>=0.104.2
 asynckivy==0.5.2
 asyncssh==2.9.0
+pyinstaller==4.10
