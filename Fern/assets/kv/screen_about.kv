@@ -1,0 +1,16 @@
+<AboutScreen>
+    name:'about'
+
+    MDToolbar:
+        elevation: 10
+        pos_hint: {"top": 1}
+        size_hint: 1, .075
+        left_action_items:
+            [['menu', lambda x: app.navbar.set_state("open")]]
+
+    MDFloatLayout:
+        MDLabel:
+            text:'About'
+            font_style: "H1"
+            pos_hint:{'center_x': .5, 'center_y': .65 }
+            halign: 'center'

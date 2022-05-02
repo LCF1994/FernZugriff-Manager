@@ -68,15 +68,33 @@
     
             OneLineIconListItem:
                 text: "Thin Client 1"
+                on_press:
+                    root.parent.set_state("close")
+                    app.screen_manager.current = "tc1"
                 IconLeftWidget:
                     icon: "monitor"
+                    on_press:
+                        root.parent.set_state("close")
+                        app.screen_manager.current = "tc1"
 
             OneLineIconListItem:
                 text: "Thin Client 2"
+                on_press:
+                    root.parent.set_state("close")
+                    app.screen_manager.current = "tc2"
                 IconLeftWidget:
                     icon: "monitor"
+                    on_press:
+                        root.parent.set_state("close")
+                        app.screen_manager.current = "tc2"
 
             OneLineIconListItem:
                 text: "About"
+                on_press:
+                    root.parent.set_state("close")
+                    app.screen_manager.current = "about"
                 IconLeftWidget:
                     icon: "information"
+                    on_press:
+                        root.parent.set_state("close")
+                        app.screen_manager.current = "about"
