@@ -3,7 +3,7 @@ from os import listdir, path
 
 def string_builder(kv_files_path=None) -> str:
     if kv_files_path is None:
-        kv_files_path = 'Fern/kv'
+        kv_files_path = './kv/'
 
     # Errors
     if type(kv_files_path) is not str:

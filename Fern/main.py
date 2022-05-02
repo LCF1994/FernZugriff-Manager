@@ -11,7 +11,7 @@ from widgets.screen.screen_manager import MyScreenManager
 from widgets.screen.screen_sage import ScreenSage1, ScreenSage2
 
 # Build kv string from kv files
-KV = string_builder()
+KV = string_builder('./Fern/kv/')
 
 CONFIG_PATH = './Fern/config.json'
 
