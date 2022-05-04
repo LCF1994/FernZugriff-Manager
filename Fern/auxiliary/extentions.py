@@ -1,4 +1,5 @@
 from functools import partial
+import platform
 
 import asynckivy as ak
 from auxiliary.servidor_paramiko import ServidorSAGE
@@ -262,8 +263,20 @@ class Extentions:
                 self.cancel_clock(clock_key)
 
 
+    def check_running_os(self, server:ServidorSAGE):
+        if platform.system() == 'Linux':
+            self.request_visor_acesso(server)
+            return False
+
+        if platform.system() == 'Windows':
+            return True
+
+        else:
+            return True
+
+
     def request_visor_acesso(self, server:ServidorSAGE):
-        Logger.error('VisorAcesso : Requested VisorAcesso')
+        Logger.error('VisorAcesso : Requesting VisorAcesso')
 
         server.build_async_ssh_client()
         ak.start(
