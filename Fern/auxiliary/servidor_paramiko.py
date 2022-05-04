@@ -8,6 +8,7 @@ from paramiko import (
     SSHException,
 )
 
+from auxiliary.servidor_asyncssh import AsyncSSHClient
 
 class ServidorSAGE(object):
     def __init__(
@@ -29,6 +30,9 @@ class ServidorSAGE(object):
         # SSH Client from Paramiko
         self.client = SSHClient()
         self.client.set_missing_host_key_policy(AutoAddPolicy())
+
+        self.async_client = None
+        
 
         # Internal variables for status
         self.transport = None
@@ -179,8 +183,8 @@ class ServidorSAGE(object):
 
         return self.proccess
 
-    def request_visor_acesso(self):
-        print('VisorAcesso solicitado para abertura.')
+    def build_async_ssh_client(self):
+        self.async_client = AsyncSSHClient(self.host)
 
     def disconnect(self) -> None:
         self.client.close()

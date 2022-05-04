@@ -45,7 +45,7 @@ class CommandCard(MDCard, CommonFeatures):
     # Actions
     def open_visor_acesso(self) -> None:
         Logger.info('VisorAcesso : VisorAcesso requested')
-        self.target.request_visor_acesso()
+        self.app.request_visor_acesso(self.target)
 
     def open_process_card(self):
         self.screen.add_widget(

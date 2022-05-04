@@ -260,3 +260,16 @@ class Extentions:
         for clock_key in self.running_clocks.keys():
             if server.name in clock_key:
                 self.cancel_clock(clock_key)
+
+
+    def request_visor_acesso(self, server:ServidorSAGE):
+        Logger.error('VisorAcesso : Requested VisorAcesso')
+
+        server.build_async_ssh_client()
+        ak.start(
+            self.async_cmd(
+                server.async_client.run_thread, self.visor_acesso_exit)
+        )
+    
+    def visor_acesso_exit(self, *args):
+        Logger.error('VisorAcesso : Exit VisorAcesso')

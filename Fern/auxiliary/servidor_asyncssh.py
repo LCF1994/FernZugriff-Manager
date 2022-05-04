@@ -4,7 +4,7 @@ import sys
 import asyncssh
 
 
-class ServidorSAGE:
+class AsyncSSHClient:
     def __init__(
         self, host: str, username='sagetr1', password='sagetr1'
     ) -> None:
@@ -27,7 +27,7 @@ class ServidorSAGE:
 
     async def _wait_for_thread(self):
         loop = asyncio.get_event_loop()
-        r = await loop.create_task(self.exec_cmd('whoami'))
+        r = await loop.create_task(self.exec_cmd('VisorAcesso'))
         return r
 
     def run_thread(self):
@@ -40,7 +40,7 @@ class ServidorSAGE:
 
 
 if __name__ == '__main__':
-    sage1 = ServidorSAGE('192.168.198.135')
+    sage1 = AsyncSSHClient('192.168.198.137')
 
     print(sage1.run_thread())
     # try:
