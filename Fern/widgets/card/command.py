@@ -44,11 +44,11 @@ class CommandCard(MDCard, CommonFeatures):
 
     # Actions
     def open_visor_acesso(self) -> None:
+        self.btn_disable = True
         Logger.info('VisorAcesso : Start request avaliation')
         result = self.app.check_running_os(self.target)
         if result:
             self._snackbar_error('Disponivel apenas no Linux.')
-
 
     def open_process_card(self):
         self.screen.add_widget(

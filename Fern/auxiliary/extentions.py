@@ -1,5 +1,5 @@
-from functools import partial
 import platform
+from functools import partial
 
 import asynckivy as ak
 from auxiliary.servidor_paramiko import ServidorSAGE
@@ -262,27 +262,31 @@ class Extentions:
             if server.name in clock_key:
                 self.cancel_clock(clock_key)
 
-
-    def check_running_os(self, server:ServidorSAGE):
+    def check_running_os(self, server: ServidorSAGE):
         if platform.system() == 'Linux':
             self.request_visor_acesso(server)
             return False
 
         if platform.system() == 'Windows':
-            return True
+            self.visor_acesso_exit(server)
 
         else:
             return True
 
-
-    def request_visor_acesso(self, server:ServidorSAGE):
-        Logger.error('VisorAcesso : Requesting VisorAcesso')
+    def request_visor_acesso(self, server: ServidorSAGE):
+        Logger.info('VisorAcesso : Requesting VisorAcesso')
 
         server.build_async_ssh_client()
         ak.start(
-            self.async_cmd(
-                server.async_client.run_thread, self.visor_acesso_exit)
+            self.async_cmd_with_args(
+                server.async_client.run_thread, self.visor_acesso_exit, server
+            )
         )
-    
-    def visor_acesso_exit(self, *args):
-        Logger.error('VisorAcesso : Exit VisorAcesso')
+
+    def visor_acesso_exit(self, close_log: str, server: ServidorSAGE, *args):
+        Logger.info('VisorAcesso : Exit VisorAcesso')
+
+        for widget in self.widgets[server.name]:
+            if 'VISORACESSO' in widget:
+                target = self.widgets[server.name][widget]
+                target.btn_disable = False

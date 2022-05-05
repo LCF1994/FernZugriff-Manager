@@ -1,6 +1,7 @@
 import json
 import socket
 
+from auxiliary.servidor_asyncssh import AsyncSSHClient
 from paramiko import (
     AuthenticationException,
     AutoAddPolicy,
@@ -8,7 +9,6 @@ from paramiko import (
     SSHException,
 )
 
-from auxiliary.servidor_asyncssh import AsyncSSHClient
 
 class ServidorSAGE(object):
     def __init__(
@@ -32,7 +32,6 @@ class ServidorSAGE(object):
         self.client.set_missing_host_key_policy(AutoAddPolicy())
 
         self.async_client = None
-        
 
         # Internal variables for status
         self.transport = None
