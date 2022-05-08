@@ -268,7 +268,7 @@ class Extentions:
             return False
 
         if platform.system() == 'Windows':
-            self.visor_acesso_exit(server)
+           return True
 
         else:
             return True

@@ -1,0 +1,40 @@
+<ToolsScreen>
+    name:'tools'
+    MDIconButton:
+        icon:'menu'
+        on_press: app.navbar.set_state("open")
+        pos_hint: { 'center_x': .05, 'center_y': .925 }
+
+    MDLabel:
+        text:'Ferramentas'
+        font_style: "H4"
+        pos_hint:{'center_x': .5, 'center_y': .925 }
+        halign: 'center'
+
+    MDSeparator:
+        size_hint_x: .9
+        pos_hint:{'center_x': .5, 'center_y': .875 }
+
+
+
+    MDLabel:
+        text:'Comutacao Automatica'
+        pos_hint:{'center_x': .5, 'center_y': .75 }
+        halign:'center'
+
+    MDIconButton:
+        icon:'help-circle-outline'
+        pos_hint:{'center_x': .75, 'center_y': .75 }
+
+    MDSwitch:
+        pos_hint:{'center_x': .5, 'center_y': .70 }
+
+
+
+    CardPingServer:
+        server: app.SAGE_1
+        pos_hint:{'center_x': .25, 'center_y': .33 }
+
+    CardPingServer:
+        server: app.SAGE_2
+        pos_hint:{'center_x': .75, 'center_y': .33 }

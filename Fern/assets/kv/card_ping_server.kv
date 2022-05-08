@@ -1,0 +1,61 @@
+<CardPingServer>:
+    size_hint: .4, .2
+    radius: [10, ]
+
+    MDFloatLayout:
+        pos_hint:{'center_x': .5, 'center_y': .5 }
+            
+        # row 1
+        MDLabel:
+            size_hint: .5, .2
+            text: root.title
+            pos_hint:{'center_x': .3, 'center_y': .33 * 2.5 }
+    
+        # row 2
+        MDBoxLayout:
+            size_hint: .95, .4
+            pos_hint:{'center_x': .5, 'center_y': .5 }
+            padding: [ 15, 5, 15, 5 ]
+            spacing: 5
+
+            MDLabel:
+                size_hint_x: .2
+                text: 'IP : '
+                font_style:'H6'
+                halign:'right'
+
+            MDLabel:
+                text: root.server_ip
+                font_style:'H6'
+
+            MDFloatLayout:
+                size_hint_x: .2
+                MDSpinner:
+                    active: root.spinner
+                    size_hint: None, None
+                    size: dp(20), dp(20)
+                    pos_hint:{'center_x': .5, 'center_y': .5 }
+                MDIcon:
+                    icon: root.check_icon
+                    halign:'center'
+                    pos_hint:{'center_x': .5, 'center_y': .5 }
+
+            # row 3
+        MDBoxLayout:
+            size_hint: .5, .2
+            pos_hint:{'center_x': .7, 'center_y': .33 * 0.5 }
+            spacing: 2
+            padding: [2, ]
+
+            MDTextButton:
+                text:'edit'
+                size_hint_x: .4
+                halign: 'center'
+                pos_hint:{'center_x': .5, 'center_y': .5 }
+                on_press: root.edit_btn()
+
+            MDFillRoundFlatButton:
+                text:'PING'
+                size_hint: None, 1
+                adaptive_width:True
+                on_press: root.check_ping()
