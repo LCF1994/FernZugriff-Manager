@@ -1,4 +1,5 @@
 import platform
+import subprocess
 from functools import partial
 
 import asynckivy as ak
@@ -200,7 +201,6 @@ class Extentions:
         )
 
     def cancel_clock(self, clock: str) -> None:
-        print('in cancel_clock')
         try:
             self.running_clocks[clock].cancel()
             Logger.info(f'Clock : Clock {clock} successfully canceled')
@@ -268,7 +268,7 @@ class Extentions:
             return False
 
         if platform.system() == 'Windows':
-           return True
+            return True
 
         else:
             return True

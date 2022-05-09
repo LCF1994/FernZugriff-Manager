@@ -1,7 +1,15 @@
 import json
 import socket
+import subprocess
+from json.decoder import JSONDecodeError
 
-from auxiliary.servidor_asyncssh import AsyncSSHClient
+from kivy.logger import Logger
+
+if __name__ == '__main__':
+    from servidor_asyncssh import AsyncSSHClient
+else:
+    from auxiliary.servidor_asyncssh import AsyncSSHClient
+
 from paramiko import (
     AuthenticationException,
     AutoAddPolicy,
@@ -95,20 +103,23 @@ class ServidorSAGE(object):
             return self.check_connection()
 
         except AuthenticationException:
-            print('Erro de autenticação')
+            Logger.error('App : Erro de autenticação')
         except SSHException:
-            print('Falha de conexão')
+            Logger.error('App :Falha de conexão')
         except (socket.error, OSError) as err:
-            print(f'Socket error: {err}')
+            Logger.error(f'App : Socket error: {err}')
 
         return False
 
     def exec_cmd(self, cmd: str, stdin=None) -> bytes:
-        stdin, stdout, stderr = self.client.exec_command(cmd)
-        if stderr.channel.recv_exit_status() != 0:
-            return str(stderr.read()[:-1], 'utf-8')
-        else:
-            return str(stdout.read()[:-1], 'utf-8')
+        try:
+            stdin, stdout, stderr = self.client.exec_command(cmd)
+            if stderr.channel.recv_exit_status() != 0:
+                return str(stderr.read()[:-1], 'utf-8')
+            else:
+                return str(stdout.read()[:-1], 'utf-8')
+        except AttributeError:
+            Logger.error(f'App : Command fail. Destination: {self.name}')
 
     def check_gcd_running(self) -> bool:
         self.gcd = True if self.exec_cmd('pgrep gcd') else False
@@ -145,13 +156,14 @@ class ServidorSAGE(object):
         cmd = f'brsql -s {query} --json {context}'
 
         result = self._conversion_json_to_dict(self.exec_cmd(cmd))
-        # print(type(result))
 
         return result
-        # return cmd
 
     def _conversion_json_to_dict(self, received_json: json) -> dict:
-        json_loaded = json.loads(received_json)
+        try:
+            json_loaded = json.loads(received_json)
+        except JSONDecodeError:
+            Logger.error('App : Error while disconecting')
 
         if type(json_loaded) == list and len(json_loaded) > 0:
             return json_loaded
@@ -172,7 +184,7 @@ class ServidorSAGE(object):
                 self.performance['disk_arqs'] = data_dict['disk_use_arqs']
                 self.performance['disk_logs'] = data_dict['disk_use_log']
             except KeyError:
-                print('Query has returned an error.')
+                Logger.error('App : Query has returned an error.')
 
         return self.performance
 
@@ -188,16 +200,15 @@ class ServidorSAGE(object):
     def disconnect(self) -> None:
         self.client.close()
 
+    def ping_test(self) -> bool:
+        __ping = subprocess.run(
+            ['ping', self.host, '-w', '3'], stdout=subprocess.DEVNULL
+        )
+        return True if __ping.returncode == 0 else False
+
 
 if __name__ == '__main__':
     sage1 = ServidorSAGE('sage1', '192.168.198.137')
 
-    print(f'Connection :{sage1.connect()}')
-    print(f'Check connection: {sage1.check_connection()}')
-
-    sage1.disconnect()
-    print('Disconnect')
-    print(f'Check connection: {sage1.check_connection()}')
-
-    print(f'Connection :{sage1.connect()}')
-    print(f'Check connection: {sage1.check_connection()}')
+    print('Ping test started')
+    print(f'Ping test result: {sage1.ping_test()}')

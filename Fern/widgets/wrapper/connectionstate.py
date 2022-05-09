@@ -1,5 +1,3 @@
-from logging import Logger
-
 import asynckivy as ak
 from auxiliary.common import CommonFeatures
 from auxiliary.servidor_paramiko import ServidorSAGE
@@ -39,7 +37,6 @@ class ConnectionState(MDBoxLayout, CommonFeatures):
 
     def update_connection(self, data: bool) -> None:
         self.spinner = False
-        print(f'Dados recebidos: {data}')
 
         if data is True:
             self.positive_conn()
@@ -48,7 +45,7 @@ class ConnectionState(MDBoxLayout, CommonFeatures):
 
     def positive_conn(self):
         self.conn_state_txt = 'Online'
-        # Must be implemented
+
         self.ids.btn_container.clear_widgets()
         self.ids.btn_container.add_widget(
             DisconnectionButton(on_press=self.disconnect)
