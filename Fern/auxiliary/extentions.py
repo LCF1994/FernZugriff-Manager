@@ -273,7 +273,7 @@ class Extentions:
         else:
             return True
 
-    def request_visor_acesso(self, server: ServidorSAGE):
+    def request_visor_acesso(self, server: ServidorSAGE) -> None:
         Logger.info('VisorAcesso : Requesting VisorAcesso')
 
         server.build_async_ssh_client()
@@ -290,3 +290,24 @@ class Extentions:
             if 'VISORACESSO' in widget:
                 target = self.widgets[server.name][widget]
                 target.btn_disable = False
+
+    def start_ping_test(self, server: ServidorSAGE, card) -> None:
+        Logger.info('App : Ping test started.')
+        Logger.info(f'App : Ping test target: {server.host}.')
+
+        card.reset_icon()
+        card.toggle_spinner()
+
+        ak.start(
+            self.async_cmd_with_args(
+                server.ping_test, self.ping_test_result, server, card
+            )
+        )
+
+    def ping_test_result(self, result, server, card, *args):
+        log_result = 'success' if result else 'fail'
+        Logger.info(f'App : Ping test result: {log_result}.')
+
+        card.toggle_spinner()
+        card.define_icon(result)
+        
