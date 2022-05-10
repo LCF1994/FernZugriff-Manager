@@ -306,7 +306,7 @@ class Extentions:
 
     def ping_test_result(self, result, server, card, *args):
         log_result = 'success' if result else 'fail'
-        Logger.info(f'App : Ping test result: {log_result}.')
+        Logger.info(f'App : Ping test result {log_result} for destination {server.host}')
 
         card.toggle_spinner()
         card.define_icon(result)

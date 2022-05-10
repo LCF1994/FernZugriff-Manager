@@ -2,6 +2,7 @@ from auxiliary.servidor_paramiko import ServidorSAGE
 from kivy.properties import BooleanProperty, ObjectProperty, StringProperty, ColorProperty
 from kivymd.app import MDApp
 from kivymd.uix.card import MDCard
+from widgets.card.serverconfig import ConfigCard
 
 
 class CardPingServer(MDCard):
@@ -15,14 +16,12 @@ class CardPingServer(MDCard):
     def on_kv_post(self, base_widget):
         self.app = MDApp.get_running_app()
         self.title = self.server.name.replace('_', ' ')
-        self.update_ip()
+        self.app.widgets[self.server.name]['PINGCARD'] = self
+        self.update_ip(self.server.host)
         return super().on_kv_post(base_widget)
 
-    def update_ip(self) -> None:
-        self.server_ip = self.server.host
-
-    def edit_btn(self) -> None:
-        print('btn edit pressed')
+    def update_ip(self, new_ip:str) -> None:
+        self.server_ip = new_ip
 
     def check_ping(self) -> None:
         self.app.start_ping_test(server=self.server, card=self)
@@ -40,3 +39,11 @@ class CardPingServer(MDCard):
 
     def reset_icon(self) -> None:
         self.check_icon = ''
+
+
+    def open_card(self) -> None:
+        self.parent.add_widget(
+            ConfigCard(
+                target=self.server, srv_name=self.server.name.replace('_', ' ')
+            )
+        )
