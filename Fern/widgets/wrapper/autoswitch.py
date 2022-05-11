@@ -2,26 +2,27 @@ from kivymd.uix.floatlayout import MDFloatLayout
 from kivy.properties import BooleanProperty, StringProperty, ColorProperty
 from kivymd.app import MDApp
 from kivymd.uix.button import MDRoundFlatButton
-from kivymd.uix.label import MDLabel
-from kivy.uix.popup import Popup
 from widgets.card.help import HelpCard
 
 class AutoSwitch(MDFloatLayout):
     
-    def open_popup(self):
-        self.parent.add_widget(Popup(
-            title='Transferencia Automatica',
-            content=MDLabel(
-                text='infos',
-                ),
-            size_hint=(.5,.5), 
-            pos_hint={'center_x': .5, 'center_y': .5 },
-            auto_dismiss=True,
-        ))
-    
-    def open_popup2(self):
+    TEXT_AUTOSWITCH = '''
+    Funcionalidade que permite a abertura automatica do Visor Acesso em caso de desconexao ou desativacao do GCD.
+
+    Requerimentos:
+     - Conexao com ambos os Servidores
+     - Ambos os servidores com GCD ativo
+
+
+
+    '''
+
+    def open_help(self):
         self.parent.add_widget(
-            HelpCard()
+            HelpCard(
+                title='Transferencia Automatica',
+                content=self.TEXT_AUTOSWITCH
+            )
         )
 
 
