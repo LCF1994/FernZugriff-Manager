@@ -1,0 +1,27 @@
+<HelpCard>
+    radius:[ 25, ]
+    pos_hint: {'center_x': .5, 'center_y': .5}
+    size_hint: .5, .5
+    padding: [1, ]
+    md_bg_color: app.theme_cls.primary_light
+    on_touch_down: self.check_card_focus(args)
+    MDCard:
+        radius:[ 25, ]
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        MDFloatLayout:
+            MDLabel:
+                text: root.title
+                size_hint: .9, .2
+                pos_hint: {'center_x': .5, 'center_y': .925}
+            MDSeparator:
+                size_hint_x: .9
+                color: app.theme_cls.primary_color
+                pos_hint: {'center_x': .5, 'center_y': .85}
+            MDLabel:
+                text: root.content
+                size_hint: .9, .6
+                pos_hint: {'center_x': .5, 'center_y': .80}
+            MDRoundFlatButton:
+                text: 'close'
+                pos_hint: {'center_x': .5, 'center_y': .15}
+                on_press: root.close_card()

@@ -1,0 +1,21 @@
+<AutoSwitch>:
+    size_hint: .5 , 1 / 3
+
+    MDLabel:
+        text:'Transferencia Automatica'
+        pos_hint:{'center_x': .5, 'center_y': .75 }
+        halign:'center'
+        adaptive_size: True
+    MDIconButton:
+        icon:'help-circle-outline'
+        pos_hint:{'center_x': .85, 'center_y': .75 }
+        on_press: root.open_popup2()
+    SwitchButton:
+        pos_hint:{'center_x': .5, 'center_y': .5 }
+
+
+<SwitchButton>
+    text: root.text
+    line_width: 1.25
+    line_color: root.color
+    on_press: root.toggle()
