@@ -1,44 +1,38 @@
 <ConnectionState>
-    size_hint: .25, None
-    height: 45
-    spacing: 10
-    padding: 10, 0, 0, 0
+    spacing: 5
+    padding: [ 5, ]
+    # md_bg_color: [ 1, 1, 1, .5 ]
 
-    AnchorLayout:
-        anchor_x:'left'
-        anchor_y:'center'
-        MDBoxLayout:
-            adaptive_height:True
-            adaptive_width:True
-            #md_bg_color: [1,0,0,1]
-            MDSpinner:
-                size_hint: None, None
-                size: dp(15), dp(15)
-                pos_hint: {'center_y': .5}
-                active: root.spinner
-                #active:True
+    MDBoxLayout:
+        pos_hint: { 'center_x': .5, 'center_y': .5 }
+        adaptive_height:True
+        adaptive_width:True
+        # md_bg_color: [ 1, 0, 0, .5 ]
+        MDSpinner:
+            size: dp(15), dp(15)
+            size_hint: None, None
+            active: root.spinner
+            # active:True
 
-    AnchorLayout:
-        anchor_x:'right'
-        anchor_y:'center'
-        MDBoxLayout:
+    MDBoxLayout:
+        pos_hint: { 'center_x': .5, 'center_y': .5 }
+        size_hint: 3, 1
+        adaptive_height:True
+        # md_bg_color: [ 0, 1, 0, .5 ]
+        MDLabel:
+            text: root.conn_state_txt
             adaptive_height:True
-            adaptive_width:True
-            #md_bg_color: [0,1,0,1]
-            MDLabel:
-                text: root.conn_state_txt
-                adaptive_height:True
+            halign:'center'
 
-    AnchorLayout:
-        anchor_x:'right'
-        anchor_y:'center'
-        MDBoxLayout:
-            id:btn_container
-            adaptive_height:True
-            adaptive_width:True
-            #md_bg_color: [0,0,1,1]
-            ConnectionButton:
-                on_release: root.connect()
+    MDBoxLayout:
+        id:btn_container
+        pos_hint: { 'center_x': .5, 'center_y': .5 }
+        adaptive_height:True
+        adaptive_width:True
+        # md_bg_color: [ 0, 0, 1, .5 ]
+        ConnectionButton:
+            on_release: root.connect()
+
 
 <ConnectionButton>
     adaptive_height: True
@@ -47,6 +41,5 @@
 <DisconnectionButton>
     adaptive_height: True
     text: 'Desconectar'
-    theme_text_color: "Custom"
-    text_color: [ 1, 0, 0, 1 ]
-    line_color: [ 1, 0, 0, 1 ]
+    line_color: app.failure_color
+    line_width: 1.25

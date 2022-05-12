@@ -5,17 +5,17 @@ from kivy.clock import Clock
 from kivy.properties import BooleanProperty, ObjectProperty, StringProperty
 from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.button import MDFillRoundFlatButton, MDRectangleFlatButton
+from kivymd.uix.button import MDFillRoundFlatButton, MDRoundFlatButton
 
 
 class ConnectionState(MDBoxLayout, CommonFeatures):
-    conn_state_txt = StringProperty('Offline')
     target = ObjectProperty(ServidorSAGE)
+    conn_state_txt = StringProperty('Desconectado')
     spinner = BooleanProperty(False)
 
     def on_kv_post(self, base_widget):
         self.app = MDApp.get_running_app()
-        self.app.widgets[self.target.name]['CONN_STATE'] = self
+        self.app.widgets[self.target.name][f'CONN_STATE_{id(self)}'] = self
 
         return super().on_kv_post(base_widget)
 
@@ -38,13 +38,13 @@ class ConnectionState(MDBoxLayout, CommonFeatures):
     def update_connection(self, data: bool) -> None:
         self.spinner = False
 
-        if data is True:
+        if data:
             self.positive_conn()
         else:
             self.negative_conn()
 
     def positive_conn(self):
-        self.conn_state_txt = 'Online'
+        self.conn_state_txt = 'Conectado'
 
         self.ids.btn_container.clear_widgets()
         self.ids.btn_container.add_widget(
@@ -52,8 +52,7 @@ class ConnectionState(MDBoxLayout, CommonFeatures):
         )
 
     def negative_conn(self):
-        self.conn_state_txt = 'Offline'
-        self.spinner = False
+        self.conn_state_txt = 'Desconectado'
 
         self._snackbar_error('Falha na Conexao')
 
@@ -62,5 +61,5 @@ class ConnectionButton(MDFillRoundFlatButton):
     ...
 
 
-class DisconnectionButton(MDRectangleFlatButton):
+class DisconnectionButton(MDRoundFlatButton):
     ...
