@@ -19,7 +19,7 @@
 
     Status:
         pos_hint:{'center_x': .25, 'center_y': .45 }
-    
+
     Status:
         pos_hint:{'center_x': .75, 'center_y': .45 }
 
@@ -27,6 +27,16 @@
 <Status@MDCard>
     size_hint: .4, .35
     padding: [2, ]
+    orientation: 'vertical'
+    MDLabel:
+        text: app.SAGE_1.name.replace('_', ' ')
+        font_style:'H5'
+        halign:'center'
+    MDSeparator:
+        color: app.theme_cls.primary_color
+        pos_hint:{'center_x': .5}
+        size_hint_x: .8
     ConnectionState:
         target: app.SAGE_1
-
+        pos_hint:{'center_x': .5}
+        size_hint_x: .8
