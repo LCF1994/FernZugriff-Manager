@@ -76,6 +76,17 @@
                     on_press:
                         root.parent.set_state("close")
                         app.screen_manager.current = "tools"
+            
+            OneLineIconListItem:
+                text: "Ping"
+                on_press:
+                    root.parent.set_state("close")
+                    app.screen_manager.current = "ping_test"
+                IconLeftWidget:
+                    icon: "monitor"
+                    on_press:
+                        root.parent.set_state("close")
+                        app.screen_manager.current = "ping_test"
 
             OneLineIconListItem:
                 text: "About"
