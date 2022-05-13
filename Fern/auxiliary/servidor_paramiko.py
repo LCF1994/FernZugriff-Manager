@@ -125,7 +125,22 @@ class ServidorSAGE(object):
         self.gcd = True if self.exec_cmd('pgrep gcd') else False
         return self.gcd
 
+    def check_server_hot(self) -> bool:
+        self.hot_server = False
+        _query = f''' 'select estad from inp where id like "alr%{self.var['LOCAL']}"' '''
+        data_dict = self.brsql_request(_query, gcd_required=True)
+
+        try: 
+            self.hot_server = True if data_dict[0]['estad'] == 4 else False
+        except TypeError:
+            Logger.warning('App : Query failed. Server undefined')
+
+        return self.hot_server
+
     def get_var(self) -> dict:
+        _gcd_active = self.check_gcd_running()
+        
+
         self.var = {
             'CPU': self.exec_cmd('echo $CPU').lower(),
             'SAGE_OS': self.exec_cmd('echo $SAGE_SO'),
@@ -141,14 +156,13 @@ class ServidorSAGE(object):
             'DIFUSAO': self.exec_cmd('echo $METODO_DIFUSAO')
             if 'Undefined' not in self.exec_cmd('echo $METODO_DIFUSAO')
             else 'Undefined',
-            'GCD': 'ativo' if self.check_gcd_running() else 'desativado',
-            'GCD_COR': [0, 1, 0, 1]
-            if self.check_gcd_running()
-            else [1, 0, 0, 1],
+            'GCD': _gcd_active,
+            'SERVER_HOT': True if _gcd_active and self.check_server_hot() else False,
             'LOCAL': self.exec_cmd('echo $LOCAL')
             if 'Undefined' not in self.exec_cmd('echo $LOCAL')
             else self.exec_cmd('echo $HOST'),
         }
+
         return self.var
 
     def brsql_request(self, query: str, gcd_required=False) -> dict:

@@ -103,9 +103,29 @@ class Extentions:
                 f'Clock : GCD_Checker - {server.name} [IP: {server.host}] - GCD Running'
             )
             self._clock_charts_update(server)
+            self._clock_server_hot_update(server)
+
         else:
-            Logger.info(
+            Logger.debug(
                 f'Clock : GCD_Checker - {server.name} [IP: {server.host}] - GCD Stopped'
+            )
+
+    def update_charts_with_data_received(
+        self, data: bool, server: ServidorSAGE
+    ) -> None:
+        #Logger.debug('Dashboard : Updating charts values')
+
+        # send screen widgets result
+        try:
+            for widget in self.widgets[server.name].values():
+                try:
+                    widget.update_server_hot(data)
+                except AttributeError:
+                    continue
+
+        except KeyError:
+            print(
+                f'KeyError {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
             )
 
     def update_charts_with_data_received(
@@ -174,6 +194,32 @@ class Extentions:
                 server.check_gcd_running, self.gcd_result, server
             )
         )
+    
+    def _clock_server_hot_update(self, server: ServidorSAGE, *args) -> None:
+        Logger.debug(
+            f'Clock : Checking hot/stand by at {server.name}...'
+        )
+        ak.start(
+            self.async_cmd_with_args(
+                server.check_server_hot,
+                self.update_server_hot_with_data_received,
+                server,
+            )
+        )
+
+    def update_server_hot_with_data_received(self, data:bool, server:ServidorSAGE) -> None:
+        # send screen widgets result
+        try:
+            for widget in self.widgets[server.name].values():
+                try:
+                    widget.update_server_hot(data)
+                except AttributeError:
+                    continue
+
+        except KeyError:
+            print(
+                f'KeyError {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
+            )
 
     def _clock_charts_update(self, server: ServidorSAGE, *args) -> None:
         Logger.debug(

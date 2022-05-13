@@ -17,7 +17,9 @@ class ServerDetails(MDBoxLayout):
     database = StringProperty('undefined')
     dbtype = StringProperty('undefined')
     gcd = StringProperty('desativado')
-    gcd_color = ColorProperty([1, 0, 0, 1])
+    gcd_color = ColorProperty([0, 0, 1, 1])
+    server_hot = StringProperty('stand by')
+    server_hot_color = ColorProperty([0, 0, 1, 1])
     sound = StringProperty('undefined')
     redundancy = StringProperty('undefined')
     network_node = StringProperty('undefined')
@@ -34,11 +36,11 @@ class ServerDetails(MDBoxLayout):
         if connected is True:
             self.update_data(self.target)
 
-    def update_data(self, srv: ServidorSAGE) -> None:
-        ak.start(self._request_data(srv))
+    def update_data(self, server: ServidorSAGE) -> None:
+        ak.start(self._request_data(server))
 
-    async def _request_data(self, srv: ServidorSAGE) -> None:
-        data = await ak.run_in_thread(srv.get_var)
+    async def _request_data(self, server: ServidorSAGE) -> None:
+        data = await ak.run_in_thread(server.get_var)
         self._update_widget_data(data)
 
     def _update_widget_data(self, data: dict) -> None:
@@ -46,8 +48,10 @@ class ServerDetails(MDBoxLayout):
         self.hostname = data['HOST']
         self.version = data['VERSAO']
         self.database = data['BASE']
-        self.gcd = data['GCD']
-        self.gcd_color = data['GCD_COR']
+        self.gcd = 'ativo' if data['GCD'] else 'desativado'
+        self.gcd_color = self.app.success_color if  data['GCD'] else self.app.failure_color
+        self.server_hot = 'hot' if data['SERVER_HOT'] else 'stand by'
+        self.server_hot_color = self.app.failure_color if  data['SERVER_HOT'] else self.app.neutral_color
         self.dbtype = data['MODELO']
         self.sound = data['SOM']
         self.redundancy = data['DIFUSAO']
@@ -67,6 +71,15 @@ class ServerDetails(MDBoxLayout):
     def gcd_stoped(self) -> None:
         self.gcd = 'desativado'
         self.gcd_color = self.app.failure_color
+
+    def update_server_hot(self, server_hot:bool) -> None:
+        if server_hot is True:
+            self.server_hot = 'HOT'
+            self.server_hot_color = self.app.failure_color
+        else:
+            self.server_hot = 'stand by'
+            self.server_hot_color = self.app.neutral_color
+
 
 
 class Item(MDBoxLayout):
