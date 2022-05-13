@@ -28,11 +28,11 @@ class ServerDetails(MDBoxLayout):
 
     def on_kv_post(self, base_widget):
         self.app = MDApp.get_running_app()
-        self.app.widgets[self.target.name]['DB_DETAILS'] = self
+        self.app.widgets[self.target.name][f'DB_DETAILS_{id(self)}'] = self
         return super().on_kv_post(base_widget)
 
     # Rotines for Connection
-    def update_connection(self, connected: bool) -> None:
+    def update_connection(self, connected: bool, *args) -> None:
         if connected is True:
             self.update_data(self.target)
 
@@ -58,7 +58,7 @@ class ServerDetails(MDBoxLayout):
         self.network_node = data['LOCAL']
 
     # Rotines for gcd state
-    def update_gcd_state(self, gcd_state: bool) -> None:
+    def update_gcd_state(self, gcd_state: bool, *args) -> None:
         if gcd_state is True:
             self.gcd_running()
         else:

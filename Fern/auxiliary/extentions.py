@@ -57,7 +57,7 @@ class Extentions:
                 try:
                     for widget in self.widgets[server.name].values():
                         try:
-                            widget.update_connection(data)
+                            widget.update_connection(data, server)
                         except AttributeError:
                             Logger.debug(
                                 'App : Function not found or not implemented'
@@ -89,7 +89,7 @@ class Extentions:
         try:
             for widget in self.widgets[server.name].values():
                 try:
-                    widget.update_gcd_state(data)
+                    widget.update_gcd_state(data, server)
                 except AttributeError:
                     continue
 

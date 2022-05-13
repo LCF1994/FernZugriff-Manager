@@ -132,7 +132,7 @@ class ServidorSAGE(object):
 
         try: 
             self.hot_server = True if data_dict[0]['estad'] == 4 else False
-        except TypeError:
+        except (TypeError, KeyError):
             Logger.warning('App : Query failed. Server undefined')
 
         return self.hot_server

@@ -2,6 +2,7 @@ from kivymd.uix.floatlayout import MDFloatLayout
 from kivy.properties import BooleanProperty, StringProperty, ColorProperty
 from kivymd.app import MDApp
 from kivymd.uix.button import MDRoundFlatButton
+from auxiliary.servidor_paramiko import ServidorSAGE
 from widgets.card.help import HelpCard
 
 class AutoSwitch(MDFloatLayout):
@@ -31,18 +32,57 @@ class SwitchButton(MDRoundFlatButton):
     color = ColorProperty([1, 1, 1, 1])
     status = BooleanProperty(False)
 
+    sage1_conn = False
+    sage1_gcd_on = False
+
+    sage2_conn = False
+    sage2_gcd_on = False
+
 
     def on_kv_post(self, base_widget):
         self.app = MDApp.get_running_app()
-        self.app.widgets['SAGE_1']['AUTOSWITCH'] = self
-        self.app.widgets['SAGE_2']['AUTOSWITCH'] = self
+        self.app.widgets['SAGE_1'][f'AUTOSWITCH_{id(self)}'] = self
+        self.app.widgets['SAGE_2'][f'AUTOSWITCH_{id(self)}'] = self
 
         self.text = 'Desligada'
         self.color = self.app.failure_color
         return super().on_kv_post(base_widget)
     
 
+    def update_connection(self, data:bool, server:ServidorSAGE) -> None:
+        if '1' in server.name:
+            self.sage1_conn = data
+        if '2' in server.name:
+            self.sage2_conn = data
+
+    def update_gcd_state(self, data:bool, server:ServidorSAGE) -> None:
+        if '1' in server.name:
+            self.sage1_gcd_on = data
+        if '2' in server.name:
+            self.sage2_gcd_on = data
+
+    def requiriments_validation(self) -> bool:
+        sage1_ok = self.sage1_conn and self.sage1_gcd_on
+        sage2_ok = self.sage2_conn and self.sage2_gcd_on
+
+        return sage1_ok and sage2_ok
+
+
     def toggle(self):
+        print(
+        f'''
+            SAGE 1 :
+            conectado : {self.sage1_conn}
+            gcd ativo : {self.sage1_gcd_on}
+
+            SAGE 2 :
+            conectado : {self.sage2_conn}
+            gcd ativo : {self.sage2_gcd_on}
+        '''
+            )
+
+
+
         self.status = not self.status
 
         if self.status:

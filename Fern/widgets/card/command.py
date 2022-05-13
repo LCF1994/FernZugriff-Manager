@@ -39,7 +39,7 @@ class CommandCard(MDCard, CommonFeatures):
         self.screen = self.parent.parent.parent
         return super().on_kv_post(base_widget)
 
-    def update_connection(self, conn_state: bool) -> None:
+    def update_connection(self, conn_state: bool, *args) -> None:
         self.btn_disable = not conn_state
 
     # Actions

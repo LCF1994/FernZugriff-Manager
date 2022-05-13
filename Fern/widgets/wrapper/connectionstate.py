@@ -35,7 +35,7 @@ class ConnectionState(MDBoxLayout, CommonFeatures):
             ConnectionButton(on_press=self.connect)
         )
 
-    def update_connection(self, data: bool) -> None:
+    def update_connection(self, data: bool, *args) -> None:
         self.spinner = False
 
         if data:

@@ -26,7 +26,7 @@ class BodyContainer(MDFloatLayout):
 
         return super().on_kv_post(base_widget)
 
-    def update_connection(self, connected: bool) -> None:
+    def update_connection(self, connected: bool, *args) -> None:
         if connected is True:
             self._hide_cover(self.ids.cover_all)
         else:
@@ -36,7 +36,7 @@ class BodyContainer(MDFloatLayout):
                 darkness=0.925,
             )
 
-    def update_gcd_state(self, gcd_running: bool) -> None:
+    def update_gcd_state(self, gcd_running: bool, *args) -> None:
         if gcd_running is True:
             self._hide_cover(self.ids.cover_all)
             self._hide_cover(self.ids.cover_charts)
