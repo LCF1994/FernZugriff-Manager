@@ -49,9 +49,15 @@ class ServerDetails(MDBoxLayout):
         self.version = data['VERSAO']
         self.database = data['BASE']
         self.gcd = 'ativo' if data['GCD'] else 'desativado'
-        self.gcd_color = self.app.success_color if  data['GCD'] else self.app.failure_color
+        self.gcd_color = (
+            self.app.success_color if data['GCD'] else self.app.failure_color
+        )
         self.server_hot = 'hot' if data['SERVER_HOT'] else 'stand by'
-        self.server_hot_color = self.app.failure_color if  data['SERVER_HOT'] else self.app.neutral_color
+        self.server_hot_color = (
+            self.app.failure_color
+            if data['SERVER_HOT']
+            else self.app.neutral_color
+        )
         self.dbtype = data['MODELO']
         self.sound = data['SOM']
         self.redundancy = data['DIFUSAO']
@@ -72,14 +78,13 @@ class ServerDetails(MDBoxLayout):
         self.gcd = 'desativado'
         self.gcd_color = self.app.failure_color
 
-    def update_server_hot(self, server_hot:bool) -> None:
+    def update_server_hot(self, server_hot: bool) -> None:
         if server_hot is True:
             self.server_hot = 'HOT'
             self.server_hot_color = self.app.failure_color
         else:
             self.server_hot = 'stand by'
             self.server_hot_color = self.app.neutral_color
-
 
 
 class Item(MDBoxLayout):

@@ -1,5 +1,10 @@
 from auxiliary.servidor_paramiko import ServidorSAGE
-from kivy.properties import BooleanProperty, ObjectProperty, StringProperty, ColorProperty
+from kivy.properties import (
+    BooleanProperty,
+    ColorProperty,
+    ObjectProperty,
+    StringProperty,
+)
 from kivymd.app import MDApp
 from kivymd.uix.card import MDCard
 from widgets.card.serverconfig import ConfigCard
@@ -10,7 +15,7 @@ class CardPingServer(MDCard):
     title = StringProperty('Server XX')
     server_ip = StringProperty('xxx.xxx.xxx.xxx')
     check_icon = StringProperty('')
-    check_color = ColorProperty([1,1,1,1])
+    check_color = ColorProperty([1, 1, 1, 1])
     spinner = BooleanProperty(False)
 
     def on_kv_post(self, base_widget):
@@ -20,7 +25,7 @@ class CardPingServer(MDCard):
         self.update_ip(self.server.host)
         return super().on_kv_post(base_widget)
 
-    def update_ip(self, new_ip:str) -> None:
+    def update_ip(self, new_ip: str) -> None:
         self.server_ip = new_ip
 
     def check_ping(self) -> None:
@@ -29,7 +34,7 @@ class CardPingServer(MDCard):
     def toggle_spinner(self) -> None:
         self.spinner = not self.spinner
 
-    def define_icon(self, result:bool) -> None:
+    def define_icon(self, result: bool) -> None:
         if result:
             self.check_color = self.app.success_color
             self.check_icon = 'check'
@@ -39,7 +44,6 @@ class CardPingServer(MDCard):
 
     def reset_icon(self) -> None:
         self.check_icon = ''
-
 
     def open_card(self) -> None:
         self.parent.add_widget(

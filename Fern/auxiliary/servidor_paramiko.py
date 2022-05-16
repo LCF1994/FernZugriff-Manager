@@ -66,6 +66,7 @@ class ServidorSAGE(object):
             'disk_logs': 0,
         }
 
+        self.conn_status = False
         self.gcd = False
 
         self.proccess = {}
@@ -127,10 +128,10 @@ class ServidorSAGE(object):
 
     def check_server_hot(self) -> bool:
         self.hot_server = False
-        _query = f''' 'select estad from inp where id like "alr%{self.var['LOCAL']}"' '''
+        _query = f""" 'select estad from inp where id like "alr%{self.var['LOCAL']}"' """
         data_dict = self.brsql_request(_query, gcd_required=True)
 
-        try: 
+        try:
             self.hot_server = True if data_dict[0]['estad'] == 4 else False
         except (TypeError, KeyError):
             Logger.warning('App : Query failed. Server undefined')
@@ -139,7 +140,6 @@ class ServidorSAGE(object):
 
     def get_var(self) -> dict:
         _gcd_active = self.check_gcd_running()
-        
 
         self.var = {
             'CPU': self.exec_cmd('echo $CPU').lower(),
@@ -157,7 +157,9 @@ class ServidorSAGE(object):
             if 'Undefined' not in self.exec_cmd('echo $METODO_DIFUSAO')
             else 'Undefined',
             'GCD': _gcd_active,
-            'SERVER_HOT': True if _gcd_active and self.check_server_hot() else False,
+            'SERVER_HOT': True
+            if _gcd_active and self.check_server_hot()
+            else False,
             'LOCAL': self.exec_cmd('echo $LOCAL')
             if 'Undefined' not in self.exec_cmd('echo $LOCAL')
             else self.exec_cmd('echo $HOST'),
@@ -176,7 +178,7 @@ class ServidorSAGE(object):
     def _conversion_json_to_dict(self, received_json: json) -> dict:
         try:
             json_loaded = json.loads(received_json)
-        except JSONDecodeError:
+        except (JSONDecodeError, UnboundLocalError):
             Logger.error('App : Error while disconecting')
 
         if type(json_loaded) == list and len(json_loaded) > 0:

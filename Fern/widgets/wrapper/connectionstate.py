@@ -30,10 +30,7 @@ class ConnectionState(MDBoxLayout, CommonFeatures):
     def disconnect(self, *args) -> None:
         self.app.disconnect(self.target)
 
-        self.ids.btn_container.clear_widgets()
-        self.ids.btn_container.add_widget(
-            ConnectionButton(on_press=self.connect)
-        )
+        self.negative_conn()
 
     def update_connection(self, data: bool, *args) -> None:
         self.spinner = False
@@ -53,6 +50,11 @@ class ConnectionState(MDBoxLayout, CommonFeatures):
 
     def negative_conn(self):
         self.conn_state_txt = 'Desconectado'
+
+        self.ids.btn_container.clear_widgets()
+        self.ids.btn_container.add_widget(
+            ConnectionButton(on_press=self.connect)
+        )
 
         self._snackbar_error('Falha na Conexao')
 

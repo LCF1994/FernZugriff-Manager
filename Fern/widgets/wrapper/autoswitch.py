@@ -1,13 +1,14 @@
-from kivymd.uix.floatlayout import MDFloatLayout
-from kivy.properties import BooleanProperty, StringProperty, ColorProperty
+from auxiliary.servidor_paramiko import ServidorSAGE
+from kivy.properties import BooleanProperty, ColorProperty, StringProperty
 from kivymd.app import MDApp
 from kivymd.uix.button import MDRoundFlatButton
-from auxiliary.servidor_paramiko import ServidorSAGE
+from kivymd.uix.floatlayout import MDFloatLayout
 from widgets.card.help import HelpCard
 
+
 class AutoSwitch(MDFloatLayout):
-    
-    TEXT_AUTOSWITCH = '''
+
+    TEXT_AUTOSWITCH = """
     Funcionalidade que permite a abertura automatica do Visor Acesso em caso de desconexao ou desativacao do GCD.
 
     Requerimentos:
@@ -16,13 +17,12 @@ class AutoSwitch(MDFloatLayout):
 
 
 
-    '''
+    """
 
     def open_help(self):
         self.parent.add_widget(
             HelpCard(
-                title='Transferencia Automatica',
-                content=self.TEXT_AUTOSWITCH
+                title='Transferencia Automatica', content=self.TEXT_AUTOSWITCH
             )
         )
 
@@ -34,10 +34,8 @@ class SwitchButton(MDRoundFlatButton):
 
     sage1_conn = False
     sage1_gcd_on = False
-
     sage2_conn = False
     sage2_gcd_on = False
-
 
     def on_kv_post(self, base_widget):
         self.app = MDApp.get_running_app()
@@ -47,15 +45,14 @@ class SwitchButton(MDRoundFlatButton):
         self.text = 'Desligada'
         self.color = self.app.failure_color
         return super().on_kv_post(base_widget)
-    
 
-    def update_connection(self, data:bool, server:ServidorSAGE) -> None:
+    def update_connection(self, data: bool, server: ServidorSAGE) -> None:
         if '1' in server.name:
             self.sage1_conn = data
         if '2' in server.name:
             self.sage2_conn = data
 
-    def update_gcd_state(self, data:bool, server:ServidorSAGE) -> None:
+    def update_gcd_state(self, data: bool, server: ServidorSAGE) -> None:
         if '1' in server.name:
             self.sage1_gcd_on = data
         if '2' in server.name:
@@ -67,10 +64,9 @@ class SwitchButton(MDRoundFlatButton):
 
         return sage1_ok and sage2_ok
 
-
     def toggle(self):
         print(
-        f'''
+            f"""
             SAGE 1 :
             conectado : {self.sage1_conn}
             gcd ativo : {self.sage1_gcd_on}
@@ -78,10 +74,8 @@ class SwitchButton(MDRoundFlatButton):
             SAGE 2 :
             conectado : {self.sage2_conn}
             gcd ativo : {self.sage2_gcd_on}
-        '''
-            )
-
-
+        """
+        )
 
         self.status = not self.status
 
@@ -91,5 +85,3 @@ class SwitchButton(MDRoundFlatButton):
         else:
             self.text = 'Desligada'
             self.color = self.app.failure_color
-    
-

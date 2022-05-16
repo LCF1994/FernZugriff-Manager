@@ -1,5 +1,4 @@
 import platform
-import subprocess
 from functools import partial
 
 import asynckivy as ak
@@ -21,8 +20,17 @@ class Extentions:
             'THIN_1': {},
             'THIN_2': {},
         }
-        self.conn_status = False
+        # self.conn_status = False
         self.storage = JsonStore(CONFIG_PATH)
+
+        self.sage1_conn = False
+        self.sage1_gcd_on = False
+        self.sage1_VisorAcesso_open = False
+        self.sage2_conn = False
+        self.sage2_gcd_on = False
+        self.sage2_VisorAcesso_open = False
+        self.autoswitch_target = None
+        self.autoswitch_active = False
 
     async def async_cmd(self, async_action, future_reaction) -> None:
         future_reaction(await ak.run_in_thread(async_action))
@@ -41,14 +49,15 @@ class Extentions:
         )
 
     def connection_result(self, data: bool, server: ServidorSAGE) -> None:
+
         if data is True:
-            if self.conn_status:
+            if server.conn_status:
                 Logger.debug(
                     f'Clock : Conn_Checker - {server.name} [IP: {server.host}] - Connection Verified'
                 )
                 self._clock_gcd_checker(server)
             else:
-                self.conn_status = True
+                server.conn_status = True
                 Logger.info(
                     f'App : {server.name} [IP: {server.host}] connected successfully'
                 )
@@ -113,7 +122,7 @@ class Extentions:
     def update_charts_with_data_received(
         self, data: bool, server: ServidorSAGE
     ) -> None:
-        #Logger.debug('Dashboard : Updating charts values')
+        # Logger.debug('Dashboard : Updating charts values')
 
         # send screen widgets result
         try:
@@ -194,11 +203,9 @@ class Extentions:
                 server.check_gcd_running, self.gcd_result, server
             )
         )
-    
+
     def _clock_server_hot_update(self, server: ServidorSAGE, *args) -> None:
-        Logger.debug(
-            f'Clock : Checking hot/stand by at {server.name}...'
-        )
+        Logger.debug(f'Clock : Checking hot/stand by at {server.name}...')
         ak.start(
             self.async_cmd_with_args(
                 server.check_server_hot,
@@ -207,7 +214,9 @@ class Extentions:
             )
         )
 
-    def update_server_hot_with_data_received(self, data:bool, server:ServidorSAGE) -> None:
+    def update_server_hot_with_data_received(
+        self, data: bool, server: ServidorSAGE
+    ) -> None:
         # send screen widgets result
         try:
             for widget in self.widgets[server.name].values():
@@ -287,7 +296,7 @@ class Extentions:
     def disconnect(self, server: ServidorSAGE) -> None:
         self._disconnection_rotine(server)
 
-        self.conn_status = False
+        server.conn_status = False
         server.disconnect()
         Logger.warning(f'App : {server.name} disconnected')
 
@@ -295,7 +304,7 @@ class Extentions:
         try:
             for widget in self.widgets[server.name].values():
                 try:
-                    widget.update_connection(False)
+                    widget.update_connection(False, server)
                 except AttributeError:
                     Logger.debug('App : Function not found or not implemented')
                 continue
@@ -328,6 +337,7 @@ class Extentions:
                 server.async_client.run_thread, self.visor_acesso_exit, server
             )
         )
+        self.autoswitch_choose_server()
 
     def visor_acesso_exit(self, close_log: str, server: ServidorSAGE, *args):
         Logger.info('VisorAcesso : Exit VisorAcesso')
@@ -336,6 +346,8 @@ class Extentions:
             if 'VISORACESSO' in widget:
                 target = self.widgets[server.name][widget]
                 target.btn_disable = False
+
+        self.autoswitch_choose_server()
 
     def start_ping_test(self, server: ServidorSAGE, card) -> None:
         Logger.info('App : Ping test started.')
@@ -352,8 +364,96 @@ class Extentions:
 
     def ping_test_result(self, result, server, card, *args):
         log_result = 'success' if result else 'fail'
-        Logger.info(f'App : Ping test result {log_result} for destination {server.host}')
+        Logger.info(
+            f'App : Ping test result {log_result} for destination {server.host}'
+        )
 
         card.toggle_spinner()
         card.define_icon(result)
-        
+
+    def autoswitch_validation(self) -> bool:
+        sage1_ok = self.sage1_conn and self.sage1_gcd_on
+        sage2_ok = self.sage2_conn and self.sage2_gcd_on
+        return sage1_ok and sage2_ok
+
+    def autoswitch_toggle(self) -> bool:
+        if self.autoswitch_active:
+            self.autoswitch_active = not self.autoswitch_active
+        else:
+            self.autoswitch_active = self.autoswitch_validation()
+
+        return self.autoswitch_active
+
+    def autoswitch_choose_server(self) -> None:
+        _visor_sage1 = self.sage1_VisorAcesso_open
+        _visor_sage2 = self.sage2_VisorAcesso_open
+
+        if _visor_sage1 and not _visor_sage2:
+            self.autoswitch_target = self.SAGE_2
+            return
+
+        if not _visor_sage1 and _visor_sage2:
+            self.autoswitch_target = self.SAGE_1
+            return
+
+        self.autoswitch_target = None
+
+    def autoswitch_target_ok(self) -> bool:
+        if self.autoswitch_target is self.SAGE_1:
+            return (
+                self.sage1_conn
+                and self.sage1_gcd_on
+                # and not self.sage1_VisorAcesso_open
+            )
+
+        if self.autoswitch_target is self.SAGE_2:
+            return (
+                self.sage2_conn
+                and self.sage2_gcd_on
+                # and not self.sage2_VisorAcesso_open
+            )
+
+    def autoswitch_update_connection(
+        self, data: bool, server: ServidorSAGE
+    ) -> None:
+        if '1' in server.name:
+            _previous_value = self.sage1_conn
+            _visor_open = self.sage1_VisorAcesso_open
+            self.sage1_conn = data
+        if '2' in server.name:
+            _previous_value = self.sage2_conn
+            _visor_open = self.sage2_VisorAcesso_open
+            self.sage2_conn = data
+
+        if self.autoswitch_active:
+            _drop_conn = (
+                True if _previous_value is True and data is False else False
+            )
+            if _drop_conn and _visor_open:
+                self.autoswitch_trigger()
+
+    def autoswitch_update_gcd_state(
+        self, data: bool, server: ServidorSAGE
+    ) -> None:
+        if '1' in server.name:
+            _previous_value = self.sage1_gcd_on
+            _visor_open = self.sage1_VisorAcesso_open
+            self.sage1_gcd_on = data
+        if '2' in server.name:
+            _previous_value = self.sage2_gcd_on
+            _visor_open = self.sage2_VisorAcesso_open
+            self.sage2_gcd_on = data
+
+        if self.autoswitch_active:
+            _drop_gcd = (
+                True if _previous_value is True and data is False else False
+            )
+            if _drop_gcd and _visor_open:
+                self.autoswitch_trigger()
+
+    def autoswitch_open_VisorAcesso(self) -> None:
+        self.request_visor_acesso(self.autoswitch_target)
+
+    def autoswitch_trigger(self) -> None:
+        if self.autoswitch_target_ok():
+            self.autoswitch_open_VisorAcesso()
