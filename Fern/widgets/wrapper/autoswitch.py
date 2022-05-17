@@ -77,7 +77,7 @@ class SwitchButton(MDRoundFlatButton):
         """
         )
 
-        self.status = not self.status
+        self.status = self.app.autoswitch_toggle()
 
         if self.status:
             self.text = 'Ligada'

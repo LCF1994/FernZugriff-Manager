@@ -78,7 +78,7 @@ class ServerDetails(MDBoxLayout):
         self.gcd = 'desativado'
         self.gcd_color = self.app.failure_color
 
-    def update_server_hot(self, server_hot: bool) -> None:
+    def update_server_hot(self, server_hot: bool, *args) -> None:
         if server_hot is True:
             self.server_hot = 'HOT'
             self.server_hot_color = self.app.failure_color

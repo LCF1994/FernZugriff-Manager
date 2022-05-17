@@ -119,10 +119,10 @@ class Extentions:
                 f'Clock : GCD_Checker - {server.name} [IP: {server.host}] - GCD Stopped'
             )
 
-    def update_charts_with_data_received(
+    def update_server_hot_data_received(
         self, data: bool, server: ServidorSAGE
     ) -> None:
-        # Logger.debug('Dashboard : Updating charts values')
+        Logger.debug('Dashboard : Updating Server HOT')
 
         # send screen widgets result
         try:
