@@ -25,18 +25,24 @@ class AsyncSSHClient:
             result = await conn.run(cmd, check=True)
             return result.stdout[:-1], result.returncode, result.exit_status
 
-    async def _wait_for_thread(self):
+    async def _wait_for_thread(self, cmd: str, *args):
         loop = asyncio.get_event_loop()
-        r = await loop.create_task(self.exec_cmd('VisorAcesso'))
+        r = await loop.create_task(self.exec_cmd(cmd))
         return r
 
-    def run_thread(self):
+    def run_thread(self, cmd: str, *args):
         try:
-            r = asyncio.run(self._wait_for_thread())
+            r = asyncio.run(self._wait_for_thread(cmd))
             return r
 
         except (OSError, asyncssh.Error) as exc:
             sys.exit('SSH connection failed: ' + str(exc))
+
+    def open_visor_acesso(self) -> None:
+        self.run_thread('VisorAcesso')
+
+    def open_syslog(self) -> None:
+        self.run_thread('slog')
 
 
 if __name__ == '__main__':

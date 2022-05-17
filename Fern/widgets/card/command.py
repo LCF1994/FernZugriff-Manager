@@ -9,11 +9,7 @@ from kivy.properties import (
 )
 from kivymd.app import MDApp
 from kivymd.uix.card import MDCard
-
-# from kivymd.uix.spinner import MDSpinner
 from widgets.card.process import ProcessCard
-
-# from widgets.card.serverconfig import ConfigCard
 
 
 class CommandCard(MDCard, CommonFeatures):
@@ -25,7 +21,6 @@ class CommandCard(MDCard, CommonFeatures):
     btn_text = StringProperty('Executar')
 
     btn_disable = BooleanProperty(True)
-
     target = ObjectProperty(ServidorSAGE)
 
     release_function = DictProperty()
@@ -43,21 +38,30 @@ class CommandCard(MDCard, CommonFeatures):
         self.btn_disable = not conn_state
 
     # Actions
-    def open_visor_acesso(self) -> None:
+    def request_visor_acesso(self) -> None:
         self.btn_disable = True
         Logger.info('VisorAcesso : Start request avaliation')
-        result = self.app.check_running_os(self.target)
-        if result:
+
+        if self.app.check_running_os():
+            self.app.request_visor_acesso(self.target)
+        else:
             self._snackbar_error('Disponivel apenas no Linux.')
 
-    def open_process_card(self):
+    def close_visor_acesso(self) -> None:
+        self.btn_disable = False
+
+    def open_process_card(self) -> None:
         self.screen.add_widget(
             ProcessCard(
                 target=self.target,
             )
         )
-
         self.app._on_open_process_card(self.target)
 
-    def execute_remote_command(self):
-        print(f'Executar comando no Servidor {self.target.host}')
+    def request_syslog(self) -> None:
+        Logger.info('App : Start syslog request')
+
+        if self.app.check_running_os():
+            self.app.request_syslog(self.target)
+        else:
+            self._snackbar_error('Disponivel apenas no Linux.')

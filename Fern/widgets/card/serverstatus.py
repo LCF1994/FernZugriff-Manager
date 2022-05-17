@@ -14,10 +14,10 @@ from kivymd.uix.card import MDCard
 class ServerStatus(MDCard):
     server = ObjectProperty(ServidorSAGE)
     server_name = StringProperty('SAGE X')
-    gcd_status = StringProperty('Desativado')
-    gcd_status_color = ColorProperty([1, 1, 0, 1])
-    server_hot = StringProperty('Stand by')
-    server_hot_color = ColorProperty([1, 1, 0, 1])
+    gcd_status = StringProperty('?')
+    gcd_status_color = ColorProperty([1, 1, 1, 1])
+    server_hot = StringProperty('?')
+    server_hot_color = ColorProperty([1, 1, 1, 1])
     visor_acesso = StringProperty('Fechado')
 
     def on_kv_post(self, base_widget):
@@ -50,6 +50,12 @@ class ServerStatus(MDCard):
         else:
             self.server_hot = 'Stand by'
             self.server_hot_color = self.app.neutral_color
+
+    def open_visor_acesso(self, *args) -> None:
+        ...
+
+    def close_visor_acesso(self, *args) -> None:
+        ...
 
     class ItemWrapper(MDBoxLayout):
         title = StringProperty('title')

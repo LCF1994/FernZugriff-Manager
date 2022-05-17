@@ -317,37 +317,86 @@ class Extentions:
             if server.name in clock_key:
                 self.cancel_clock(clock_key)
 
-    def check_running_os(self, server: ServidorSAGE):
+    def check_running_os(self, *args):
         if platform.system() == 'Linux':
-            self.request_visor_acesso(server)
-            return False
-
+            return True
         if platform.system() == 'Windows':
-            return True
-
+            return False
         else:
-            return True
+            return False
 
     def request_visor_acesso(self, server: ServidorSAGE) -> None:
         Logger.info('VisorAcesso : Requesting VisorAcesso')
+        server.visor_acesso = True
 
-        server.build_async_ssh_client()
+        if server.async_client is None:
+            server.build_async_ssh_client()
+
         ak.start(
             self.async_cmd_with_args(
-                server.async_client.run_thread, self.visor_acesso_exit, server
+                server.async_client.open_visor_acesso,
+                self.visor_acesso_exit,
+                server,
             )
         )
+        # send screen widgets result
+        try:
+            for widget in self.widgets[server.name].values():
+                try:
+                    widget.open_visor_acesso()
+                except AttributeError:
+                    continue
+
+        except KeyError:
+            print(
+                f'KeyError {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
+            )
         self.autoswitch_choose_server()
 
     def visor_acesso_exit(self, close_log: str, server: ServidorSAGE, *args):
         Logger.info('VisorAcesso : Exit VisorAcesso')
 
-        for widget in self.widgets[server.name]:
-            if 'VISORACESSO' in widget:
-                target = self.widgets[server.name][widget]
-                target.btn_disable = False
+        try:
+            for widget in self.widgets[server.name].values():
+                try:
+                    widget.close_visor_acesso()
+                except AttributeError:
+                    continue
 
+        except KeyError:
+            print(
+                f'KeyError {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
+            )
+
+        server.visor_acesso = False
         self.autoswitch_choose_server()
+
+    def request_syslog(self, server: ServidorSAGE) -> None:
+        Logger.info('VisorAcesso : Requesting server SysLog')
+
+        if server.async_client is None:
+            server.build_async_ssh_client()
+
+        ak.start(
+            self.async_cmd_with_args(
+                server.async_client.open_syslog, self.syslog_exit, server
+            )
+        )
+        # send screen widgets result
+        try:
+            for widget in self.widgets[server.name].values():
+                try:
+                    widget.open_syslog()
+                except AttributeError:
+                    continue
+
+        except KeyError:
+            print(
+                f'KeyError {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
+            )
+
+    def syslog_exit(self, *args) -> None:
+        Logger.info('App : Syslog closed.')
 
     def start_ping_test(self, server: ServidorSAGE, card) -> None:
         Logger.info('App : Ping test started.')

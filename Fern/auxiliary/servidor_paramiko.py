@@ -67,6 +67,7 @@ class ServidorSAGE(object):
         }
 
         self.conn_status = False
+        self.visor_acesso = False
         self.gcd = False
 
         self.proccess = {}

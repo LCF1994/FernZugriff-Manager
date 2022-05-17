@@ -68,7 +68,7 @@
             btn_icon: 'open-in-new'
             btn_text: 'Abrir'
             target: root.server
-            release_function: {'function': self.open_visor_acesso}
+            release_function: {'function': self.request_visor_acesso}
 
         CommandCard:
             name: 'ProcessCard'
@@ -82,8 +82,8 @@
         CommandCard:
             name: 'CMDCard'
             image: 'Fern/assets/images/cryptocode.jpg'
-            title: 'Remote Terminal'
+            title: 'Server SysLog'
             btn_icon: 'console-line'
-            btn_text: 'Executar'
+            btn_text: 'Abrir'
             target: root.server
-            release_function: {'function': self.execute_remote_command}
+            release_function: {'function': self.request_syslog}
