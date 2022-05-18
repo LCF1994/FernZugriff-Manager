@@ -37,7 +37,7 @@ class ServerStatus(MDCard):
 
     def update_gcd_state(self, status: bool, *args) -> None:
         if status is True:
-            self.gcd_status = 'Ativado'
+            self.gcd_status = 'Ativo'
             self.gcd_status_color = self.app.success_color
         else:
             self.gcd_status = 'Desativado'
@@ -52,10 +52,10 @@ class ServerStatus(MDCard):
             self.server_hot_color = self.app.neutral_color
 
     def open_visor_acesso(self, *args) -> None:
-        ...
+        self.visor_acesso = 'Aberto'
 
     def close_visor_acesso(self, *args) -> None:
-        ...
+        self.visor_acesso = 'Fechado'
 
     class ItemWrapper(MDBoxLayout):
         title = StringProperty('title')

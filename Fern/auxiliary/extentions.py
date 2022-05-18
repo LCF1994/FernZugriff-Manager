@@ -26,9 +26,11 @@ class Extentions:
         self.sage1_conn = False
         self.sage1_gcd_on = False
         self.sage1_VisorAcesso_open = False
+
         self.sage2_conn = False
         self.sage2_gcd_on = False
         self.sage2_VisorAcesso_open = False
+
         self.autoswitch_target = None
         self.autoswitch_active = False
 
@@ -49,7 +51,6 @@ class Extentions:
         )
 
     def connection_result(self, data: bool, server: ServidorSAGE) -> None:
-
         if data is True:
             if server.conn_status:
                 Logger.debug(
@@ -88,10 +89,11 @@ class Extentions:
                     partial(self._clock_conn_checker, server),
                     5,
                 )
-
         else:
             Logger.error('App : Connection Fail')
             self._disconnection_rotine(server)
+
+        self.autoswitch_update_connection(data, server)
 
     def gcd_result(self, data: bool, server: ServidorSAGE) -> None:
         # send screen widgets result
@@ -118,6 +120,8 @@ class Extentions:
             Logger.debug(
                 f'Clock : GCD_Checker - {server.name} [IP: {server.host}] - GCD Stopped'
             )
+
+        self.autoswitch_update_gcd_state(data, server)
 
     def update_server_hot_data_received(
         self, data: bool, server: ServidorSAGE
@@ -372,7 +376,7 @@ class Extentions:
         self.autoswitch_choose_server()
 
     def request_syslog(self, server: ServidorSAGE) -> None:
-        Logger.info('VisorAcesso : Requesting server SysLog')
+        Logger.info('App : Requesting server SysLog')
 
         if server.async_client is None:
             server.build_async_ssh_client()
@@ -421,6 +425,19 @@ class Extentions:
         card.define_icon(result)
 
     def autoswitch_validation(self) -> bool:
+        print(
+            f"""
+
+            SAGE 1:
+            Conn : {self.sage1_conn}
+            GCD  : {self.sage1_gcd_on}
+            
+            SAGE 2:
+            Conn : {self.sage2_conn}         
+            GCD  : {self.sage2_gcd_on}
+
+            """
+        )
         sage1_ok = self.sage1_conn and self.sage1_gcd_on
         sage2_ok = self.sage2_conn and self.sage2_gcd_on
         return sage1_ok and sage2_ok

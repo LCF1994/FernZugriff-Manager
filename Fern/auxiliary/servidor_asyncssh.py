@@ -27,7 +27,7 @@ class AsyncSSHClient:
 
     async def _wait_for_thread(self, cmd: str, *args):
         loop = asyncio.get_event_loop()
-        r = await loop.create_task(self.exec_cmd(cmd))
+        r = await loop.create_task(self.exec_cmd(cmd), name=cmd)
         return r
 
     def run_thread(self, cmd: str, *args):
@@ -42,16 +42,11 @@ class AsyncSSHClient:
         self.run_thread('VisorAcesso')
 
     def open_syslog(self) -> None:
-        self.run_thread('slog')
+        cmd = 'xterm -sb -sl 3000 -n SysLog -T "Log de Mensagens do Sistema Operacional" -geometry 160x17+0-0 -fg black -bg cyan -e tail -f $LOG/unix.log'
+        self.run_thread(cmd)
 
 
 if __name__ == '__main__':
-    sage1 = AsyncSSHClient('192.168.198.137')
+    sage1 = AsyncSSHClient('192.168.198.11')
 
-    print(sage1.run_thread())
-    # try:
-    #     r = asyncio.run(sage1._wait_for_thread())
-    #     print(r)
-
-    # except (OSError, asyncssh.Error) as exc:
-    #     sys.exit('SSH connection failed: ' + str(exc))
+    sage1.open_visor_acesso()

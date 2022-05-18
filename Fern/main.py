@@ -46,7 +46,7 @@ class FernApp(MDApp, Extentions):
         # colors
         self.theme_cls.theme_style = 'Dark'
 
-        self.theme_cls.primary_palette = 'Cyan'  #'Teal'
+        self.theme_cls.primary_palette = 'Teal'
         self.theme_cls.primary_hue = '400'
 
         self.theme_cls.primary_color

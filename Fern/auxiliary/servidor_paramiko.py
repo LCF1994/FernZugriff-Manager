@@ -140,7 +140,11 @@ class ServidorSAGE(object):
         return self.hot_server
 
     def get_var(self) -> dict:
+        _svr_hot = False
         _gcd_active = self.check_gcd_running()
+
+        if _gcd_active:
+            _svr_hot = self.check_server_hot()
 
         self.var = {
             'CPU': self.exec_cmd('echo $CPU').lower(),
@@ -158,9 +162,7 @@ class ServidorSAGE(object):
             if 'Undefined' not in self.exec_cmd('echo $METODO_DIFUSAO')
             else 'Undefined',
             'GCD': _gcd_active,
-            'SERVER_HOT': True
-            if _gcd_active and self.check_server_hot()
-            else False,
+            'SERVER_HOT': _svr_hot,
             'LOCAL': self.exec_cmd('echo $LOCAL')
             if 'Undefined' not in self.exec_cmd('echo $LOCAL')
             else self.exec_cmd('echo $HOST'),
@@ -177,6 +179,8 @@ class ServidorSAGE(object):
         return result
 
     def _conversion_json_to_dict(self, received_json: json) -> dict:
+        json_loaded = None
+
         try:
             json_loaded = json.loads(received_json)
         except (JSONDecodeError, UnboundLocalError):
@@ -222,6 +226,9 @@ class ServidorSAGE(object):
             ['ping', self.host, '-w', '3'], stdout=subprocess.DEVNULL
         )
         return True if __ping.returncode == 0 else False
+
+    # '/export/home/sagetr1/sage/bin/scripts/gcd_off_cgs.rc'
+    # 'gcd_off_cgs.rc'
 
 
 if __name__ == '__main__':
