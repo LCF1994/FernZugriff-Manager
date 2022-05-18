@@ -1,3 +1,8 @@
+import os
+
+os.environ['KCFG_GRAPHICS_RESIZABLE'] = '0'
+os.environ['KCFG_GRAPHICS_ALLOW_SCREENSAVER'] = '0'
+
 from auxiliary.extentions import Extentions
 from auxiliary.kvlang import string_builder
 from auxiliary.servidor_paramiko import ServidorSAGE
@@ -41,7 +46,7 @@ class FernApp(MDApp, Extentions):
         # colors
         self.theme_cls.theme_style = 'Dark'
 
-        self.theme_cls.primary_palette = 'Teal'
+        self.theme_cls.primary_palette = 'Cyan'  #'Teal'
         self.theme_cls.primary_hue = '400'
 
         self.theme_cls.primary_color

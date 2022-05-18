@@ -1,3 +1,4 @@
+from auxiliary.common import CommonFeatures
 from auxiliary.servidor_paramiko import ServidorSAGE
 from kivy.properties import BooleanProperty, ColorProperty, StringProperty
 from kivymd.app import MDApp
@@ -27,7 +28,7 @@ class AutoSwitch(MDFloatLayout):
         )
 
 
-class SwitchButton(MDRoundFlatButton):
+class SwitchButton(MDRoundFlatButton, CommonFeatures):
     text = StringProperty('Button')
     color = ColorProperty([1, 1, 1, 1])
     status = BooleanProperty(False)
@@ -44,6 +45,7 @@ class SwitchButton(MDRoundFlatButton):
 
         self.text = 'Desligada'
         self.color = self.app.failure_color
+
         return super().on_kv_post(base_widget)
 
     def update_connection(self, data: bool, server: ServidorSAGE) -> None:
@@ -65,19 +67,12 @@ class SwitchButton(MDRoundFlatButton):
         return sage1_ok and sage2_ok
 
     def toggle(self):
-        print(
-            f"""
-            SAGE 1 :
-            conectado : {self.sage1_conn}
-            gcd ativo : {self.sage1_gcd_on}
+        toggle_request = self.app.autoswitch_toggle()
 
-            SAGE 2 :
-            conectado : {self.sage2_conn}
-            gcd ativo : {self.sage2_gcd_on}
-        """
-        )
+        if not self.status and not toggle_request:
+            self._snackbar_error('Falha: Requerimentos nao atingidos')
 
-        self.status = self.app.autoswitch_toggle()
+        self.status = toggle_request
 
         if self.status:
             self.text = 'Ligada'

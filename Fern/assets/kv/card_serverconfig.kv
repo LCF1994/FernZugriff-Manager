@@ -1,87 +1,79 @@
 <ConfigCard>
     size_hint: .6, .9
     pos_hint: {'center_x': .5, 'center_y': .5}
-    elevation: 20
-    radius: [dp(36), ]
-
+    radius: [36, ]
+    padding: [1, ]
+    md_bg_color: app.theme_cls.primary_light
     on_touch_down: self.check_card_focus(args)
-
-    MDFloatLayout:
-        Image:
-            source:'Fern/assets/images/sage.png'
-            pos_hint: {'center_x': .5, 'center_y': .86}
-            size_hint: None, None
-            size: 27, 27
-        MDIconButton:
-            icon: 'monitor'
-            theme_text_color: "Custom"
-            text_color: app.theme_cls.primary_color
-            user_font_size: '75sp'
-            pos_hint: {"center_x": .5, "center_y": .85}
-
-
-        # title
-        MDLabel:
-            halign:'center'
-            pos_hint: {'center_x': .5, "center_y": .75}
-            text: root.srv_name
-
-        # IP input
-        MDTextField:
-            id: server_ip
-            pos_hint: {'center_x': .5, 'center_y': .6}
-            size_hint_x: .9
-            hint_text: 'IP do servidor'
-            required: True
-            helper_text: 'Requirido - insira um IP'
-            helper_text_mode: 'on_error'
-        
-        # Advanced inputs
-        MDLabel:
-            pos_hint: {'center_x': .5, 'center_y': .5}
-            size_hint_x: .9
-            text: 'Advanced'
-        MDSeparator:
-            pos_hint: {'center_x': .5, 'center_y': .475}
-            size_hint_x: .9
-
-        MDTextField:
-            id: username
-            pos_hint: {'center_x': .5, 'center_y': .4}
-            size_hint_x: .9
-            hint_text: 'Usuario'
-            helper_text: "Default= sagetr1"
-            helper_text_mode: "persistent"
-
-        MDTextField:
-            id: password
-            pos_hint: {'center_x': .5, 'center_y': .3}
-            size_hint_x: .9
-            hint_text: 'Senha'
-            helper_text: "Default= sagetr1"
-            helper_text_mode: "persistent"
-            password: True
-
-        MDTextField:
-            id: port_number
-            pos_hint: {'center_x': .5, 'center_y': .2}
-            size_hint_x: .9
-            hint_text: 'SSH Port'
-            helper_text: "Default= 22"
-            helper_text_mode: "persistent"
-        
-
-        # Buttons
-        MDBoxLayout:
-            pos_hint: {'center_x': .9, 'center_y': .15}
-            adaptive_height: True
-            size_hint_y: .2
-            padding: 30, 0, 30, 0
-            spacing: 20
-
-            MDRaisedButton:
-                text:'Salvar'
-                on_release: root.save_button()
-            MDRectangleFlatButton:
-                text:'Cancelar'
-                on_release: root.cancel_button()
+    MDCard:
+        radius: [36, ]
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        MDFloatLayout:
+            Image:
+                source:'Fern/assets/images/sage.png'
+                pos_hint: {'center_x': .5, 'center_y': .86}
+                size_hint: None, None
+                size: 27, 27
+            MDIconButton:
+                icon: 'monitor'
+                theme_text_color: "Custom"
+                text_color: app.theme_cls.primary_color
+                user_font_size: '75sp'
+                pos_hint: {"center_x": .5, "center_y": .85}
+            # title
+            MDLabel:
+                halign:'center'
+                pos_hint: {'center_x': .5, "center_y": .75}
+                text: root.srv_name
+            # IP input
+            MDTextField:
+                id: server_ip
+                pos_hint: {'center_x': .5, 'center_y': .6}
+                size_hint_x: .9
+                hint_text: 'IP do servidor'
+                required: True
+                helper_text: 'Requirido - insira um IP'
+                helper_text_mode: 'on_error'
+            # Advanced inputs
+            MDLabel:
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                size_hint_x: .9
+                text: 'Advanced'
+            MDSeparator:
+                pos_hint: {'center_x': .5, 'center_y': .475}
+                size_hint_x: .9
+            MDTextField:
+                id: username
+                pos_hint: {'center_x': .5, 'center_y': .4}
+                size_hint_x: .9
+                hint_text: 'Usuario'
+                helper_text: "Default= sagetr1"
+                helper_text_mode: "persistent"
+            MDTextField:
+                id: password
+                pos_hint: {'center_x': .5, 'center_y': .3}
+                size_hint_x: .9
+                hint_text: 'Senha'
+                helper_text: "Default= sagetr1"
+                helper_text_mode: "persistent"
+                password: True
+            MDTextField:
+                id: port_number
+                pos_hint: {'center_x': .5, 'center_y': .2}
+                size_hint_x: .9
+                hint_text: 'SSH Port'
+                helper_text: "Default= 22"
+                helper_text_mode: "persistent"
+            # Buttons
+            MDBoxLayout:
+                pos_hint: {'center_x': .9, 'center_y': .15}
+                adaptive_height: True
+                size_hint_y: .2
+                padding: 30, 0, 30, 0
+                spacing: 20
+                MDRaisedButton:
+                    text:'Salvar'
+                    on_release: root.save_button()
+                MDRectangleFlatButton:
+                    text:'Cancelar'
+                    on_release: root.cancel_button()
