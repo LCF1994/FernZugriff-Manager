@@ -339,6 +339,7 @@ class Extentions:
         ak.start(
             self.async_cmd_with_args(
                 server.async_client.open_visor_acesso,
+                #server.open_visor_acesso,
                 self.visor_acesso_exit,
                 server,
             )
