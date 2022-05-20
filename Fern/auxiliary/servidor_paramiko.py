@@ -89,7 +89,6 @@ class ServidorSAGE(object):
             return False
 
     def connect(self) -> bool:
-        # print(f'Connecting to {self.host}')
         try:
             self.client.connect(
                 self.host,
@@ -97,8 +96,6 @@ class ServidorSAGE(object):
                 password=self.password,
                 port=self.port,
             )
-            # print('Conectado')
-
             self.transport = self.client.get_transport()
             self.transport.set_keepalive(30)
             self.check_gcd_running()

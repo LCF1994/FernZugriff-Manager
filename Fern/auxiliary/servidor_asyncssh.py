@@ -1,12 +1,8 @@
 import asyncio
 import sys
 
-from time import sleep
-
 import asyncssh
-from asyncssh import SSHClientConnection
 
-import asynckivy as ak
 
 class AsyncSSHClient:
     def __init__(
@@ -23,6 +19,9 @@ class AsyncSSHClient:
         )
 
         self.loop = None
+        self.target_ip = None
+
+        self._terminal_default = 'xterm -sb -sl 3000 -T "Terminal" -geometry 160x17+0-0 -fg green -bg black'
 
     async def exec_cmd(self, cmd: str, *args, **kargs) -> tuple:
         async with asyncssh.connect(
@@ -45,25 +44,39 @@ class AsyncSSHClient:
 
     def run_thread(self, cmd: str, *args):
         try:
-            # r = asyncio.run(self._wait_for_thread(cmd))
-            r = asyncio.run(self._wait_for_task(cmd))
-            return r
+            return asyncio.run(self._wait_for_thread(cmd))
+        except (OSError, asyncssh.Error) as exc:
+            sys.exit('SSH connection failed: ' + str(exc))
 
+    def run_task(self, cmd: str, *args):
+        try:
+            return asyncio.run(self._wait_for_task(cmd))
         except (OSError, asyncssh.Error) as exc:
             sys.exit('SSH connection failed: ' + str(exc))
 
     def open_visor_acesso(self) -> None:
-        _visor_acesso = 'xterm -sb -sl 3000 -n SysLog -T "Log do VisorAcesso" -geometry 160x17+0-0 -fg green -bg black -e VisorAcesso'
-        self.run_thread(_visor_acesso)
+        # _visor_acesso = 'xterm -sb -sl 3000 -n SysLog -T "Log do VisorAcesso" -geometry 160x17+0-0 -fg green -bg black -e VisorAcesso'
+        _visor_acesso = 'VisorAcesso'
+        self.run_task(_visor_acesso)
 
-
-    def open_syslog(self) -> None:
-        # slog = 'xterm -sb -sl 3000 -n SysLog -T "Log de Mensagens do Sistema Operacional" -geometry 160x17+0-0 -fg black -bg cyan -e tail -f $LOG/unix.log'
-        # self.run_thread(slog)
-        print('cancela tudo')
+    def close_visor_acesso(self) -> None:
         self.task.cancel()
 
+    def open_syslog(self) -> None:
+        slog = 'xterm -sb -sl 3000 -n SysLog -T "Log de Mensagens do Sistema Operacional" -geometry 160x17+0-0 -fg black -bg cyan -e tail -f $LOG/unix.log'
+        self.run_thread(slog)
 
+    def open_remote_terminal(self) -> None:
+        self.run_thread(self._terminal_default)
+
+    def change_target_ip(self, new_ip: str) -> None:
+        self.change_target_ip = new_ip
+
+    def ping_target(self) -> None:
+        _remote_ping = (
+            f'{self._terminal_default} -e ping {self.target_ip} -w 3'
+        )
+        self.run_thread(_remote_ping)
 
 
 if __name__ == '__main__':

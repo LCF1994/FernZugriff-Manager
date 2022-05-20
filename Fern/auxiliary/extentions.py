@@ -32,6 +32,7 @@ class Extentions:
         self.sage2_VisorAcesso_open = False
 
         self.autoswitch_target = None
+        self.autoswitch_current = None
         self.autoswitch_active = False
 
     async def async_cmd(self, async_action, future_reaction) -> None:
@@ -339,7 +340,7 @@ class Extentions:
         ak.start(
             self.async_cmd_with_args(
                 server.async_client.open_visor_acesso,
-                #server.open_visor_acesso,
+                # server.open_visor_acesso,
                 self.visor_acesso_exit,
                 server,
             )
@@ -374,6 +375,22 @@ class Extentions:
             )
 
         server.visor_acesso = False
+        self.autoswitch_choose_server()
+
+    def cancel_visor_acesso(self, server: ServidorSAGE) -> None:
+        Logger.info('VisorAcesso : Canceling VisorAcesso')
+        server.visor_acesso = False
+
+        if server.async_client is None:
+            server.build_async_ssh_client()
+
+        ak.start(
+            self.async_cmd_with_args(
+                server.async_client.close_visor_acesso,
+                self.visor_acesso_exit,
+                server,
+            )
+        )
         self.autoswitch_choose_server()
 
     def request_syslog(self, server: ServidorSAGE) -> None:
@@ -457,13 +474,16 @@ class Extentions:
 
         if _visor_sage1 and not _visor_sage2:
             self.autoswitch_target = self.SAGE_2
+            self.autoswitch_current = self.SAGE_1
             return
 
         if not _visor_sage1 and _visor_sage2:
             self.autoswitch_target = self.SAGE_1
+            self.autoswitch_current = self.SAGE_2
             return
 
         self.autoswitch_target = None
+        self.autoswitch_current = None
 
     def autoswitch_target_ok(self) -> bool:
         if self.autoswitch_target is self.SAGE_1:
@@ -518,9 +538,10 @@ class Extentions:
             if _drop_gcd and _visor_open:
                 self.autoswitch_trigger()
 
-    def autoswitch_open_VisorAcesso(self) -> None:
+    def autoswitch_switch_VisorAcesso(self) -> None:
+        self.cancel_visor_acesso(self.autoswitch_current)
         self.request_visor_acesso(self.autoswitch_target)
 
     def autoswitch_trigger(self) -> None:
         if self.autoswitch_target_ok():
-            self.autoswitch_open_VisorAcesso()
+            self.autoswitch_switch_VisorAcesso()
