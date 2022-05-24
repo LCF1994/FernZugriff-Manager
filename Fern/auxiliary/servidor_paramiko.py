@@ -16,6 +16,7 @@ from paramiko import (
     SSHClient,
     SSHException,
 )
+from paramiko.ssh_exception import ChannelException
 
 
 class ServidorSAGE(object):
@@ -70,6 +71,9 @@ class ServidorSAGE(object):
         self.visor_acesso = False
         self.gcd = False
 
+        self.conn_supervision = False
+        self.gcd_supervision = False
+
         self.proccess = {}
 
     def set_config(self, config: dict) -> None:
@@ -117,8 +121,13 @@ class ServidorSAGE(object):
                 return str(stderr.read()[:-1], 'utf-8')
             else:
                 return str(stdout.read()[:-1], 'utf-8')
-        except AttributeError:
+        except (AttributeError, EOFError):
             Logger.error(f'App : Command fail. Destination: {self.name}')
+        except ChannelException:
+            Logger.error(
+                f'App : Command fail, Channel Error. Destination: {self.name}'
+            )
+            Logger.error(f'App : {self.name} Disconnecting...')
 
     def check_gcd_running(self) -> bool:
         self.gcd = True if self.exec_cmd('pgrep gcd') else False
@@ -223,6 +232,11 @@ class ServidorSAGE(object):
             ['ping', self.host, '-w', '3'], stdout=subprocess.DEVNULL
         )
         return True if __ping.returncode == 0 else False
+
+    def validate_connection(self) -> bool:
+        ping_test = self.ping_test()
+        transport_check = self.check_connection()
+        return ping_test and transport_check
 
     # '/export/home/sagetr1/sage/bin/scripts/gcd_off_cgs.rc'
     # 'gcd_off_cgs.rc'

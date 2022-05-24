@@ -54,7 +54,7 @@ class Extentions:
     def connection_result(self, data: bool, server: ServidorSAGE) -> None:
         if data is True:
             if server.conn_status:
-                Logger.debug(
+                Logger.warn(
                     f'Clock : Conn_Checker - {server.name} [IP: {server.host}] - Connection Verified'
                 )
                 self._clock_gcd_checker(server)
@@ -63,8 +63,6 @@ class Extentions:
                 Logger.info(
                     f'App : {server.name} [IP: {server.host}] connected successfully'
                 )
-
-                # send screen widgets result
                 try:
                     for widget in self.widgets[server.name].values():
                         try:
@@ -74,7 +72,6 @@ class Extentions:
                                 'App : Function not found or not implemented'
                             )
                         continue
-
                 except KeyError:
                     Logger.debug(
                         f'KeyError : {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
@@ -92,19 +89,17 @@ class Extentions:
                 )
         else:
             Logger.error('App : Connection Fail')
-            self._disconnection_rotine(server)
+            self.disconnect(server)
 
         self.autoswitch_update_connection(data, server)
 
     def gcd_result(self, data: bool, server: ServidorSAGE) -> None:
-        # send screen widgets result
         try:
             for widget in self.widgets[server.name].values():
                 try:
                     widget.update_gcd_state(data, server)
                 except AttributeError:
                     continue
-
         except KeyError:
             print(
                 f'KeyError {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
@@ -128,15 +123,12 @@ class Extentions:
         self, data: bool, server: ServidorSAGE
     ) -> None:
         Logger.debug('Dashboard : Updating Server HOT')
-
-        # send screen widgets result
         try:
             for widget in self.widgets[server.name].values():
                 try:
                     widget.update_server_hot(data)
                 except AttributeError:
                     continue
-
         except KeyError:
             print(
                 f'KeyError {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
@@ -146,15 +138,12 @@ class Extentions:
         self, data: dict, server: ServidorSAGE
     ) -> None:
         Logger.debug('Charts: Updating charts values')
-
-        # send screen widgets result
         try:
             for widget in self.widgets[server.name].values():
                 try:
                     widget.update_charts_info(data)
                 except AttributeError:
                     continue
-
         except KeyError:
             print(
                 f'KeyError {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
@@ -172,7 +161,6 @@ class Extentions:
 
     def _on_close_process_card(self, server: ServidorSAGE) -> None:
         clock_name = f'Process_checker_{server.name}'
-
         Logger.info(f'ProcessCard : Canceling clock {clock_name}...')
         self.cancel_clock(clock_name)
 
@@ -180,24 +168,25 @@ class Extentions:
         Logger.debug(
             f'ProcessCard : Data retrieved from {server.name} [IP: {server.host}]'
         )
-        # send screen widgets result
         try:
             for widget in self.widgets[server.name].values():
                 try:
                     widget._update_process(data)
                 except AttributeError:
                     continue
-
         except KeyError:
             print(
                 f'KeyError {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
             )
 
     def _clock_conn_checker(self, server: ServidorSAGE, *args) -> None:
-        Logger.debug('Clock : Checking Connection State ...')
+        Logger.debug(f'Clock : Checking {server.name} Connection State ... ')
         ak.start(
             self.async_cmd_with_args(
-                server.check_connection, self.connection_result, server
+                server.validate_connection,
+                self.connection_result,
+                server
+                # server.check_connection, self.connection_result, server
             )
         )
 
@@ -222,14 +211,12 @@ class Extentions:
     def update_server_hot_with_data_received(
         self, data: bool, server: ServidorSAGE
     ) -> None:
-        # send screen widgets result
         try:
             for widget in self.widgets[server.name].values():
                 try:
                     widget.update_server_hot(data)
                 except AttributeError:
                     continue
-
         except KeyError:
             print(
                 f'KeyError {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
@@ -272,24 +259,20 @@ class Extentions:
             clock.cancel()
 
     def set_ip_on_server_title(self, server):
-        # send screen widgets result
         try:
             for widget in self.widgets[server.name].values():
                 try:
                     widget.update_ip(server.host)
                 except AttributeError:
                     continue
-
         except KeyError:
             print(
                 f'KeyError {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
             )
 
     def save_config(self, server: ServidorSAGE) -> None:
-
         if self.SAGE_1.host == self.SAGE_2.host:
             Logger.warning('App : Identical IPs configured for Servers')
-
         self.storage.put(
             server.name,
             host=server.host,
@@ -298,14 +281,24 @@ class Extentions:
             port=server.port,
         )
 
-    def disconnect(self, server: ServidorSAGE) -> None:
-        self._disconnection_rotine(server)
+    def autoswitch_save_config(self) -> None:
+        self.storage.put(
+            'app',
+            autoswitch=self.autoswitch_active,
+        )
 
+    def disconnect(self, server: ServidorSAGE) -> None:
         server.conn_status = False
         server.disconnect()
+        self._disconnection_rotine(server)
         Logger.warning(f'App : {server.name} disconnected')
 
     def _disconnection_rotine(self, server: ServidorSAGE) -> None:
+        if server.conn_supervision and self.autoswitch_active:
+            self.autoswitch_trigger()
+        else:
+            if server.visor_acesso:
+                self.cancel_visor_acesso(server)
         try:
             for widget in self.widgets[server.name].values():
                 try:
@@ -317,7 +310,6 @@ class Extentions:
             Logger.debug(
                 f'KeyError : {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
             )
-
         for clock_key in self.running_clocks.keys():
             if server.name in clock_key:
                 self.cancel_clock(clock_key)
@@ -331,8 +323,13 @@ class Extentions:
             return False
 
     def request_visor_acesso(self, server: ServidorSAGE) -> None:
-        Logger.info('VisorAcesso : Requesting VisorAcesso')
+        Logger.info(f'VisorAcesso : Requesting VisorAcesso at {server.name}')
         server.visor_acesso = True
+
+        if server.conn_status:
+            server.conn_supervision = True
+        if server.gcd:
+            server.gcd_supervision = True
 
         if server.async_client is None:
             server.build_async_ssh_client()
@@ -340,27 +337,25 @@ class Extentions:
         ak.start(
             self.async_cmd_with_args(
                 server.async_client.open_visor_acesso,
-                # server.open_visor_acesso,
                 self.visor_acesso_exit,
                 server,
             )
         )
-        # send screen widgets result
         try:
             for widget in self.widgets[server.name].values():
                 try:
                     widget.open_visor_acesso()
                 except AttributeError:
                     continue
-
         except KeyError:
             print(
                 f'KeyError {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
             )
+
         self.autoswitch_choose_server()
 
     def visor_acesso_exit(self, close_log: str, server: ServidorSAGE, *args):
-        Logger.info('VisorAcesso : Exit VisorAcesso')
+        Logger.info(f'VisorAcesso : Exit VisorAcesso at {server.name}')
 
         try:
             for widget in self.widgets[server.name].values():
@@ -368,19 +363,18 @@ class Extentions:
                     widget.close_visor_acesso()
                 except AttributeError:
                     continue
-
         except KeyError:
             print(
                 f'KeyError {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
             )
 
         server.visor_acesso = False
+        server.conn_supervision = False
+        server.gcd_supervision = False
         self.autoswitch_choose_server()
 
     def cancel_visor_acesso(self, server: ServidorSAGE) -> None:
-        Logger.info('VisorAcesso : Canceling VisorAcesso')
-        # server.visor_acesso = False
-
+        Logger.info(f'VisorAcesso : Canceling VisorAcesso at {server.name}')
         ak.start(
             self.async_cmd_with_args(
                 server.async_client.close_visor_acesso,
@@ -391,7 +385,7 @@ class Extentions:
         self.autoswitch_choose_server()
 
     def request_syslog(self, server: ServidorSAGE) -> None:
-        Logger.info('App : Requesting server SysLog')
+        Logger.info(f'App : Requesting {server.name} SysLog')
 
         if server.async_client is None:
             server.build_async_ssh_client()
@@ -401,14 +395,12 @@ class Extentions:
                 server.async_client.open_syslog, self.syslog_exit, server
             )
         )
-        # send screen widgets result
         try:
             for widget in self.widgets[server.name].values():
                 try:
                     widget.open_syslog()
                 except AttributeError:
                     continue
-
         except KeyError:
             print(
                 f'KeyError {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
@@ -440,21 +432,8 @@ class Extentions:
         card.define_icon(result)
 
     def autoswitch_validation(self) -> bool:
-        print(
-            f"""
-
-            SAGE 1:
-            Conn : {self.sage1_conn}
-            GCD  : {self.sage1_gcd_on}
-            
-            SAGE 2:
-            Conn : {self.sage2_conn}         
-            GCD  : {self.sage2_gcd_on}
-
-            """
-        )
-        sage1_ok = self.sage1_conn and self.sage1_gcd_on
-        sage2_ok = self.sage2_conn and self.sage2_gcd_on
+        sage1_ok = self.SAGE_1.conn_status and self.SAGE_1.gcd
+        sage2_ok = self.SAGE_2.conn_status and self.SAGE_2.gcd
         return sage1_ok and sage2_ok
 
     def autoswitch_toggle(self) -> bool:
@@ -463,6 +442,7 @@ class Extentions:
         else:
             self.autoswitch_active = self.autoswitch_validation()
 
+        self.autoswitch_save_config()
         return self.autoswitch_active
 
     def autoswitch_choose_server(self) -> None:
@@ -485,56 +465,41 @@ class Extentions:
     def autoswitch_target_ok(self) -> bool:
         if self.autoswitch_target == None:
             return False
-
         if self.autoswitch_target == self.SAGE_1:
             return (
-                self.sage1_conn
-                and self.sage1_gcd_on
-                # and not self.sage1_VisorAcesso_open
+                self.SAGE_1.conn_status
+                and self.SAGE_1.gcd
+                and not self.SAGE_1.visor_acesso
             )
-
         if self.autoswitch_target == self.SAGE_2:
             return (
-                self.sage2_conn
-                and self.sage2_gcd_on
-                # and not self.sage2_VisorAcesso_open
+                self.SAGE_2.conn_status
+                and self.SAGE_2.gcd
+                and not self.SAGE_2.visor_acesso
             )
 
     def autoswitch_update_connection(
         self, data: bool, server: ServidorSAGE
     ) -> None:
-        if '1' in server.name:
-            _previous_value = self.sage1_conn
-            _visor_open = self.sage1_VisorAcesso_open
-            self.sage1_conn = data
-        if '2' in server.name:
-            _previous_value = self.sage2_conn
-            _visor_open = self.sage2_VisorAcesso_open
-            self.sage2_conn = data
+        _previous_value = server.conn_supervision
+        _visor_open = server.visor_acesso
 
+        # print(f'autoswitch_update_connection - prev: {_previous_value} - data: {data} - visor: {_visor_open}')
         if self.autoswitch_active:
-            _drop_conn = (
-                True if _previous_value is True and data is False else False
-            )
+            _drop_conn = _previous_value and not data
             if _drop_conn and _visor_open:
                 self.autoswitch_trigger()
 
     def autoswitch_update_gcd_state(
         self, data: bool, server: ServidorSAGE
     ) -> None:
-        if '1' in server.name:
-            _previous_value = self.sage1_gcd_on
-            _visor_open = self.sage1_VisorAcesso_open
-            self.sage1_gcd_on = data
-        if '2' in server.name:
-            _previous_value = self.sage2_gcd_on
-            _visor_open = self.sage2_VisorAcesso_open
-            self.sage2_gcd_on = data
+
+        _previous_value = server.gcd_supervision
+        _visor_open = server.visor_acesso
+        # print(f'autoswitch_update_gcd_state - prev: {_previous_value} - data: {data} - visor: {_visor_open}')
 
         if self.autoswitch_active:
-            _drop_gcd = (
-                True if _previous_value is True and data is False else False
-            )
+            _drop_gcd = _previous_value and not data
             if _drop_gcd and _visor_open:
                 self.autoswitch_trigger()
 
@@ -546,10 +511,10 @@ class Extentions:
         Logger.info('AutoSwitch : Triggered')
 
         var = self.autoswitch_target_ok()
-        print(f'autoswitch_target_ok = {var}')
-        print(f'autoswitch_target = {self.autoswitch_target}')
-        print(f'autoswitch_current = {self.autoswitch_current}')
-        print(f'autoswitch_sage1 visor acesso = {self.SAGE_1.visor_acesso}')
-        print(f'autoswitch_sage2 visor acesso = {self.SAGE_2.visor_acesso}')
+        # print(f'autoswitch_target_ok = {var}')
+        # print(f'autoswitch_target = {self.autoswitch_target}')
+        # print(f'autoswitch_current = {self.autoswitch_current}')
+        # print(f'autoswitch_sage1 visor acesso = {self.SAGE_1.visor_acesso}')
+        # print(f'autoswitch_sage2 visor acesso = {self.SAGE_2.visor_acesso}')
         if var:
             self.autoswitch_switch_VisorAcesso()

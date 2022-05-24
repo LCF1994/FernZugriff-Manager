@@ -38,6 +38,9 @@ class FernApp(MDApp, Extentions):
             self.SAGE_1.set_config(self.storage.get('SAGE_1'))
             self.SAGE_2.set_config(self.storage.get('SAGE_2'))
 
+            self.autoswitch_active = self.storage.get('app')['autoswitch']
+            # print(self.storage.get('app'))
+
             Logger.info('Settings: Configuration file loaded')
         except KeyError:
             Logger.warning('Settings: Configuration file incomplete')

@@ -98,4 +98,4 @@ class ManualSwitchButton(MDIconButton, CommonFeatures, CommonAutoSwitch):
 
     def manual_trigger(self) -> None:
         self.app.autoswitch_trigger()
-        self._snackbar_info('Troca manual de Visor realizada')
+        self._snackbar_info('Troca manual de Visor requisitada')
