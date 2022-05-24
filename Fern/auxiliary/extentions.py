@@ -379,10 +379,7 @@ class Extentions:
 
     def cancel_visor_acesso(self, server: ServidorSAGE) -> None:
         Logger.info('VisorAcesso : Canceling VisorAcesso')
-        server.visor_acesso = False
-
-        if server.async_client is None:
-            server.build_async_ssh_client()
+        # server.visor_acesso = False
 
         ak.start(
             self.async_cmd_with_args(
@@ -469,8 +466,8 @@ class Extentions:
         return self.autoswitch_active
 
     def autoswitch_choose_server(self) -> None:
-        _visor_sage1 = self.sage1_VisorAcesso_open
-        _visor_sage2 = self.sage2_VisorAcesso_open
+        _visor_sage1 = self.SAGE_1.visor_acesso
+        _visor_sage2 = self.SAGE_2.visor_acesso
 
         if _visor_sage1 and not _visor_sage2:
             self.autoswitch_target = self.SAGE_2
@@ -486,14 +483,17 @@ class Extentions:
         self.autoswitch_current = None
 
     def autoswitch_target_ok(self) -> bool:
-        if self.autoswitch_target is self.SAGE_1:
+        if self.autoswitch_target == None:
+            return False
+
+        if self.autoswitch_target == self.SAGE_1:
             return (
                 self.sage1_conn
                 and self.sage1_gcd_on
                 # and not self.sage1_VisorAcesso_open
             )
 
-        if self.autoswitch_target is self.SAGE_2:
+        if self.autoswitch_target == self.SAGE_2:
             return (
                 self.sage2_conn
                 and self.sage2_gcd_on
@@ -543,5 +543,13 @@ class Extentions:
         self.request_visor_acesso(self.autoswitch_target)
 
     def autoswitch_trigger(self) -> None:
-        if self.autoswitch_target_ok():
+        Logger.info('AutoSwitch : Triggered')
+
+        var = self.autoswitch_target_ok()
+        print(f'autoswitch_target_ok = {var}')
+        print(f'autoswitch_target = {self.autoswitch_target}')
+        print(f'autoswitch_current = {self.autoswitch_current}')
+        print(f'autoswitch_sage1 visor acesso = {self.SAGE_1.visor_acesso}')
+        print(f'autoswitch_sage2 visor acesso = {self.SAGE_2.visor_acesso}')
+        if var:
             self.autoswitch_switch_VisorAcesso()

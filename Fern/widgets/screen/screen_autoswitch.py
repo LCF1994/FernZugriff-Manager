@@ -4,5 +4,5 @@ from widgets.card.serverstatus import ServerStatus
 from widgets.wrapper.autoswitch import AutoSwitch
 
 
-class ToolsScreen(Screen):
+class AutoSwitchScreen(Screen):
     ...

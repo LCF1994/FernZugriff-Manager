@@ -3,6 +3,22 @@ from kivymd.uix.snackbar import Snackbar
 
 
 class CommonFeatures:
+    def _snackbar_info(self, message: str) -> None:
+        Snackbar(
+            text=f'{message}',
+            snackbar_x='10dp',
+            snackbar_y='10dp',
+            size_hint_x=0.95,
+        ).open()
+
+    def _snackbar_warn(self, message: str) -> None:
+        Snackbar(
+            text=f'[color=#eeee00]{message}[/color]',
+            snackbar_x='10dp',
+            snackbar_y='10dp',
+            size_hint_x=0.95,
+        ).open()
+
     def _snackbar_error(self, message: str) -> None:
         Snackbar(
             text=f'[color=#ee3434]{message}[/color]',

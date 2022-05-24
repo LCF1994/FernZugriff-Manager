@@ -2,7 +2,7 @@ from auxiliary.common import CommonFeatures
 from auxiliary.servidor_paramiko import ServidorSAGE
 from kivy.properties import BooleanProperty, ColorProperty, StringProperty
 from kivymd.app import MDApp
-from kivymd.uix.button import MDRoundFlatButton
+from kivymd.uix.button import MDIconButton, MDRoundFlatButton
 from kivymd.uix.floatlayout import MDFloatLayout
 from widgets.card.help import HelpCard
 
@@ -28,25 +28,11 @@ class AutoSwitch(MDFloatLayout):
         )
 
 
-class SwitchButton(MDRoundFlatButton, CommonFeatures):
-    text = StringProperty('Button')
-    color = ColorProperty([1, 1, 1, 1])
-    status = BooleanProperty(False)
-
+class CommonAutoSwitch:
     sage1_conn = False
     sage1_gcd_on = False
     sage2_conn = False
     sage2_gcd_on = False
-
-    def on_kv_post(self, base_widget):
-        self.app = MDApp.get_running_app()
-        self.app.widgets['SAGE_1'][f'AUTOSWITCH_{id(self)}'] = self
-        self.app.widgets['SAGE_2'][f'AUTOSWITCH_{id(self)}'] = self
-
-        self.text = 'Desligada'
-        self.color = self.app.failure_color
-
-        return super().on_kv_post(base_widget)
 
     def update_connection(self, data: bool, server: ServidorSAGE) -> None:
         if '1' in server.name:
@@ -66,6 +52,22 @@ class SwitchButton(MDRoundFlatButton, CommonFeatures):
 
         return sage1_ok and sage2_ok
 
+
+class AutoSwitchButton(MDRoundFlatButton, CommonFeatures, CommonAutoSwitch):
+    text = StringProperty('Button')
+    color = ColorProperty([1, 1, 1, 1])
+    status = BooleanProperty(False)
+
+    def on_kv_post(self, base_widget):
+        self.app = MDApp.get_running_app()
+        self.app.widgets['SAGE_1'][f'AUTOSWITCH_{id(self)}'] = self
+        self.app.widgets['SAGE_2'][f'AUTOSWITCH_{id(self)}'] = self
+
+        self.text = 'Desligada'
+        self.color = self.app.failure_color
+
+        return super().on_kv_post(base_widget)
+
     def toggle(self):
         toggle_request = self.app.autoswitch_toggle()
 
@@ -80,3 +82,20 @@ class SwitchButton(MDRoundFlatButton, CommonFeatures):
         else:
             self.text = 'Desligada'
             self.color = self.app.failure_color
+
+
+class ManualSwitchButton(MDIconButton, CommonFeatures, CommonAutoSwitch):
+    color = ColorProperty([1, 1, 1, 1])
+
+    def on_kv_post(self, base_widget):
+        self.app = MDApp.get_running_app()
+        self.app.widgets['SAGE_1'][f'MANUAL_SWITCH_{id(self)}'] = self
+        self.app.widgets['SAGE_2'][f'MANUAL_SWITCH_{id(self)}'] = self
+
+        self.color = self.app.theme_cls.primary_color
+
+        return super().on_kv_post(base_widget)
+
+    def manual_trigger(self) -> None:
+        self.app.autoswitch_trigger()
+        self._snackbar_info('Troca manual de Visor realizada')

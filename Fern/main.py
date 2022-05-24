@@ -12,10 +12,10 @@ from kivy.storage.jsonstore import JsonStore
 from kivymd.app import MDApp
 from widgets.navbar.content import MyNavDrawer
 from widgets.screen.screen_about import AboutScreen
+from widgets.screen.screen_autoswitch import AutoSwitchScreen
 from widgets.screen.screen_home import HomeScreen
 from widgets.screen.screen_manager import MyScreenManager
 from widgets.screen.screen_sage import ScreenSage1, ScreenSage2
-from widgets.screen.screen_tools import ToolsScreen
 
 # Build kv string from kv files
 KV = string_builder('./Fern/assets/kv/')

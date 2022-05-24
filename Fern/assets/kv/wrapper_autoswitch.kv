@@ -10,7 +10,7 @@
         icon:'help-circle-outline'
         pos_hint:{'center_x': .85, 'center_y': .75 }
         on_press: root.open_help()
-    SwitchButton:
+    AutoSwitchButton:
         pos_hint:{'center_x': .5, 'center_y': .5 }
     # MDBoxLayout:
     #     size_hint_x: .6
@@ -25,8 +25,15 @@
     #         halign:'center'
 
 
-<SwitchButton>
+<AutoSwitchButton>
     text: root.text
     line_width: 1.25
     line_color: root.color
     on_press: root.toggle()
+
+
+<ManualSwitchButton>
+    icon:'repeat'
+    theme_text_color: 'Custom'
+    text_color: root.color
+    on_press: root.manual_trigger()

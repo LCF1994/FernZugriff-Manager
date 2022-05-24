@@ -2,6 +2,7 @@ import asyncio
 import sys
 
 import asyncssh
+from kivy.logger import Logger
 
 
 class AsyncSSHClient:
@@ -40,7 +41,7 @@ class AsyncSSHClient:
         try:
             return await self.task
         except asyncio.CancelledError:
-            print('CPF Cancelado')
+            Logger.debug('Asyncssh : Task Cancelled')
 
     def run_thread(self, cmd: str, *args):
         try:
