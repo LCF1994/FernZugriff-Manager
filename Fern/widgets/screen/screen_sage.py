@@ -39,8 +39,4 @@ class ScreenSageDefault(MDFloatLayout):
     srv_name = StringProperty('Servidor X')
 
     def open_card(self) -> None:
-        self.add_widget(
-            ConfigCard(
-                target=self.server, srv_name=self.server.name.replace('_', ' ')
-            )
-        )
+        self.add_widget(ConfigCard(server=self.server))

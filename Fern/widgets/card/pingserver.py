@@ -46,8 +46,4 @@ class CardPingServer(MDCard):
         self.check_icon = ''
 
     def open_card(self) -> None:
-        self.parent.add_widget(
-            ConfigCard(
-                target=self.server, srv_name=self.server.name.replace('_', ' ')
-            )
-        )
+        self.parent.add_widget(ConfigCard(server=self.server))
