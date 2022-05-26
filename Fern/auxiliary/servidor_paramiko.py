@@ -76,6 +76,8 @@ class ServidorSAGE(object):
 
         self.proccess = {}
 
+        self.target_for_ping = None
+
     def set_config(self, config: dict) -> None:
         try:
             self.host = config['host']
@@ -121,6 +123,28 @@ class ServidorSAGE(object):
                 return str(stderr.read()[:-1], 'utf-8')
             else:
                 return str(stdout.read()[:-1], 'utf-8')
+        except (AttributeError, EOFError):
+            Logger.error(f'App : Command fail. Destination: {self.name}')
+        except ChannelException:
+            Logger.error(
+                f'App : Command fail, Channel Error. Destination: {self.name}'
+            )
+            Logger.error(f'App : {self.name} Disconnecting...')
+
+    def define_target_for_ping(self, new_ip: str) -> None:
+        self.target_for_ping = new_ip
+
+    def exec_ping(self, *args) -> bool:
+        if self.target_for_ping == None:
+            return False
+        try:
+            cmd = f'ping {self.target_for_ping} -w 3'
+            _, _, stderr = self.client.exec_command(cmd)
+            Logger.info(f'App : {self.name} ping {self.target_for_ping} ...')
+            if stderr.channel.recv_exit_status() != 0:
+                return False
+            else:
+                return True
         except (AttributeError, EOFError):
             Logger.error(f'App : Command fail. Destination: {self.name}')
         except ChannelException:

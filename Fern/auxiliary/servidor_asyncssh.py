@@ -71,7 +71,7 @@ class AsyncSSHClient:
         self.run_thread(self._terminal_default)
 
     def change_target_ip(self, new_ip: str) -> None:
-        self.change_target_ip = new_ip
+        self.target_ip = new_ip
 
     def ping_target(self) -> None:
         _remote_ping = (

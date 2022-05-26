@@ -65,3 +65,11 @@ class CommandCard(MDCard, CommonFeatures):
             self.app.request_syslog(self.target)
         else:
             self._snackbar_error('Disponivel apenas no Linux.')
+
+    def request_remote_terminal(self) -> None:
+        Logger.info('App : Start remote terminal request')
+
+        if self.app.check_running_os():
+            self.app.request_remote_terminal(self.target)
+        else:
+            self._snackbar_error('Disponivel apenas no Linux.')

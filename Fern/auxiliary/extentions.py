@@ -20,16 +20,7 @@ class Extentions:
             'THIN_1': {},
             'THIN_2': {},
         }
-        # self.conn_status = False
         self.storage = JsonStore(CONFIG_PATH)
-
-        self.sage1_conn = False
-        self.sage1_gcd_on = False
-        self.sage1_VisorAcesso_open = False
-
-        self.sage2_conn = False
-        self.sage2_gcd_on = False
-        self.sage2_VisorAcesso_open = False
 
         self.autoswitch_target = None
         self.autoswitch_current = None
@@ -409,6 +400,33 @@ class Extentions:
     def syslog_exit(self, *args) -> None:
         Logger.info('App : Syslog closed.')
 
+    def request_remote_terminal(self, server: ServidorSAGE) -> None:
+        Logger.info(f'App : Requesting {server.name} Remote Terminal')
+
+        if server.async_client is None:
+            server.build_async_ssh_client()
+
+        ak.start(
+            self.async_cmd_with_args(
+                server.async_client.open_remote_terminal,
+                self.remote_terminal_exit,
+                server,
+            )
+        )
+        try:
+            for widget in self.widgets[server.name].values():
+                try:
+                    widget.open_syslog()
+                except AttributeError:
+                    continue
+        except KeyError:
+            print(
+                f'KeyError {server.name} is not SAGE_1, SAGE_2, THIN_1 or THIN_2'
+            )
+
+    def remote_terminal_exit(self, *args) -> None:
+        Logger.info('App : Remote Terminal closed.')
+
     def start_ping_test(self, server: ServidorSAGE, card) -> None:
         Logger.info('App : Ping test started.')
         Logger.info(f'App : Ping test target: {server.host}.')
@@ -427,7 +445,6 @@ class Extentions:
         Logger.info(
             f'App : Ping test result {log_result} for destination {server.host}'
         )
-
         card.toggle_spinner()
         card.define_icon(result)
 
