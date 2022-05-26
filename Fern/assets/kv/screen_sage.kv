@@ -80,10 +80,19 @@
             release_function: {'function': self.open_process_card}
 
         CommandCard:
-            name: 'CMDCard'
+            name: 'SYSLOGCard'
             image: 'Fern/assets/images/cryptocode.jpg'
-            title: 'Server SysLog'
+            title: 'SysLog'
             btn_icon: 'console-line'
             btn_text: 'Abrir'
             target: root.server
             release_function: {'function': self.request_syslog}
+
+        CommandCard:
+            name: 'TERMINALCard'
+            image: 'Fern/assets/images/red_ray.jpg'
+            title: 'Terminal'
+            btn_icon: 'console-line'
+            btn_text: 'Abrir'
+            target: root.server
+            release_function: {'function': self.request_remote_terminal}
