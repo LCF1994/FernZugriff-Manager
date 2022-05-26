@@ -45,7 +45,7 @@ class Extentions:
     def connection_result(self, data: bool, server: ServidorSAGE) -> None:
         if data is True:
             if server.conn_status:
-                Logger.warn(
+                Logger.debug(
                     f'Clock : Conn_Checker - {server.name} [IP: {server.host}] - Connection Verified'
                 )
                 self._clock_gcd_checker(server)
@@ -444,6 +444,32 @@ class Extentions:
         log_result = 'success' if result else 'fail'
         Logger.info(
             f'App : Ping test result {log_result} for destination {server.host}'
+        )
+        card.toggle_spinner()
+        card.define_icon(result)
+
+    def start_ping_test_remote(
+        self, target_ip: str, server: ServidorSAGE, card
+    ) -> None:
+        Logger.info('App : Ping test started.')
+        Logger.info(
+            f'App : Ping test from {server.host} targeting: {target_ip} .'
+        )
+
+        server.define_target_for_ping(target_ip)
+
+        ak.start(
+            self.async_cmd_with_args(
+                server.exec_ping, self.ping_test_remote_result, server, card
+            )
+        )
+
+    def ping_test_remote_result(
+        self, result: bool, server: ServidorSAGE, card, *args
+    ):
+        log_result = 'success' if result else 'fail'
+        Logger.info(
+            f'App : Ping test result {log_result} for destination {server.target_for_ping}'
         )
         card.toggle_spinner()
         card.define_icon(result)

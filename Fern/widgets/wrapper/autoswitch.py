@@ -63,8 +63,8 @@ class AutoSwitchButton(MDRoundFlatButton, CommonFeatures, CommonAutoSwitch):
         self.app.widgets['SAGE_1'][f'AUTOSWITCH_{id(self)}'] = self
         self.app.widgets['SAGE_2'][f'AUTOSWITCH_{id(self)}'] = self
 
-        self.text = 'Desligada'
-        self.color = self.app.failure_color
+        self.status = self.app.autoswitch_active
+        self.change_interface()
 
         return super().on_kv_post(base_widget)
 
@@ -75,7 +75,9 @@ class AutoSwitchButton(MDRoundFlatButton, CommonFeatures, CommonAutoSwitch):
             self._snackbar_error('Falha: Requerimentos nao atingidos')
 
         self.status = toggle_request
+        self.change_interface()
 
+    def change_interface(self) -> None:
         if self.status:
             self.text = 'Ligada'
             self.color = self.app.success_color

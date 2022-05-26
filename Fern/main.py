@@ -15,6 +15,7 @@ from widgets.screen.screen_about import AboutScreen
 from widgets.screen.screen_autoswitch import AutoSwitchScreen
 from widgets.screen.screen_home import HomeScreen
 from widgets.screen.screen_manager import MyScreenManager
+from widgets.screen.screen_pingtest import PingTestScreen
 from widgets.screen.screen_sage import ScreenSage1, ScreenSage2
 
 # Build kv string from kv files
