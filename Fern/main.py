@@ -3,7 +3,7 @@ import os
 os.environ['KCFG_GRAPHICS_RESIZABLE'] = '0'
 os.environ['KCFG_GRAPHICS_ALLOW_SCREENSAVER'] = '0'
 
-from auxiliary.extentions import Extentions
+from auxiliary.extensions import Extensions
 from auxiliary.kvlang import string_builder
 from auxiliary.servidor_paramiko import ServidorSAGE
 from kivy.lang import Builder
@@ -24,7 +24,7 @@ KV = string_builder('./Fern/assets/kv/')
 CONFIG_PATH = './Fern/config.json'
 
 
-class FernApp(MDApp, Extentions):
+class FernApp(MDApp, Extensions):
     SAGE_1 = ServidorSAGE('SAGE_1', 'xxx.xxx.xxx.xxx')
     SAGE_2 = ServidorSAGE('SAGE_2', 'xxx.xxx.xxx.xxx')
 

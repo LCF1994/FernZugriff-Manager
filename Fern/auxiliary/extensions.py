@@ -11,7 +11,7 @@ DEFAULT_TIME = 1
 CONFIG_PATH = './Fern/config.json'
 
 
-class Extentions:
+class Extensions:
     def __init__(self) -> None:
         self.running_clocks = {}
         self.widgets = {

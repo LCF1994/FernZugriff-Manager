@@ -15,7 +15,7 @@ class AutoSwitch(MDFloatLayout):
     Requerimentos:
      - Conexao com ambos os Servidores
      - Ambos os servidores com GCD ativo
-
+     - Apenas um dos Visores de Acesso aberto
 
 
     """
