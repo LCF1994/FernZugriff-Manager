@@ -27,6 +27,7 @@
                 text: root.server_name
             # IP input
             MDTextField:
+                id:server_ip
                 text: root.server_ip
                 pos_hint: {'center_x': .5, 'center_y': .6}
                 size_hint_x: .9
@@ -43,6 +44,7 @@
                 pos_hint: {'center_x': .5, 'center_y': .475}
                 size_hint_x: .9
             MDTextField:
+                id:username
                 text: root.username
                 pos_hint: {'center_x': .5, 'center_y': .4}
                 size_hint_x: .9
@@ -50,6 +52,7 @@
                 helper_text: "Default= sagetr1"
                 helper_text_mode: "persistent"
             MDTextField:
+                id:password
                 text: root.password
                 pos_hint: {'center_x': .5, 'center_y': .3}
                 size_hint_x: .9
@@ -58,6 +61,7 @@
                 helper_text_mode: "persistent"
                 password: True
             MDTextField:
+                id:port_number
                 text: root.port_number
                 pos_hint: {'center_x': .5, 'center_y': .2}
                 size_hint_x: .9

@@ -26,7 +26,14 @@ class ConfigCard(MDCard, CommonFeatures, CommonCard):
     def cancel_button(self) -> None:
         self.close_card()
 
+    def get_card_texts(self) -> None:
+        self.server_ip = self.ids.server_ip.text
+        self.username = self.ids.username.text
+        self.password = self.ids.password.text
+        self.port_number = self.ids.port_number.text
+
     def save_button(self) -> None:
+        self.get_card_texts()
         data = {
             'host': self.server_ip,
             'username': self.username if self.username != '' else 'sagetr1',
