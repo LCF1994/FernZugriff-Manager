@@ -1,0 +1,56 @@
+<SiemensAboutScreen@Screen>
+    name:'about'
+
+    Image:
+        source:'./Fern/assets/images/sie.jpg'
+        pos_hint:{'x': .45, 'center_y': .75 }
+        size_hint: None, None
+        size: 700, 700
+
+    MDToolbar:
+        elevation: 10
+        pos_hint: {"top": 1}
+        size_hint: 1, .05
+        left_action_items:
+            [['menu', lambda x: app.navbar.set_state("open")]]
+
+    MDFloatLayout:
+        Image:
+            source:'./Fern/assets/images/siemens.png'
+            pos_hint:{'x': .15, 'center_y': .8 }
+            size_hint: None, None
+            size: 160, 25
+
+        SiemensTitle:
+            pos_hint:{'x': .15, 'center_y': .55 }
+            size_hint: .4, .2
+
+        MDLabel:
+            pos_hint:{'x': .15, 'center_y': .35 }
+            text:'Release on July, 12 - 2022'
+            adaptive_size: True
+            font_style: 'H6'
+        MDLabel:
+            pos_hint:{'x': .15, 'center_y': .3 }
+            text:'Version 2.1'
+            adaptive_size: True
+            font_style: 'H6'
+        MDLabel:
+            pos_hint:{'x': .15, 'center_y': .2 }
+            text:'Desenvolvido por [b]Lucas Campos Ferreira[/b]'
+            markup:True
+            adaptive_size: True
+            font_style: 'Caption'
+
+        MDBoxLayout:
+            pos_hint:{'center_x': .85, 'center_y': .125 }
+            adaptive_size: True
+            spacing: 10
+            Image:
+                source:'./Fern/assets/images/Brazil.png'
+                size_hint: None, None
+                size: 85, 85
+            Image:
+                source:'./Fern/assets/images/QR.png'
+                size_hint: None, None
+                size: 85, 85

@@ -4,31 +4,43 @@
 
 <ContentNavigationDrawer>
     orientation: "vertical"
-    padding: "8dp"
+    padding: "12dp"
     spacing: "8dp"
 
-    AnchorLayout:
-        anchor_x: "left"
-        size_hint_y: None
-        height: logo.height
+    # AnchorLayout:
+    #     anchor_x: "left"
+    #     size_hint_y: None
+    #     height: logo.height
 
-        Image:
-            id: logo
-            size_hint: None, None
-            size: "56dp", "56dp"
-            source: "Fern/assets/images/sage.png"
+    #     Image:
+    #         id: logo
+    #         # size_hint: None, None
+    #         # size: "56dp", "56dp"
+    #         # source: "Fern/assets/images/sage.png"
 
-    MDLabel:
-        text: "Gerenciador de Acessos"
-        font_style: "Button"
-        adaptive_height: True
-
-    MDLabel:
-        text: "desenvolvido por Lucas Campos Ferreira"
-        font_style: "Caption"
-        adaptive_height: True
+    #         size_hint: None, None
+    #         size: 160, 25
+    #         source: "Fern/assets/images/siemens.png"
 
     MDSeparator:
+        md_bg_color:[0,0,0,0]
+
+    MDBoxLayout:
+        adaptive_height: True
+        orientation:'vertical'
+        spacing: 2
+        MDLabel:
+                # text: "Gerenciador de Acessos"
+            text: "Thin Client Dashboard"
+            font_style: "H5"
+            adaptive_height: True
+        MDLabel:
+            text: "desenvolvido por Lucas Campos Ferreira"
+            font_style: "Caption"
+            adaptive_height: True
+
+    MDSeparator:
+        md_bg_color:app.theme_cls.primary_color
 
     ScrollView:
         MDList:
@@ -38,7 +50,8 @@
                     root.parent.set_state("close")
                     app.screen_manager.current = "home"
                 IconLeftWidget:
-                    icon: "lightbulb-outline"
+                    # icon: "lightbulb-outline"
+                    icon: "home"
                     on_press:
                         root.parent.set_state("close")
                         app.screen_manager.current = "home"
@@ -50,7 +63,8 @@
                     app.screen_manager.current = "sage1"
 
                 IconLeftWidget:
-                    icon: "centos"
+                    # icon: "centos"
+                    icon: "view-dashboard-variant"
                     on_press:
                         root.parent.set_state("close")
                         app.screen_manager.current = "sage1"
@@ -61,7 +75,8 @@
                     root.parent.set_state("close")
                     app.screen_manager.current = "sage2"
                 IconLeftWidget:
-                    icon: "centos"
+                    # icon: "centos"
+                    icon: "view-dashboard-variant"
                     on_press:
                         root.parent.set_state("close")
                         app.screen_manager.current = "sage2"
@@ -83,7 +98,7 @@
                     root.parent.set_state("close")
                     app.screen_manager.current = "ping_test"
                 IconLeftWidget:
-                    icon: "monitor"
+                    icon: "wrench"
                     on_press:
                         root.parent.set_state("close")
                         app.screen_manager.current = "ping_test"
@@ -98,3 +113,25 @@
                     on_press:
                         root.parent.set_state("close")
                         app.screen_manager.current = "about"
+
+    # MDBoxLayout:
+    #     # md_bg_color: [1,0,0,1]
+    #     # padding_bottom: 20
+    #     Image:
+    #         pos_hint: {'center_x' : .5, 'center_y': .5 }
+    #         source: "Fern/assets/images/siemens.png"    
+    #         size_hint_y: None
+    #         height: 34
+    
+    
+    # AnchorLayout:
+    #     anchor_x: "left"
+    #     size_hint_y: None
+    #     height: logo.height
+
+    #     Image:
+    #         id: logo
+    #         size_hint_y: None
+    #         height: 34
+    #         # size: "56dp", "56dp"
+    #         source: "Fern/assets/images/siemens.png"    
