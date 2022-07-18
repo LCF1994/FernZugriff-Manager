@@ -34,19 +34,20 @@ splash = Splash(
                 'assets/images/splash.png',
                 binaries=a.binaries,
                 datas=a.datas,
-                text_pos=(10, 50),
+                text_pos=(50, 400),
                 text_size=12,
                 text_color='white',
-                always_on_top=False
+                minify_script=True,
+                always_on_top=False,
                 )
 
 exe = EXE(pyz,
           a.scripts,
-          splash,                   # <-- both, splash target
-          splash.binaries,          # <-- and splash binaries
           a.binaries,
           a.zipfiles,
           a.datas,
+          splash,                   # <-- both, splash target
+          splash.binaries,          # <-- and splash binaries
           *[Tree(p) for p in (sdl2.dep_bins + glew.dep_bins)],  
           [],
           debug=False,

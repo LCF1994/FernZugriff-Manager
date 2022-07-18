@@ -7,6 +7,7 @@ from auxiliary.extensions import Extensions
 from auxiliary.kvlang import string_builder
 from auxiliary.servidor_paramiko import ServidorSAGE
 from auxiliary.theming import apply_default_theme, apply_siemens_theme
+from kivy.factory import Factory
 from kivy.lang import Builder
 from kivy.logger import Logger
 from kivy.storage.jsonstore import JsonStore
@@ -23,6 +24,13 @@ from widgets.screen.screen_sage import ScreenSage1, ScreenSage2
 # KV = string_builder()
 
 CONFIG_PATH = 'config.json'
+
+try:
+    import pyi_splash
+
+    pyi_splash.close()
+except ModuleNotFoundError:
+    pass
 
 
 class FernApp(MDApp, Extensions):

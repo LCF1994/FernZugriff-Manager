@@ -28,6 +28,41 @@ class Extensions:
         self.autoswitch_current = None
         self.autoswitch_active = False
 
+        self.NAV_ITENS_AVAILABLE = {
+            'home': {
+                'text': 'Home',
+                'icon': 'home',
+                'screen': 'home',
+            },
+            'sage1': {
+                'text': 'Dashboard SAGE 1',
+                'icon': 'view-dashboard-variant',
+                'screen': 'sage1',
+            },
+            'sage2': {
+                'text': 'Dashboard SAGE 2',
+                'icon': 'view-dashboard-variant',
+                'screen': 'sage2',
+            },
+            'autoswicth': {
+                'text': 'Troca de Visor',
+                'icon': 'monitor',
+                'screen': 'autoswicth',
+            },
+            'ping_test': {
+                'text': 'Teste de Ping',
+                'icon': 'wrench',
+                'screen': 'ping_test',
+            },
+            'about': {
+                'text': 'About',
+                'icon': 'information',
+                'screen': 'about',
+            },
+        }
+
+        self.NAV_ITENS = self.NAV_ITENS_AVAILABLE
+
     async def async_cmd(self, async_action, future_reaction) -> None:
         future_reaction(await ak.run_in_thread(async_action))
 
