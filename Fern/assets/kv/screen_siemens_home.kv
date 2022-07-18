@@ -3,33 +3,26 @@
 
     MDFloatLayout:
         FitImage:
-            source:'./Fern/assets/images/cognisphere.png'
+            source: app.resource_path('images/cognisphere.png')
             pos_hint:{'center_x': .9, 'center_y': .5 }
             size_hint: 1, 1
 
         Image:
-            source:'./Fern/assets/images/siemens.png'
+            source: app.resource_path('images/siemens.png')
             pos_hint:{'center_x': .2, 'center_y': .9 }
             size_hint: 1, None
             height: 60
 
-        # MDLabel:
         SiemensTitle:
             pos_hint:{'center_x': .3, 'center_y': .45 }
             size_hint: .4, .2
-            # text:'Thin Client\nDashboard'
-            # font_style: 'H4'
-            # halign: 'center'
-
 
         MDRaisedButton:
-            # text: 'Start'
             text: 'SAGE 1'
             halign: 'center'
             font_style: 'H6'
             size_hint: .15, .33 / 4.5
             pos_hint:{'center_x': .175, 'center_y': .2 }
-            # on_press: app.navbar.set_state("open")
             on_press:
                 root.manager.current = 'sage1'
 
@@ -41,15 +34,3 @@
             pos_hint:{'center_x': .375, 'center_y': .2 }
             on_press:
                 root.manager.current = 'sage2'
-
-    # MDFloatingActionButton:
-    #     pos_hint: { 'center_x': .05, 'center_y': .95 }
-    #     icon:'menu'
-        # on_press: app.navbar.set_state("open")
-
-    # MDToolbar:
-    #     elevation: 10
-    #     pos_hint: {'top': 1}
-    #     size_hint: 1, .035
-    #     left_action_items:
-            # [['menu', lambda x: app.navbar.set_state('open')]]

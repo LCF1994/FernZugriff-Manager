@@ -23,7 +23,3 @@ def string_builder(kv_files_path=None) -> str:
             kv_string = '\n'.join([kv_string, content])
 
     return kv_string
-
-
-if __name__ == '__main__':
-    print(string_builder())

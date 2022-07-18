@@ -20,9 +20,9 @@ from widgets.screen.screen_pingtest import PingTestScreen
 from widgets.screen.screen_sage import ScreenSage1, ScreenSage2
 
 # Build kv string from kv files
-KV = string_builder('./Fern/assets/kv/')
+# KV = string_builder()
 
-CONFIG_PATH = './Fern/config.json'
+CONFIG_PATH = 'config.json'
 
 
 class FernApp(MDApp, Extensions):
@@ -49,11 +49,12 @@ class FernApp(MDApp, Extensions):
 
     def build(self):
         self.title = 'Thin Client Dashboard'
+        self.icon = self.resource_path('images/sie-favicon.png')
 
         # apply_default_theme(self)
         apply_siemens_theme(self)
 
-        return Builder.load_string(KV)
+        return Builder.load_string(string_builder(self.resource_path('kv')))
 
 
 if __name__ == '__main__':

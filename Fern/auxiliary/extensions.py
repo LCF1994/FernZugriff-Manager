@@ -1,4 +1,6 @@
+import os
 import platform
+import sys
 from functools import partial
 
 import asynckivy as ak
@@ -8,7 +10,7 @@ from kivy.logger import Logger
 from kivy.storage.jsonstore import JsonStore
 
 DEFAULT_TIME = 1
-CONFIG_PATH = './Fern/config.json'
+CONFIG_PATH = './config.json'
 
 
 class Extensions:
@@ -527,7 +529,6 @@ class Extensions:
         _previous_value = server.conn_supervision
         _visor_open = server.visor_acesso
 
-        # print(f'autoswitch_update_connection - prev: {_previous_value} - data: {data} - visor: {_visor_open}')
         if self.autoswitch_active:
             _drop_conn = _previous_value and not data
             if _drop_conn and _visor_open:
@@ -539,7 +540,6 @@ class Extensions:
 
         _previous_value = server.gcd_supervision
         _visor_open = server.visor_acesso
-        # print(f'autoswitch_update_gcd_state - prev: {_previous_value} - data: {data} - visor: {_visor_open}')
 
         if self.autoswitch_active:
             _drop_gcd = _previous_value and not data
@@ -554,10 +554,16 @@ class Extensions:
         Logger.info('AutoSwitch : Triggered')
 
         var = self.autoswitch_target_ok()
-        # print(f'autoswitch_target_ok = {var}')
-        # print(f'autoswitch_target = {self.autoswitch_target}')
-        # print(f'autoswitch_current = {self.autoswitch_current}')
-        # print(f'autoswitch_sage1 visor acesso = {self.SAGE_1.visor_acesso}')
-        # print(f'autoswitch_sage2 visor acesso = {self.SAGE_2.visor_acesso}')
+
         if var:
             self.autoswitch_switch_VisorAcesso()
+
+    def resource_path(self, relative_path):
+        """Get absolute path to resource, works for dev and for PyInstaller"""
+        try:
+            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath('./assets/')
+
+        return os.path.join(base_path, relative_path)

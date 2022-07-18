@@ -16,11 +16,11 @@
     #         id: logo
     #         # size_hint: None, None
     #         # size: "56dp", "56dp"
-    #         # source: "Fern/assets/images/sage.png"
+    #         # source: app.resource_path("images/sage.png")
 
     #         size_hint: None, None
     #         size: 160, 25
-    #         source: "Fern/assets/images/siemens.png"
+    #         source: app.resource_path("images/siemens.png")
 
     MDSeparator:
         md_bg_color:[0,0,0,0]
@@ -113,25 +113,3 @@
                     on_press:
                         root.parent.set_state("close")
                         app.screen_manager.current = "about"
-
-    # MDBoxLayout:
-    #     # md_bg_color: [1,0,0,1]
-    #     # padding_bottom: 20
-    #     Image:
-    #         pos_hint: {'center_x' : .5, 'center_y': .5 }
-    #         source: "Fern/assets/images/siemens.png"    
-    #         size_hint_y: None
-    #         height: 34
-    
-    
-    # AnchorLayout:
-    #     anchor_x: "left"
-    #     size_hint_y: None
-    #     height: logo.height
-
-    #     Image:
-    #         id: logo
-    #         size_hint_y: None
-    #         height: 34
-    #         # size: "56dp", "56dp"
-    #         source: "Fern/assets/images/siemens.png"    

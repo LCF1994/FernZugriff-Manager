@@ -2,7 +2,7 @@
     name:'about'
 
     Image:
-        source:'./Fern/assets/images/sie.jpg'
+        source: app.resource_path('images/sie.jpg')
         pos_hint:{'x': .45, 'center_y': .75 }
         size_hint: None, None
         size: 700, 700
@@ -16,7 +16,7 @@
 
     MDFloatLayout:
         Image:
-            source:'./Fern/assets/images/siemens.png'
+            source: app.resource_path('images/siemens.png')
             pos_hint:{'x': .15, 'center_y': .8 }
             size_hint: None, None
             size: 160, 25
@@ -47,10 +47,10 @@
             adaptive_size: True
             spacing: 10
             Image:
-                source:'./Fern/assets/images/Brazil.png'
+                source: app.resource_path('images/Brazil.png')
                 size_hint: None, None
                 size: 85, 85
             Image:
-                source:'./Fern/assets/images/QR.png'
+                source: app.resource_path('images/QR.png')
                 size_hint: None, None
                 size: 85, 85
