@@ -3,6 +3,13 @@ import os
 os.environ['KCFG_GRAPHICS_RESIZABLE'] = '0'
 os.environ['KCFG_GRAPHICS_ALLOW_SCREENSAVER'] = '0'
 
+try:
+    import pyi_splash
+
+    pyi_splash.close()
+except ModuleNotFoundError:
+    pass
+
 from auxiliary.extensions import Extensions
 from auxiliary.kvlang import string_builder
 from auxiliary.servidor_paramiko import ServidorSAGE
@@ -20,17 +27,7 @@ from widgets.screen.screen_manager import MyScreenManager
 from widgets.screen.screen_pingtest import PingTestScreen
 from widgets.screen.screen_sage import ScreenSage1, ScreenSage2
 
-# Build kv string from kv files
-# KV = string_builder()
-
 CONFIG_PATH = 'config.json'
-
-try:
-    import pyi_splash
-
-    pyi_splash.close()
-except ModuleNotFoundError:
-    pass
 
 
 class FernApp(MDApp, Extensions):
@@ -49,7 +46,6 @@ class FernApp(MDApp, Extensions):
             self.SAGE_2.set_config(self.storage.get('SAGE_2'))
 
             self.autoswitch_active = self.storage.get('app')['autoswitch']
-            # print(self.storage.get('app'))
 
             Logger.info('Settings: Configuration file loaded')
         except KeyError:
